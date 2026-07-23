@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, nextTick, useSlots, useTemplateRef, watch } from 'vue'
 import { cn } from '@/lib/utils'
 import { formInputVariants, type FormInputVariants } from './formInputVariants'
 
@@ -18,6 +18,12 @@ export interface InputProps {
   id?: string
   lang?: string
   class?: string
+  /**
+   * Optional value transform applied on every input event (e.g. masks).
+   * When the transformed value differs from what the user typed, the native
+   * input is synced immediately so the DOM cannot keep rejected characters.
+   */
+  transform?: (value: string) => string
 }
 
 const props = withDefaults(defineProps<InputProps>(), {
@@ -35,6 +41,7 @@ const emit = defineEmits<{
 }>()
 
 const slots = useSlots()
+const inputEl = useTemplateRef<HTMLInputElement>('inputEl')
 
 const hasBefore = computed(() => !!slots.elemBefore)
 const hasAfter = computed(() => !!slots.elemAfter)
@@ -58,9 +65,33 @@ const classes = computed(() =>
   ),
 )
 
-function onInput(event: Event): void {
-  emit('update:modelValue', (event.target as HTMLInputElement).value)
+function syncDomValue(value: string): void {
+  const el = inputEl.value
+  if (el && el.value !== value) {
+    el.value = value
+  }
 }
+
+function onInput(event: Event): void {
+  const el = event.target as HTMLInputElement
+  let value = el.value
+  if (props.transform) {
+    value = props.transform(value)
+    syncDomValue(value)
+  }
+  emit('update:modelValue', value)
+  // Parent may further normalize modelValue; keep the native input in sync.
+  void nextTick(() => {
+    syncDomValue(props.modelValue ?? '')
+  })
+}
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    syncDomValue(value ?? '')
+  },
+)
 </script>
 
 <template>
@@ -73,6 +104,7 @@ function onInput(event: Event): void {
         <slot name="elemBefore" />
       </span>
       <input
+        ref="inputEl"
         :id="id"
         :type="type"
         :value="modelValue"
