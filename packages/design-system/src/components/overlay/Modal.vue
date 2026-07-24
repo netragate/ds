@@ -36,7 +36,8 @@ function onOverlayClick(): void {
 }
 
 function onKeydown(event: KeyboardEvent): void {
-  if (event.key === 'Escape' && open.value) {
+  // When overlay dismiss is locked (e.g. request in flight), Escape must not close either.
+  if (event.key === 'Escape' && open.value && props.closeOnOverlay) {
     event.preventDefault()
     close()
   }

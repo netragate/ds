@@ -39,6 +39,7 @@ const selectMultiple = ref(false)
 const selectValue = ref('')
 const selectMultipleValue = ref<string[]>(['design-system', 'react'])
 const selectSearchable = ref(true)
+const selectCreatable = ref(false)
 const selectDisabled = ref(false)
 const selectPlaceholderSingle = ref('')
 const selectPlaceholderMulti = ref('')
@@ -263,6 +264,7 @@ import { Button } from '${PACKAGE}'
   ${templateBooleanAttr('multiple', true)}
   ${templateStringAttr('placeholder', selectPlaceholderMulti.value || 'Select technologies...')}
   ${playgroundSnippetAttr('searchable', selectSearchable.value)}
+  ${playgroundSnippetAttr('creatable', selectCreatable.value)}
   ${playgroundSnippetAttr('disabled', selectDisabled.value)}
   :options="options"
 />`
@@ -270,6 +272,7 @@ import { Button } from '${PACKAGE}'
   v-model="value"
   ${templateStringAttr('placeholder', selectPlaceholderSingle.value || 'Select an option...')}
   ${playgroundSnippetAttr('searchable', selectSearchable.value)}
+  ${playgroundSnippetAttr('creatable', selectCreatable.value)}
   ${playgroundSnippetAttr('disabled', selectDisabled.value)}
   :options="options"
 />`,
@@ -404,12 +407,16 @@ function optionStyle(active: boolean) {
           <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :style="!selectMultiple ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }" @click="selectMultiple = false">{{ selectPlayground.modeSingle }}</button>
           <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :style="selectMultiple ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }" @click="selectMultiple = true">{{ selectPlayground.modeMulti }}</button>
         </div>
-        <Select v-if="!selectMultiple" v-model="selectValue" :options="selectOptions" :searchable="selectSearchable" :disabled="selectDisabled" :placeholder="selectPlaceholderSingle || selectPlayground.placeholderSingle" />
-        <Select v-else v-model="selectMultipleValue" multiple :options="selectOptions" :searchable="selectSearchable" :disabled="selectDisabled" :placeholder="selectPlaceholderMulti || selectPlayground.placeholderMulti" />
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <Select v-if="!selectMultiple" v-model="selectValue" :options="selectOptions" :searchable="selectSearchable" :creatable="selectCreatable" :disabled="selectDisabled" :placeholder="selectPlaceholderSingle || selectPlayground.placeholderSingle" />
+        <Select v-else v-model="selectMultipleValue" multiple :options="selectOptions" :searchable="selectSearchable" :creatable="selectCreatable" :disabled="selectDisabled" :placeholder="selectPlaceholderMulti || selectPlayground.placeholderMulti" />
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
             <Switch v-model="selectSearchable" size="sm" />
             searchable
+          </label>
+          <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
+            <Switch v-model="selectCreatable" size="sm" />
+            creatable
           </label>
           <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
             <Switch v-model="selectDisabled" size="sm" />

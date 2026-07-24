@@ -128,6 +128,7 @@ const SettingsIcon = iconographyComponents.settings
     ]"
     :multiple="false"
     :searchable="true"
+    :creatable="false"
     :disabled="false"
   />`,
   ),

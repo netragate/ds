@@ -175,6 +175,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('options', 'SelectOption[]', undefined, 'Available options ({ label, value })'),
       p('multiple', 'boolean', 'false', 'Allow multiple selection'),
       p('searchable', 'boolean', 'true', 'Enable option search/filter'),
+      p('creatable', 'boolean', 'false', 'Allow creating a new option from the search query'),
       p('disabled', 'boolean', 'false', 'Disables the select'),
       p('placeholder', 'string', 'Select an option...', 'Placeholder when nothing is selected'),
       p('id', 'string', undefined, 'Trigger element id'),

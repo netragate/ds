@@ -538,7 +538,7 @@ export const ptBR: PlaygroundMessages = {
       FormField: 'Envolve inputs com label, texto de ajuda e validação.',
       Toggle: 'Interruptor liga/desliga para configurações binárias. A ação é imediata.',
       Checkbox: 'Permite múltiplas seleções simultâneas. Suporta estado indeterminado.',
-      Select: 'Seleção única ou múltipla com filtro de busca em lista suspensa.',
+      Select: 'Seleção única ou múltipla com filtro de busca e criação opcional a partir da busca.',
       Badge: 'Exibe um valor numérico com cores semânticas.',
       Lozenge: 'Destaque de status para reconhecimento rápido.',
       Avatar: 'Representa um usuário ou entidade. Mostra foto ou iniciais.',

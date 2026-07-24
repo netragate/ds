@@ -13,6 +13,8 @@ export interface SelectProps {
   options: SelectOption[]
   multiple?: boolean
   searchable?: boolean
+  /** When true, typing a value that is not in options offers creating it. */
+  creatable?: boolean
   disabled?: boolean
   placeholder?: string
   id?: string
@@ -23,6 +25,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   modelValue: '',
   multiple: false,
   searchable: true,
+  creatable: false,
   disabled: false,
   placeholder: 'Select an option...',
 })
@@ -55,9 +58,23 @@ const filteredOptions = computed(() => {
   return props.options.filter((option) => option.label.toLowerCase().includes(term))
 })
 
-const singleLabel = computed(
-  () => props.options.find((option) => option.value === selectedValues.value[0])?.label ?? '',
-)
+const createCandidate = computed(() => {
+  if (!props.creatable) return ''
+  const term = query.value.trim()
+  if (!term) return ''
+  const exists = props.options.some(
+    (option) =>
+      option.value.toLowerCase() === term.toLowerCase() ||
+      option.label.toLowerCase() === term.toLowerCase(),
+  )
+  return exists ? '' : term
+})
+
+const singleLabel = computed(() => {
+  const selected = selectedValues.value[0]
+  if (!selected) return ''
+  return props.options.find((option) => option.value === selected)?.label ?? selected
+})
 
 function isSelected(value: string): boolean {
   return selectedValues.value.includes(value)
@@ -105,6 +122,12 @@ function clearAll(): void {
   emit('update:modelValue', [])
 }
 
+function createFromQuery(): void {
+  const term = createCandidate.value
+  if (!term) return
+  selectOption(term)
+}
+
 function onDocumentClick(event: MouseEvent): void {
   if (!open.value) return
   const target = event.target as Node
@@ -117,6 +140,11 @@ function onKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape' && open.value) {
     open.value = false
     query.value = ''
+    return
+  }
+  if (event.key === 'Enter' && open.value && createCandidate.value) {
+    event.preventDefault()
+    createFromQuery()
   }
 }
 
@@ -220,6 +248,7 @@ onUnmounted(() => {
             type="text"
             placeholder="Search..."
             class="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            @keydown.enter.prevent="createFromQuery"
           />
         </div>
 
@@ -246,8 +275,17 @@ onUnmounted(() => {
               stroke-width="2.5"
             />
           </button>
+          <button
+            v-if="createCandidate"
+            type="button"
+            role="option"
+            class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-primary transition-colors hover:bg-primary/8"
+            @click="createFromQuery"
+          >
+            <span>Create “{{ createCandidate }}”</span>
+          </button>
           <p
-            v-if="filteredOptions.length === 0"
+            v-else-if="filteredOptions.length === 0"
             class="px-3 py-4 text-center text-xs text-muted-foreground"
           >
             No results found
