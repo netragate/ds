@@ -40,6 +40,43 @@ const triggerRef = ref<HTMLElement | null>(null)
 const panelRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 const panelStyle = ref({ top: '0px', left: '0px', width: '0px' })
+const PANEL_GAP_PX = 4
+const VIEWPORT_PADDING_PX = 8
+/** Fallback when panel is not measured yet (max-h-44 ≈ 11rem + chrome). */
+const PANEL_HEIGHT_FALLBACK_PX = 220
+
+function updatePanelPosition(): void {
+  if (!triggerRef.value) return
+
+  const rect = triggerRef.value.getBoundingClientRect()
+  const viewportH = window.innerHeight
+  const viewportW = window.innerWidth
+  const panelHeight = panelRef.value?.offsetHeight || PANEL_HEIGHT_FALLBACK_PX
+  const spaceBelow = viewportH - rect.bottom - VIEWPORT_PADDING_PX
+  const spaceAbove = rect.top - VIEWPORT_PADDING_PX
+  const openUpward = spaceBelow < panelHeight && spaceAbove > spaceBelow
+
+  let top = openUpward
+    ? rect.top - panelHeight - PANEL_GAP_PX
+    : rect.bottom + PANEL_GAP_PX
+  top = Math.max(
+    VIEWPORT_PADDING_PX,
+    Math.min(top, viewportH - Math.min(panelHeight, viewportH - VIEWPORT_PADDING_PX * 2) - VIEWPORT_PADDING_PX),
+  )
+
+  let left = rect.left
+  const width = rect.width
+  if (left + width > viewportW - VIEWPORT_PADDING_PX) {
+    left = Math.max(VIEWPORT_PADDING_PX, viewportW - width - VIEWPORT_PADDING_PX)
+  }
+  left = Math.max(VIEWPORT_PADDING_PX, left)
+
+  panelStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`,
+    width: `${width}px`,
+  }
+}
 
 const selectedValues = computed<string[]>(() => {
   if (props.multiple) {
@@ -80,16 +117,6 @@ function isSelected(value: string): boolean {
   return selectedValues.value.includes(value)
 }
 
-function updatePanelPosition(): void {
-  if (!triggerRef.value) return
-  const rect = triggerRef.value.getBoundingClientRect()
-  panelStyle.value = {
-    top: `${rect.bottom + 4}px`,
-    left: `${rect.left}px`,
-    width: `${rect.width}px`,
-  }
-}
-
 function toggleOpen(): void {
   if (props.disabled) return
   open.value = !open.value
@@ -128,7 +155,7 @@ function createFromQuery(): void {
   selectOption(term)
 }
 
-function onDocumentClick(event: MouseEvent): void {
+function onDocumentPointerDown(event: PointerEvent): void {
   if (!open.value) return
   const target = event.target as Node
   if (triggerRef.value?.contains(target) || panelRef.value?.contains(target)) return
@@ -152,6 +179,10 @@ watch(open, async (isOpen) => {
   if (isOpen) {
     await nextTick()
     updatePanelPosition()
+    // Second pass after paint so we use the real panel height for flip-up.
+    requestAnimationFrame(() => {
+      updatePanelPosition()
+    })
     if (props.searchable) {
       searchRef.value?.focus()
     }
@@ -161,14 +192,16 @@ watch(open, async (isOpen) => {
 })
 
 onMounted(() => {
-  document.addEventListener('click', onDocumentClick)
+  // Capture pointerdown so outside-close runs before target click.
+  // A bubble-phase `click` listener races with toggleOpen and closes on the same open click.
+  document.addEventListener('pointerdown', onDocumentPointerDown, true)
   document.addEventListener('keydown', onKeydown)
   window.addEventListener('resize', updatePanelPosition)
   window.addEventListener('scroll', updatePanelPosition, true)
 })
 
 onUnmounted(() => {
-  document.removeEventListener('click', onDocumentClick)
+  document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   document.removeEventListener('keydown', onKeydown)
   window.removeEventListener('resize', updatePanelPosition)
   window.removeEventListener('scroll', updatePanelPosition, true)
@@ -190,7 +223,7 @@ onUnmounted(() => {
           disabled && 'cursor-not-allowed opacity-50',
         )
       "
-      @click="toggleOpen"
+      @click.stop="toggleOpen"
     >
       <Search v-if="searchable" :size="14" class="shrink-0 text-muted-foreground" />
 
