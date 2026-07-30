@@ -539,7 +539,7 @@ export const en: PlaygroundMessages = {
       Toggle: 'An on/off switch for binary settings. Action takes immediate effect.',
       Checkbox: 'Allows multiple concurrent selections. Supports indeterminate state.',
       Select: 'Single or multi-select with search filtering and optional create-from-query.',
-      Badge: 'Displays a numeric value with semantic glow colors.',
+      Badge: 'Displays a numeric value with optional icon and semantic glow colors.',
       Lozenge: 'Status highlight for quick at-a-glance recognition.',
       Avatar: 'Represents a user or entity. Shows photo or initials fallback.',
       Tabs: 'Groups related content on the same page with switchable panels.',

@@ -539,7 +539,7 @@ export const ptBR: PlaygroundMessages = {
       Toggle: 'Interruptor liga/desliga para configurações binárias. A ação é imediata.',
       Checkbox: 'Permite múltiplas seleções simultâneas. Suporta estado indeterminado.',
       Select: 'Seleção única ou múltipla com filtro de busca e criação opcional a partir da busca.',
-      Badge: 'Exibe um valor numérico com cores semânticas.',
+      Badge: 'Exibe um valor numérico com ícone opcional e cores semânticas.',
       Lozenge: 'Destaque de status para reconhecimento rápido.',
       Avatar: 'Representa um usuário ou entidade. Mostra foto ou iniciais.',
       Tabs: 'Agrupa conteúdo relacionado na mesma página com painéis alternáveis.',

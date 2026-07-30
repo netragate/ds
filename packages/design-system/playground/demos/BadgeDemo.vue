@@ -10,20 +10,29 @@ const { t } = usePlaygroundLocale()
 
 const variantOptions = ['default', 'primary', 'important', 'added', 'removed'] as const
 const sizeOptions = ['sm', 'md'] as const
+const iconOptions = ['none', 'bell', 'bell-ring', 'info'] as const
 type BadgeVariant = (typeof variantOptions)[number]
 type BadgeSize = (typeof sizeOptions)[number]
+type BadgeIconOption = (typeof iconOptions)[number]
 
 const count = ref(58)
 const variant = ref<BadgeVariant>('primary')
 const size = ref<BadgeSize>('md')
+const icon = ref<BadgeIconOption>('bell')
 
-const code = computed(
-  () => `<Badge
+const resolvedIcon = computed(() => (icon.value === 'none' ? undefined : icon.value))
+
+const code = computed(() => {
+  const iconLine =
+    resolvedIcon.value === undefined
+      ? ''
+      : `\n  ${playgroundSnippetAttr('icon', resolvedIcon.value)}`
+  return `<Badge
   ${playgroundSnippetAttr('value', count.value)}
   ${playgroundSnippetAttr('variant', variant.value)}
-  ${playgroundSnippetAttr('size', size.value)}
-/>`,
-)
+  ${playgroundSnippetAttr('size', size.value)}${iconLine}
+/>`
+})
 </script>
 
 <template>
@@ -31,7 +40,13 @@ const code = computed(
     <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center rounded-xl py-8">
-        <Badge :key="`${variant}-${size}-${count}`" :value="count" :variant="variant" :size="size" />
+        <Badge
+          :key="`${variant}-${size}-${count}-${icon}`"
+          :value="count"
+          :variant="variant"
+          :size="size"
+          :icon="resolvedIcon"
+        />
       </div>
 
       <div>
@@ -59,6 +74,20 @@ const code = computed(
           class="mb-1 block w-full rounded px-2 py-1 text-left text-xs transition-all"
           :style="playgroundOptionStyle(variant === item)"
           @click="variant = item"
+        >
+          {{ item }}
+        </button>
+      </div>
+
+      <div>
+        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('icon') }}</p>
+        <button
+          v-for="item in iconOptions"
+          :key="item"
+          type="button"
+          class="mb-1 block w-full rounded px-2 py-1 text-left text-xs transition-all"
+          :style="playgroundOptionStyle(icon === item)"
+          @click="icon = item"
         >
           {{ item }}
         </button>

@@ -39,6 +39,11 @@ const props = withDefaults(
   },
 )
 
+const emit = defineEmits<{
+  (e: 'click', id: string): void
+  (e: 'select', id: string): void
+}>()
+
 const injectedMenu = inject(SIDEBAR_MENU_INJECTION_KEY)
 
 if (!injectedMenu) {
@@ -299,6 +304,12 @@ function scheduleHideFlyout(event?: MouseEvent): void {
   }, 200)
 }
 
+function onTriggerClick(): void {
+  sidebarMenu.setActive(props.id)
+  emit('click', props.id)
+  emit('select', props.id)
+}
+
 watch(flyoutOpen, (visible) => {
   if (visible) {
     updateFlyoutPosition()
@@ -337,6 +348,7 @@ watch(
       :class="triggerClasses"
       :title="sidebarMenu.collapsed.value ? label : undefined"
       :aria-expanded="flyoutOpen"
+      @click="onTriggerClick"
       @mouseenter="showFlyout"
       @mouseleave="scheduleHideFlyout($event)"
     >

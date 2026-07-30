@@ -110,7 +110,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
   Toggle: ['label', 'disabled'],
   Checkbox: ['label', 'indeterminate', 'cycleIndeterminate', 'disabled'],
   Select: ['multiple', 'searchable', 'creatable', 'disabled', 'placeholder'],
-  Badge: ['value', 'variant', 'size'],
+  Badge: ['value', 'variant', 'size', 'icon'],
   Lozenge: ['variant'],
   Avatar: ['name', 'src', 'size'],
   Tabs: ['variant'],

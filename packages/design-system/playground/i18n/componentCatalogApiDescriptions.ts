@@ -24,6 +24,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Avatar size': 'Tamanho do avatar',
   'Avatar size for all members': 'Tamanho do avatar para todos os membros',
   'Badge size': 'Tamanho do badge',
+  'Optional leading icon from the iconography registry (e.g. bell)':
+    'Ícone opcional do registro de iconografia (ex.: bell)',
   'Body TableRow elements': 'Elementos TableRow do corpo',
   'Bold/high-contrast style': 'Estilo negrito/alto contraste',
   'Border top color': 'Cor da borda superior',

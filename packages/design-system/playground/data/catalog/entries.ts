@@ -239,6 +239,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.Badge!,
     props: [
       p('value', 'number', undefined, 'Numeric value — renders as text (99+ when above 99)'),
+      p('icon', 'IconographyName', undefined, 'Optional icon. When set, renders a large icon with the count as a small badge at the bottom-right.'),
       p('variant', "'default' | 'primary' | 'important' | 'added' | 'removed' | 'success' | 'warning' | 'destructive' | 'secondary' | 'outline'", 'default', 'Badge color variant. Legacy names (success, warning, destructive, secondary, outline) map to canonical appearances.'),
       p('size', "'sm' | 'md'", 'md', 'Badge size'),
       cls(),

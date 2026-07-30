@@ -207,10 +207,14 @@ import { FormField, Input } from '${PACKAGE}'
   ),
   Badge: usage(
     'Badge',
-    `  <Badge
-    :value="12"
-    :variant="'primary'"
-    :size="'md'"
+    `  <!-- Count only -->
+  <Badge :value="12" variant="primary" />
+
+  <!-- Icon + count (badge at bottom-right) -->
+  <Badge
+    icon="bell"
+    :value="3"
+    variant="primary"
   />`,
   ),
   Spinner: usage(

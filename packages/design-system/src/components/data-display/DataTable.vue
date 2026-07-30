@@ -277,18 +277,16 @@ watch(
 <template>
   <div :class="cn('flex w-full flex-col gap-4', props.class)">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div v-if="searchable" class="relative w-full sm:max-w-xs">
-        <Search
-          :size="16"
-          class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-          aria-hidden="true"
-        />
+      <div v-if="searchable" class="w-full sm:max-w-xs">
         <Input
           v-model="search"
           :placeholder="searchPlaceholder"
-          class="pl-9"
           :aria-label="resolvedLabels.searchAriaLabel"
-        />
+        >
+          <template #elemBefore>
+            <Search :size="16" aria-hidden="true" />
+          </template>
+        </Input>
       </div>
 
       <div class="flex items-center gap-3 sm:ml-auto">
