@@ -5,7 +5,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import packageJson from '../../package.json'
 
-const PACKAGE = '@tcarnaes/design-system'
+const PACKAGE = '@netragate/design-system'
 const VERSION = packageJson.version
 
 const { messages, t, locale } = usePlaygroundLocale()
@@ -141,7 +141,7 @@ const localizedGroups = computed(() =>
           {{ PACKAGE }}@{{ VERSION }}
         </span>
         <a
-          href="https://www.npmjs.com/package/@tcarnaes/design-system"
+          href="https://www.npmjs.com/package/@netragate/design-system"
           target="_blank"
           rel="noopener noreferrer"
           class="pg-text-muted inline-flex items-center gap-1.5 text-xs transition-colors hover:text-[var(--pg-accent)]"

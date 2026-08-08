@@ -99,8 +99,8 @@ A solução deve ser totalmente compatível com o sistema de i18n existente (`en
 
 #### Acceptance Criteria
 
-1. THE `Homepage` SHALL exibir uma `Quick_Start_Section` com o comando npm de instalação do pacote `@tcarnaes/design-system`.
-2. THE `Quick_Start_Section` SHALL exibir um snippet de importação básica (ex.: `import { Button } from '@tcarnaes/design-system'`).
+1. THE `Homepage` SHALL exibir uma `Quick_Start_Section` com o comando npm de instalação do pacote `@netragate/design-system`.
+2. THE `Quick_Start_Section` SHALL exibir um snippet de importação básica (ex.: `import { Button } from '@netragate/design-system'`).
 3. WHEN o usuário clica no botão de copiar e `navigator.clipboard` está disponível, THE `Homepage` SHALL copiar o comando para a área de transferência.
 4. WHEN a cópia é bem-sucedida, THE `Homepage` SHALL exibir feedback visual por entre 1500ms e 2000ms.
 5. IF `navigator.clipboard` não está disponível, THEN THE `Homepage` SHALL ocultar o botão de copiar sem erro.

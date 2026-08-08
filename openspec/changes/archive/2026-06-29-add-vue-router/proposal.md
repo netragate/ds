@@ -22,7 +22,7 @@ O playground do design system usa estado local (`activePage`) para navegação e
 
 ## Não-Objetivos
 
-- Adicionar vue-router como dependência do pacote `@tcarnaes/design-system` (apenas no playground)
+- Adicionar vue-router como dependência do pacote `@netragate/design-system` (apenas no playground)
 - Modificar a API pública dos componentes de navegação (`SidebarMenu`, `Tabs`, `Breadcrumb`, etc.)
 - Refatorar ou reestilizar páginas existentes — apenas torná-las acessíveis por rota
 - Implementar lazy-loading ou code-splitting de rotas
@@ -30,7 +30,7 @@ O playground do design system usa estado local (`activePage`) para navegação e
 
 ## Impact
 
-- `vue-router` adicionado ao `devDependencies` do pacote `@tcarnaes/design-system` (usado apenas no playground)
+- `vue-router` adicionado ao `devDependencies` do pacote `@netragate/design-system` (usado apenas no playground)
 - `packages/design-system/playground/main.ts`: instalar o router e passar para o `app.use()`
 - `packages/design-system/playground/App.vue`: remover `activePage`, `activeCat`, `setCategory`; usar `<router-view>` no lugar do sistema de renderização condicional
 - `packages/design-system/playground/components/PlaygroundHeader.vue` (ou inline no App.vue): trocar `@click` por `<router-link>`

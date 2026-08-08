@@ -4,7 +4,7 @@ export const designSystemVersion = packageJson.version
 
 export const designSystemVersionBadge = `v${packageJson.version}`
 
-/** Vue components exported from `@tcarnaes/design-system`. */
+/** Vue components exported from `@netragate/design-system`. */
 export const designSystemLibraryComponentCount = 62
 
 /** Interactive demos for Library components (drawer). */

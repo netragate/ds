@@ -21,7 +21,7 @@ const ariaLabel = ref('Settings')
 const disabled = ref(false)
 const loading = ref(false)
 
-const PACKAGE = '@tcarnaes/design-system'
+const PACKAGE = '@netragate/design-system'
 
 const code = computed(() => {
   const lines = [

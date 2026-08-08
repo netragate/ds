@@ -62,23 +62,17 @@ const isPinnedSettingsGroup = computed(
   () =>
     Boolean(
       layoutMenu?.settingsMenu.value
-        && isPinnedSettingsGroupId(props.id, layoutMenu.settingsMenuId),
+        && isPinnedSettingsGroupId(props.id, layoutMenu.settingsMenuId.value),
     ),
 )
 
-const renderInSettingsFooter = computed(() => {
-  if (!isPinnedSettingsGroup.value || !layoutMenu) {
-    return false
-  }
+const settingsTeleportTarget = computed(() => layoutMenu?.settingsGroupTarget.value ?? null)
 
-  return layoutMenu.settingsGroupTarget.value instanceof HTMLElement
-})
+const renderInSettingsFooter = computed(
+  () => isPinnedSettingsGroup.value && settingsTeleportTarget.value instanceof HTMLElement,
+)
 
 const renderInMain = computed(() => !isPinnedSettingsGroup.value)
-
-const settingsTeleportTarget = computed(
-  () => layoutMenu?.settingsGroupTarget.value ?? document.body,
-)
 
 const rootRef = ref<HTMLElement | null>(null)
 const buttonRef = ref<HTMLButtonElement | null>(null)
@@ -89,13 +83,29 @@ const flyoutCoords = ref({ top: 0, left: 0 })
 const flyoutAlign = ref<'down' | 'up'>('down')
 let hideTimer: ReturnType<typeof setTimeout> | undefined
 let scrollTarget: HTMLElement | Window | null = null
+let registeredAsPinnedSettings = false
 
 const FLYOUT_MARGIN = 8
 
-onBeforeMount(() => {
-  if (isPinnedSettingsGroup.value && layoutMenu) {
-    layoutMenu.registerSettingsGroup()
+function syncPinnedSettingsRegistration(): void {
+  if (!layoutMenu) {
+    return
   }
+
+  if (isPinnedSettingsGroup.value) {
+    layoutMenu.registerSettingsGroup()
+    registeredAsPinnedSettings = true
+    return
+  }
+
+  if (registeredAsPinnedSettings) {
+    layoutMenu.unregisterSettingsGroup()
+    registeredAsPinnedSettings = false
+  }
+}
+
+onBeforeMount(() => {
+  syncPinnedSettingsRegistration()
 })
 
 onMounted(() => {
@@ -109,14 +119,24 @@ onMounted(() => {
   if (props.defaultOpen && !sidebarMenu.isOpen(props.id)) {
     sidebarMenu.toggleOpen(props.id)
   }
-
 })
 
 onUnmounted(() => {
   clearTimeout(hideTimer)
   sidebarMenu.unregisterFlyoutCloser(props.id)
   removePositionListeners()
+  if (registeredAsPinnedSettings) {
+    layoutMenu?.unregisterSettingsGroup()
+    registeredAsPinnedSettings = false
+  }
 })
+
+watch(
+  () => [isPinnedSettingsGroup.value, layoutMenu?.settingsMenuId.value] as const,
+  () => {
+    syncPinnedSettingsRegistration()
+  },
+)
 
 const showFlyoutHeader = computed(
   () => sidebarMenu.collapsed.value && !sidebarMenu.inFlyout.value,
@@ -333,59 +353,58 @@ watch(
 <template>
   <Teleport
     :disabled="!renderInSettingsFooter"
-    :to="settingsTeleportTarget"
+    :to="settingsTeleportTarget ?? 'body'"
   >
     <div
-      v-show="renderInMain || renderInSettingsFooter"
+      v-if="renderInMain || renderInSettingsFooter"
       ref="rootRef"
       class="flex w-full flex-col"
       @mouseenter="showFlyout"
       @mouseleave="scheduleHideFlyout($event)"
     >
-    <button
-      ref="buttonRef"
-      type="button"
-      :class="triggerClasses"
-      :title="sidebarMenu.collapsed.value ? label : undefined"
-      :aria-expanded="flyoutOpen"
-      @click="onTriggerClick"
-      @mouseenter="showFlyout"
-      @mouseleave="scheduleHideFlyout($event)"
-    >
-      <span ref="iconRef" :class="iconClasses">
-        <component :is="icon" v-if="icon" :size="16" class="shrink-0" />
-      </span>
-      <span :class="sidebarMenuLabelClass()">{{ label }}</span>
-      <ChevronRight :class="chevronClasses" />
-    </button>
-
-    <Teleport to="body">
-      <div
-        v-if="flyoutOpen"
-        ref="flyoutRef"
-        data-sidebar-flyout
-        :data-sidebar-depth="sidebarMenu.depth"
-        :data-flyout-placement="flyoutAlign"
-        class="fixed min-w-[11rem] rounded-lg border border-border bg-popover py-1.5 pl-2.5 pr-1.5 shadow-[var(--ds-shadow-dropdown)]"
-        :style="{
-          top: `${flyoutCoords.top}px`,
-          left: `${flyoutCoords.left}px`,
-          zIndex: 200 + sidebarMenu.depth * 10,
-        }"
+      <button
+        ref="buttonRef"
+        type="button"
+        :class="triggerClasses"
+        :aria-expanded="flyoutOpen"
+        @click="onTriggerClick"
         @mouseenter="showFlyout"
         @mouseleave="scheduleHideFlyout($event)"
       >
-        <p
-          v-if="showFlyoutHeader"
-          class="mb-1 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground"
+        <span ref="iconRef" :class="iconClasses">
+          <component :is="icon" v-if="icon" :size="16" class="shrink-0" />
+        </span>
+        <span :class="sidebarMenuLabelClass()">{{ label }}</span>
+        <ChevronRight :class="chevronClasses" />
+      </button>
+
+      <Teleport to="body">
+        <div
+          v-if="flyoutOpen"
+          ref="flyoutRef"
+          data-sidebar-flyout
+          :data-sidebar-depth="sidebarMenu.depth"
+          :data-flyout-placement="flyoutAlign"
+          class="fixed min-w-[11rem] rounded-lg border border-border bg-popover py-1.5 pl-2.5 pr-1.5 shadow-[var(--ds-shadow-dropdown)]"
+          :style="{
+            top: `${flyoutCoords.top}px`,
+            left: `${flyoutCoords.left}px`,
+            zIndex: 200 + sidebarMenu.depth * 10,
+          }"
+          @mouseenter="showFlyout"
+          @mouseleave="scheduleHideFlyout($event)"
         >
-          {{ label }}
-        </p>
-        <SidebarMenuFlyout :parent-group-id="id">
-          <slot />
-        </SidebarMenuFlyout>
-      </div>
-    </Teleport>
+          <p
+            v-if="showFlyoutHeader"
+            class="mb-1 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground"
+          >
+            {{ label }}
+          </p>
+          <SidebarMenuFlyout :parent-group-id="id">
+            <slot />
+          </SidebarMenuFlyout>
+        </div>
+      </Teleport>
     </div>
   </Teleport>
 </template>

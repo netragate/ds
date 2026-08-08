@@ -2,7 +2,7 @@
 
 O playground do design system (`packages/design-system/playground/`) usa um sistema de navegação baseado em estado local (`activePage` ref em `App.vue`) para alternar entre as páginas Home, Foundations, Components Catalog e Docs. Não há `vue-router` instalado. A URL nunca muda, impossibilitando links diretos, histórico do navegador e uso dos botões "voltar"/"avançar".
 
-O pacote `@tcarnaes/design-system` já exporta um componente `Link` que aceita prop `to` e renderiza `<router-link>` quando detecta `vue-router` no contexto, então a base para integração futura existe.
+O pacote `@netragate/design-system` já exporta um componente `Link` que aceita prop `to` e renderiza `<router-link>` quando detecta `vue-router` no contexto, então a base para integração futura existe.
 
 ## Goals / Non-Goals
 
@@ -16,7 +16,7 @@ O pacote `@tcarnaes/design-system` já exporta um componente `Link` que aceita p
 - Testes do playground atualizados para usar `RouterView` stub
 
 **Non-Goals:**
-- Adicionar `vue-router` como dependência de produção do pacote `@tcarnaes/design-system`
+- Adicionar `vue-router` como dependência de produção do pacote `@netragate/design-system`
 - Modificar API do `Link` ou qualquer componente de navegação da biblioteca
 - Lazy-loading ou code-splitting de rotas
 - Navegação aninhada ou guardas de rota
@@ -26,7 +26,7 @@ O pacote `@tcarnaes/design-system` já exporta um componente `Link` que aceita p
 
 ### 1. `vue-router` como devDependency do playground, não do pacote
 
-`vue-router` é adicionado apenas ao `devDependencies` do `@tcarnaes/design-system` (ou diretamente no `playground/`). O pacote não expõe roteamento como dependência de consumo — componentes como `Link` já detectam router via `$router` opcional.
+`vue-router` é adicionado apenas ao `devDependencies` do `@netragate/design-system` (ou diretamente no `playground/`). O pacote não expõe roteamento como dependência de consumo — componentes como `Link` já detectam router via `$router` opcional.
 
 **Alternativa considerada:** adicionar como peerDependency do pacote. **Rejeitada:** o pacote não requer router para funcionar; a detecção já é opcional.
 

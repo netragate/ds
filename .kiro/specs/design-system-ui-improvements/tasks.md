@@ -148,9 +148,9 @@ Plano de implementação das 10 melhorias de UI no playground do design system V
     - _Requirements: 4.1–4.5, 6.6, 7.1–7.3, 8.1–8.2, 9.1–9.4, 10.1–10.3_
 
 - [x] 12. Checkpoint final — testes, TypeScript e build
-  - Executar `pnpm --filter @tcarnaes/design-system test --run` (ou equivalente) para garantir que todos os testes passam sem erros
-  - Executar `pnpm --filter @tcarnaes/design-system typecheck` (ou `vue-tsc --noEmit`) para verificar que não há erros TypeScript
-  - Executar `pnpm --filter @tcarnaes/design-system build` para verificar que o build do playground compila sem erros
+  - Executar `pnpm --filter @netragate/design-system test --run` (ou equivalente) para garantir que todos os testes passam sem erros
+  - Executar `pnpm --filter @netragate/design-system typecheck` (ou `vue-tsc --noEmit`) para verificar que não há erros TypeScript
+  - Executar `pnpm --filter @netragate/design-system build` para verificar que o build do playground compila sem erros
   - Garantir que nenhuma importação não-utilizada foi deixada nos arquivos modificados
   - Verificar visualmente no browser que os 10 requisitos estão atendidos (hero sem versão e sem botões, header com ícone GitHub, FlagGroupDemo com toggle isDismissible, etc.)
   - Perguntar ao usuário se há dúvidas ou ajustes antes de concluir

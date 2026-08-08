@@ -15004,14 +15004,14 @@
       "norm_label": "readme.md"
     },
     {
-      "label": "@tcarnaes/design-system",
+      "label": "@netragate/design-system",
       "file_type": "document",
       "source_file": "packages/design-system/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "design_system_readme_tcarnaes_design_system",
+      "id": "design_system_readme_netragate_design_system",
       "community": 32,
-      "norm_label": "@tcarnaes/design-system"
+      "norm_label": "@netragate/design-system"
     },
     {
       "label": "Requisitos",
@@ -33124,7 +33124,7 @@
       "source_location": "L1",
       "weight": 1.0,
       "source": "design_system_readme",
-      "target": "design_system_readme_tcarnaes_design_system",
+      "target": "design_system_readme_netragate_design_system",
       "confidence_score": 1.0
     },
     {
@@ -33133,7 +33133,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L121",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_card",
       "confidence_score": 1.0
     },
@@ -33143,7 +33143,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L461",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_componentes_exportados",
       "confidence_score": 1.0
     },
@@ -33153,7 +33153,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L20",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_configura\u00e7\u00e3o_r\u00e1pida",
       "confidence_score": 1.0
     },
@@ -33163,7 +33163,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L141",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_datatable",
       "confidence_score": 1.0
     },
@@ -33173,7 +33173,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L493",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_desenvolvimento_local",
       "confidence_score": 1.0
     },
@@ -33183,7 +33183,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L297",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_exemplos_por_categoria",
       "confidence_score": 1.0
     },
@@ -33193,7 +33193,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L77",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_formul\u00e1rios",
       "confidence_score": 1.0
     },
@@ -33203,7 +33203,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L14",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_instala\u00e7\u00e3o",
       "confidence_score": 1.0
     },
@@ -33213,7 +33213,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L508",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_licen\u00e7a",
       "confidence_score": 1.0
     },
@@ -33223,7 +33223,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L258",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_overlay",
       "confidence_score": 1.0
     },
@@ -33233,7 +33233,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L64",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_playground",
       "confidence_score": 1.0
     },
@@ -33243,7 +33243,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L9",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_requisitos",
       "confidence_score": 1.0
     },
@@ -33253,7 +33253,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L226",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_toasts",
       "confidence_score": 1.0
     },
@@ -33263,7 +33263,7 @@
       "source_file": "packages/design-system/README.md",
       "source_location": "L476",
       "weight": 1.0,
-      "source": "design_system_readme_tcarnaes_design_system",
+      "source": "design_system_readme_netragate_design_system",
       "target": "design_system_readme_typescript",
       "confidence_score": 1.0
     },

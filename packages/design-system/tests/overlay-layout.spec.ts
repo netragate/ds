@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
+import { defineComponent, ref } from 'vue'
 import Modal from '@/components/overlay/Modal.vue'
 import Drawer from '@/components/overlay/Drawer.vue'
 import Container from '@/components/layout/Container.vue'
@@ -259,6 +260,7 @@ describe('layout components', () => {
       },
       slots: {
         menu: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
           <SidebarMenuGroup id="prefs" label="Preferences">
             <SidebarMenuItem id="prefs.profile" label="Profile" />
             <SidebarMenuItem id="prefs.team" label="Team" />
@@ -274,7 +276,82 @@ describe('layout components', () => {
     await wrapper.vm.$nextTick()
     await flushPromises()
 
-    expect(wrapper.text()).toContain('Preferences')
+    const footer = wrapper.find('[data-settings-footer="group"]')
+    expect(footer.exists()).toBe(true)
+    expect(footer.text()).toContain('Preferences')
+    expect(wrapper.find('[data-settings-footer="single"]').text()).toBe('')
+  })
+
+  it('AppLayout does not pin a group when id differs from settingsMenuId', async () => {
+    const wrapper = mount(AppLayout, {
+      props: {
+        showMenu: true,
+        settingsMenu: true,
+        settingsMenuId: 'admin.settings',
+      },
+      slots: {
+        menu: `
+          <SidebarMenuGroup id="settings" label="Settings">
+            <SidebarMenuItem id="settings.profile" label="Profile" />
+          </SidebarMenuGroup>
+        `,
+        default: 'Content',
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+    await flushPromises()
+
+    expect(wrapper.find('[data-settings-footer="group"]').text()).toBe('')
+    expect(wrapper.text()).toContain('Settings')
+  })
+
+  it('AppLayout switches pinned settings from group to single without remount', async () => {
+    const asGroup = ref(true)
+
+    const Wrapper = defineComponent({
+      components: { AppLayout, SidebarMenuGroup, SidebarMenuItem },
+      setup() {
+        return { asGroup }
+      },
+      template: `
+        <AppLayout :show-menu="true" :settings-menu="true" settings-menu-id="settings">
+          <template #menu>
+            <SidebarMenuGroup
+              v-if="asGroup"
+              id="settings"
+              label="Settings"
+            >
+              <SidebarMenuItem id="settings.profile" label="Profile" />
+            </SidebarMenuGroup>
+            <SidebarMenuItem
+              v-else
+              id="settings"
+              label="Settings"
+            />
+          </template>
+          Content
+        </AppLayout>
+      `,
+    })
+
+    const wrapper = mount(Wrapper, { attachTo: document.body })
+    await wrapper.vm.$nextTick()
+    await flushPromises()
+
+    expect(wrapper.find('[data-settings-footer="group"]').text()).toContain('Settings')
+
+    asGroup.value = false
+    await wrapper.vm.$nextTick()
+    await flushPromises()
+
+    expect(wrapper.find('[data-settings-footer="group"]').text()).toBe('')
+    expect(wrapper.find('[data-settings-footer="single"]').text()).toContain('Settings')
+
+    wrapper.unmount()
   })
 
   it('AppLayout pins a lone SidebarMenuItem with matching settingsMenuId to the footer', async () => {

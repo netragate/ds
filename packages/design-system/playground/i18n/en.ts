@@ -175,7 +175,7 @@ export const en: PlaygroundMessages = {
     collapseMenu: 'Collapse menu',
     introLead: 'composes a full-page grid from four slots.',
     introBody:
-      'Header and footer span the full width by default; the menu sits beside the main content area. Put all navigation in #menu. With :settings-menu="true", pin a SidebarMenuGroup or lone SidebarMenuItem whose id matches settingsMenuId (default settings) to the menu footer — group with children opens a flyout on hover; a single item is a plain link. Set :footer-width="\'content\'" to keep the footer under the content column. With an empty v-model:active-menu-id, the first menu item is selected automatically.',
+      'Header and footer span the full width by default; the menu sits beside the main content area. Put all navigation in #menu. With :settings-menu="true", pin a SidebarMenuGroup or lone SidebarMenuItem whose id equals settingsMenuId (default settings — any string works, e.g. admin.settings) to the menu footer. Group with children opens a flyout on hover — set :flyout-placement="\'up\'" when pinned at the bottom; a single item is a plain link. Toggle group vs item without remounting. Set :footer-width="\'content\'" to keep the footer under the content column. With an empty v-model:active-menu-id, the first menu item is selected automatically.',
     stylingNote:
       'AppLayout does not style slot content. Declare refs in script setup and wrap each region with Tailwind utility classes — see the Usage snippet below.',
     panelDescription:

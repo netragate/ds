@@ -45,8 +45,6 @@ const visiblePages = computed(() => {
   return pages
 })
 
-const showPagination = computed(() => props.total > props.pageSize)
-
 function goToPage(page: number): void {
   if (page < 1 || page > totalPages.value || page === props.currentPage) return
   emit('update:currentPage', page)
@@ -65,7 +63,6 @@ function pageButtonClass(isActive: boolean): string {
 
 <template>
   <nav
-    v-if="showPagination"
     role="navigation"
     aria-label="pagination"
     :class="cn('flex w-auto items-center', props.class)"

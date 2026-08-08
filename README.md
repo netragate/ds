@@ -1,10 +1,10 @@
 # ds
 
-Monorepo do design system Vue 3 [`@tcarnaes/design-system`](https://www.npmjs.com/package/@tcarnaes/design-system).
+Monorepo do design system Vue 3 [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system).
 
 - **Repositório:** [github.com/thiagocarnaes/ds](https://github.com/thiagocarnaes/ds)
 - **Playground (GitHub Pages):** [thiagocarnaes.github.io/ds](https://thiagocarnaes.github.io/ds/)
-- **Pacote npm:** [`@tcarnaes/design-system`](https://www.npmjs.com/package/@tcarnaes/design-system) 
+- **Pacote npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system) 
 
 ## O que tem aqui
 

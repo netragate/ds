@@ -93,7 +93,7 @@ describe('HomeQuickStartSection — successful clipboard copy', () => {
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledOnce()
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-      'npm install @tcarnaes/design-system',
+      'npm install @netragate/design-system',
     )
 
     wrapper.unmount()
@@ -201,7 +201,7 @@ describe('HomeQuickStartSection — environment without clipboard', () => {
     // Install command code block is present
     const code = wrapper.find('code')
     expect(code.exists()).toBe(true)
-    expect(code.text()).toContain('@tcarnaes/design-system')
+    expect(code.text()).toContain('@netragate/design-system')
 
     // Docs link button is present
     const docsBtn = wrapper.find('.docs-link')

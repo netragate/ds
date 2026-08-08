@@ -244,7 +244,7 @@ const codeSnippet = computed(() => {
   if (buttonDisabled.value) buttonAttrs.push(templateBooleanAttr('disabled', true))
   if (buttonLoading.value) buttonAttrs.push(templateBooleanAttr('loading', true))
 
-  const PACKAGE = '@tcarnaes/design-system'
+  const PACKAGE = '@netragate/design-system'
 
   const map: Record<string, string> = {
     Button: `<script setup lang="ts">

@@ -10,6 +10,7 @@ import Pagination from '@/components/navigation/Pagination.vue'
 import SidebarMenu from '@/components/navigation/SidebarMenu.vue'
 import SidebarMenuGroup from '@/components/navigation/SidebarMenuGroup.vue'
 import SidebarMenuItem from '@/components/navigation/SidebarMenuItem.vue'
+import Tooltip from '@/components/overlay/Tooltip.vue'
 import { SIDEBAR_MENU_INJECTION_KEY } from '@/components/navigation/sidebarMenuContext'
 
 describe('Tabs', () => {
@@ -491,5 +492,85 @@ describe('SidebarMenu', () => {
 
     rectSpy.mockRestore()
     wrapper.unmount()
+  })
+
+  it('renders design system Tooltip with variant outline, placement right, and targetRef on collapsed SidebarMenuItem', () => {
+    const collapsedMenuItem = mount(SidebarMenuItem, {
+      props: { id: 'dashboard', label: 'Dashboard' },
+      global: {
+        provide: {
+          [SIDEBAR_MENU_INJECTION_KEY as symbol]: {
+            collapsed: { value: true },
+            showLabels: { value: false },
+            isActive: () => false,
+            isGroupActive: () => false,
+            setActive: () => undefined,
+            registerMenuItem: () => undefined,
+            registerGroupItem: () => undefined,
+          },
+        },
+      },
+    })
+
+    const tooltip = collapsedMenuItem.findComponent(Tooltip)
+    expect(tooltip.exists()).toBe(true)
+    expect(tooltip.props('content')).toBe('Dashboard')
+    expect(tooltip.props('placement')).toBe('right')
+    expect(tooltip.props('variant')).toBe('outline')
+    expect(tooltip.props('targetRef')).toBeTruthy()
+    expect(collapsedMenuItem.find('button').attributes('title')).toBeUndefined()
+
+    const expandedMenuItem = mount(SidebarMenuItem, {
+      props: { id: 'dashboard', label: 'Dashboard' },
+      global: {
+        provide: {
+          [SIDEBAR_MENU_INJECTION_KEY as symbol]: {
+            collapsed: { value: false },
+            showLabels: { value: true },
+            isActive: () => false,
+            isGroupActive: () => false,
+            setActive: () => undefined,
+            registerMenuItem: () => undefined,
+            registerGroupItem: () => undefined,
+          },
+        },
+      },
+    })
+
+    expect(expandedMenuItem.findComponent(Tooltip).exists()).toBe(false)
+    expect(expandedMenuItem.find('button').attributes('title')).toBeUndefined()
+  })
+
+  it('does NOT render design system Tooltip on SidebarMenuGroup when collapsed', () => {
+    const collapsedGroup = mount(SidebarMenuGroup, {
+      props: { id: 'settings', label: 'Settings' },
+      global: {
+        provide: {
+          [SIDEBAR_MENU_INJECTION_KEY as symbol]: {
+            collapsed: { value: true },
+            inFlyout: { value: false },
+            showLabels: { value: false },
+            depth: 0,
+            activeId: { value: '' },
+            openKeys: { value: [] },
+            toggleOpen: () => undefined,
+            isOpen: () => false,
+            isActive: () => false,
+            isGroupActive: () => false,
+            setActive: () => undefined,
+            registerMenuItem: () => undefined,
+            registerGroupItem: () => undefined,
+            registerFlyoutCloser: () => undefined,
+            unregisterFlyoutCloser: () => undefined,
+            closePeerFlyouts: () => undefined,
+            hasOpenDescendantFlyouts: () => false,
+            closeAllFlyouts: () => undefined,
+          },
+        },
+      },
+    })
+
+    expect(collapsedGroup.findComponent(Tooltip).exists()).toBe(false)
+    expect(collapsedGroup.find('button').attributes('title')).toBeUndefined()
   })
 })

@@ -12,8 +12,8 @@ const { t } = usePlaygroundLocale()
 const copied = ref(false)
 const canCopy = ref(typeof navigator !== 'undefined' && !!navigator.clipboard)
 
-const installCmd = 'npm install @tcarnaes/design-system'
-const importSnippet = "import { Button } from '@tcarnaes/design-system'"
+const installCmd = 'npm install @netragate/design-system'
+const importSnippet = "import { Button } from '@netragate/design-system'"
 
 async function copyToClipboard(text: string): Promise<void> {
   if (!canCopy.value) return

@@ -166,7 +166,7 @@
 1. `Requirements` - 29 edges
 2. `Component Design Details` - 27 edges
 3. `providePlaygroundLocale()` - 26 edges
-4. `@tcarnaes/design-system` - 15 edges
+4. `@netragate/design-system` - 15 edges
 5. `compilerOptions` - 14 edges
 6. `PlaygroundLocale` - 11 edges
 7. `Correctness Properties` - 11 edges

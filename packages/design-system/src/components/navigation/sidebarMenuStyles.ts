@@ -11,7 +11,7 @@ export function sidebarMenuTriggerClass(): string {
 }
 
 export function sidebarMenuIconClass(): string {
-  return 'flex w-8 shrink-0 items-center justify-center'
+  return 'flex h-full w-8 shrink-0 items-center justify-center'
 }
 
 export function sidebarMenuLabelClass(): string {

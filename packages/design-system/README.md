@@ -1,8 +1,8 @@
-# @tcarnaes/design-system
+# @netragate/design-system
 
 Biblioteca de componentes **Vue 3** com design tokens, Tailwind CSS 4 e suporte a **light/dark mode**.
 
-- **npm:** [`@tcarnaes/design-system`](https://www.npmjs.com/package/@tcarnaes/design-system)
+- **npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system)
 - **Repositório:** [github.com/thiagocarnaes/ds](https://github.com/thiagocarnaes/ds)
 - **Playground:** [thiagocarnaes.github.io/ds](https://thiagocarnaes.github.io/ds/)
 
@@ -14,7 +14,7 @@ Biblioteca de componentes **Vue 3** com design tokens, Tailwind CSS 4 e suporte 
 ## Instalação
 
 ```bash
-npm install @tcarnaes/design-system vue
+npm install @netragate/design-system vue
 ```
 
 ## Configuração rápida
@@ -26,7 +26,7 @@ No entry point da aplicação (ex.: `main.ts`):
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import '@tcarnaes/design-system/styles.css'
+import '@netragate/design-system/styles.css'
 
 createApp(App).mount('#app')
 ```
@@ -35,7 +35,7 @@ createApp(App).mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { Button, Input, FormField } from '@tcarnaes/design-system'
+import { Button, Input, FormField } from '@netragate/design-system'
 </script>
 
 <template>
@@ -83,7 +83,7 @@ Subcomponentes da Library (ex.: `TabPanel`, `AppLayout`, `PageSizeSelect`) abrem
 ```vue
 <script setup lang="ts">
 import { Mail } from 'lucide-vue-next'
-import { FormField, Input } from '@tcarnaes/design-system'
+import { FormField, Input } from '@netragate/design-system'
 </script>
 
 <template>
@@ -145,7 +145,7 @@ Tabela completa com busca global, **multi-sort** (Ctrl+click / ⌘+click), filtr
 ### Colunas
 
 ```ts
-import type { DataTableColumn } from '@tcarnaes/design-system'
+import type { DataTableColumn } from '@netragate/design-system'
 
 const columns: DataTableColumn[] = [
   { key: 'name', label: 'Nome', sortable: true, filter: 'text' },
@@ -169,8 +169,8 @@ Tipos de filtro: `'text'` | `'date'` (de/até) | `'enum'` (multi-select). O íco
 
 ```vue
 <script setup lang="ts">
-import { DataTable, Lozenge } from '@tcarnaes/design-system'
-import type { DataTableColumnFilters, DataTableSortEntry } from '@tcarnaes/design-system'
+import { DataTable, Lozenge } from '@netragate/design-system'
+import type { DataTableColumnFilters, DataTableSortEntry } from '@netragate/design-system'
 import { ref } from 'vue'
 
 const columns = [/* ... */]
@@ -229,7 +229,7 @@ Monte o `ToastHost` uma vez no layout raiz e dispare toasts pelo composable:
 
 ```vue
 <script setup lang="ts">
-import { ToastHost, useToast } from '@tcarnaes/design-system'
+import { ToastHost, useToast } from '@netragate/design-system'
 
 const toast = useToast()
 
@@ -270,7 +270,7 @@ Ambos usam `:variant` (não `appearance`):
 
 ```vue
 <script setup lang="ts">
-import { Button, Popover, Tooltip } from '@tcarnaes/design-system'
+import { Button, Popover, Tooltip } from '@netragate/design-system'
 </script>
 
 <template>
@@ -308,7 +308,7 @@ import {
   Select,
   Switch,
   Toggle,
-} from '@tcarnaes/design-system'
+} from '@netragate/design-system'
 import { ref } from 'vue'
 
 const name = ref('')
@@ -348,7 +348,7 @@ const notifications = ref(true)
 
 ```vue
 <script setup lang="ts">
-import { Alert, Badge, Progress, Skeleton, Spinner } from '@tcarnaes/design-system'
+import { Alert, Badge, Progress, Skeleton, Spinner } from '@netragate/design-system'
 </script>
 
 <template>
@@ -365,12 +365,12 @@ import { Alert, Badge, Progress, Skeleton, Spinner } from '@tcarnaes/design-syst
 
 ### Layout
 
-`AppLayout` organiza as regiões da página (grid + painel lateral), mas **não estiliza** header, menu, conteúdo, panel ou footer. Use o slot `#menu` com `SidebarMenuItem` / `SidebarMenuGroup` — o shell e **toggle com chevron** já vêm montados. Com `:settings-menu="true"`, declare um `SidebarMenuGroup` com `id="settings"` (ou `settings-menu-id`) **ou** um `SidebarMenuItem` sozinho com o mesmo id — veja o demo **Layout** no playground.
+`AppLayout` organiza as regiões da página (grid + painel lateral), mas **não estiliza** header, menu, conteúdo, panel ou footer. Use o slot `#menu` com `SidebarMenuItem` / `SidebarMenuGroup` — o shell e **toggle com chevron** já vêm montados. Com `:settings-menu="true"`, fixe no rodapé do menu o nó cujo `id` corresponde a `:settings-menu-id` (padrão `settings`) — pode ser um `SidebarMenuGroup` (flyout) ou um `SidebarMenuItem` isolado (link). Veja o demo **Layout** no playground.
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { AppLayout, Button, SidebarMenuGroup, SidebarMenuItem } from '@tcarnaes/design-system'
+import { AppLayout, Button, SidebarMenuGroup, SidebarMenuItem } from '@netragate/design-system'
 
 const menuCollapsed = ref(false)
 const panelOpen = ref(false)
@@ -380,6 +380,7 @@ const menuLabel = ref('Navigation')
 const activeId = ref('dashboard')
 const openKeys = ref<string[]>([])
 const settingsMenu = ref(true)
+const settingsMenuId = ref('settings')
 const pageTitle = ref('Dashboard')
 </script>
 
@@ -394,6 +395,7 @@ const pageTitle = ref('Dashboard')
     :menu-collapsed-width="menuCollapsedWidth"
     :menu-label="menuLabel"
     :settings-menu="settingsMenu"
+    :settings-menu-id="settingsMenuId"
   >
     <template #header>
       <div class="flex items-center justify-between border-b border-border bg-card px-4 py-3">
@@ -403,8 +405,8 @@ const pageTitle = ref('Dashboard')
 
     <template #menu>
       <SidebarMenuItem :id="'dashboard'" :label="'Dashboard'" />
-      <SidebarMenuGroup :id="'settings'" :label="'Settings'" flyout-placement="up">
-        <SidebarMenuItem :id="'settings.profile'" :label="'Profile'" />
+      <SidebarMenuGroup :id="settingsMenuId" :label="'Settings'" :flyout-placement="'up'">
+        <SidebarMenuItem :id="`${settingsMenuId}.profile`" :label="'Profile'" />
       </SidebarMenuGroup>
     </template>
 
@@ -430,13 +432,13 @@ const pageTitle = ref('Dashboard')
 </template>
 ```
 
-**Settings no rodapé:** com `:settings-menu="true"`, declare no `#menu` um `SidebarMenuGroup` com `id="settings"` (ou `settings-menu-id`) **ou** um `SidebarMenuItem` sozinho com o mesmo id. Grupo → submenu no hover; item único → link simples no rodapé.
+**Settings no rodapé:** com `:settings-menu="true"`, declare no `#menu` um `SidebarMenuGroup` **ou** um `SidebarMenuItem` isolado cujo `id` seja **igual** a `settings-menu-id` (padrão `settings`). O id pode ser qualquer string (ex.: `admin.settings`) — o pin compara igualdade exata. Grupo → flyout no hover; item único → link no rodapé. Não declare os dois com o mesmo id ao mesmo tempo.
 
 **IDs do menu lateral**
 
 - Itens de topo **fora** de um grupo não devem compartilhar o prefixo do grupo (evite `todos.all` ao lado do grupo `todos` — prefira `all` ou ids dentro do grupo, ex. `todos.active`).
 - Com `v-model:active-menu-id` vazio, o primeiro `SidebarMenuItem` registrado é selecionado automaticamente.
-- Flyouts perto do rodapé abrem para cima — use `flyout-placement="up"` no `SidebarMenuGroup` de settings (`'auto' | 'down' | 'up'`).
+- Flyouts perto do rodapé abrem para cima — use `:flyout-placement="'up'"` no `SidebarMenuGroup` de settings (`'auto' | 'down' | 'up'`; padrão `'auto'`).
 
 O slot **default** (conteúdo) ocupa 100% da altura disponível — use `class="min-h-svh"` no `AppLayout` (ou `height: 100%` em `html`, `body` e `#app`). Header, panel e footer continuam compostos por você com classes Tailwind.
 
@@ -448,7 +450,7 @@ Variantes: `default` | `primary` | `secondary` | `outline` | `ghost` | `destruct
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@tcarnaes/design-system'
+import { Button } from '@netragate/design-system'
 </script>
 
 <template>
@@ -487,7 +489,7 @@ import type {
   SelectOption,
   SortDirection,
   ToastPosition,
-} from '@tcarnaes/design-system'
+} from '@netragate/design-system'
 ```
 
 ## Desenvolvimento local

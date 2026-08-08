@@ -326,7 +326,17 @@ const toast = useToast()
     `  <SidebarMenuGroup :id="'forms'" :label="'Forms'" :default-open="true">
     <SidebarMenuItem :id="'forms.input'" :label="'Input'" />
   </SidebarMenuGroup>
-  <!-- Near viewport bottom (e.g. AppLayout settings footer): flyout-placement="up" -->`,
+
+  <!-- Pinned near the menu footer (e.g. AppLayout settings): force flyout upward -->
+  <SidebarMenuGroup
+    :id="'settings'"
+    :label="'Settings'"
+    :flyout-placement="'up'"
+    :child-ids="['settings.profile', 'settings.team']"
+  >
+    <SidebarMenuItem :id="'settings.profile'" :label="'Profile'" />
+    <SidebarMenuItem :id="'settings.team'" :label="'Team'" />
+  </SidebarMenuGroup>`,
   ),
   SidebarMenuShell: usageMany(
     ['SidebarMenu', 'SidebarMenuShell'],
@@ -556,6 +566,7 @@ const showHeader = ref(true)
 const showMenu = ref(true)
 const showFooter = ref(true)
 const settingsMenu = ref(true)
+const settingsMenuId = ref('settings')
 const footerWidth = ref<'full' | 'content'>('full')
 const activeId = ref('dashboard')
 const openKeys = ref<string[]>([])
@@ -583,6 +594,7 @@ const pageTitle = ref('Dashboard')
     :show-menu="showMenu"
     :show-footer="showFooter"
     :settings-menu="settingsMenu"
+    :settings-menu-id="settingsMenuId"
     :footer-width="footerWidth"
   >
     <template #header>
@@ -593,10 +605,10 @@ const pageTitle = ref('Dashboard')
 
     <template #menu>
       <SidebarMenuItem :id="'dashboard'" :label="'Dashboard'" />
-      <SidebarMenuGroup :id="'settings'" :label="'Settings'" :flyout-placement="'up'">
-        <SidebarMenuItem :id="'settings.profile'" :label="'Profile'" />
+      <SidebarMenuGroup :id="settingsMenuId" :label="'Settings'" :flyout-placement="'up'">
+        <SidebarMenuItem :id="settingsMenuId + '.profile'" :label="'Profile'" />
       </SidebarMenuGroup>
-      <!-- Or a single item: <SidebarMenuItem :id="'settings'" :label="'Settings'" /> -->
+      <!-- Or a single item: <SidebarMenuItem :id="settingsMenuId" :label="'Settings'" /> -->
     </template>
 
     <div class="flex flex-col gap-4 p-6">

@@ -121,6 +121,11 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Flex direction': 'Direção do flex',
   'Footer actions aligned to the end': 'Ações do footer alinhadas ao final',
   'Footer spans full width or content column only': 'Footer ocupa largura total ou apenas a coluna de conteúdo',
+  'Pin a SidebarMenuGroup or SidebarMenuItem whose id equals settingsMenuId to the menu footer':
+    'Fixa no rodapé do menu um SidebarMenuGroup ou SidebarMenuItem cujo id seja igual a settingsMenuId',
+  'Exact id of the SidebarMenuGroup or lone SidebarMenuItem to pin (any string; must match the node id)':
+    'Id exato do SidebarMenuGroup ou SidebarMenuItem isolado a fixar (qualquer string; deve bater com o id do nó)',
+  'Form field content (input, select, etc.)': 'Conteúdo do campo de formulário (input, select, etc.)',
   'Form control; receives auto-generated id for label association': 'Controle de formulário; recebe id auto-gerado para associação com label',
   'Gap between items (Tailwind spacing scale)': 'Espaço entre itens (escala de spacing do Tailwind)',
   'Grid cell children': 'Filhos da célula do grid',
@@ -171,6 +176,19 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Native button type': 'Tipo nativo do botão',
   'Native input type': 'Tipo nativo do input',
   'Nested SidebarMenuItem children': 'Filhos SidebarMenuItem aninhados',
+  'Vertical flyout alignment relative to the group trigger — auto opens upward near the viewport bottom; use up for pinned settings in the AppLayout menu footer':
+    'Alinhamento vertical do flyout relativo ao trigger do grupo — auto abre para cima perto do fundo da viewport; use up para settings pinado no rodapé do menu do AppLayout',
+  'Child SidebarMenuItem ids — marks the group active when a child is selected even if the flyout is closed':
+    'Ids dos SidebarMenuItem filhos — marca o grupo como ativo quando um filho está selecionado mesmo com o flyout fechado',
+  'Compared with exact string equality to the SidebarMenuGroup / lone SidebarMenuItem id':
+    'Comparado com igualdade exata de string ao id do SidebarMenuGroup / SidebarMenuItem isolado',
+  'Register/unregister switches footer mode live (group flyout or single link)':
+    'Register/unregister alterna o modo do rodapé ao vivo (flyout de grupo ou link simples)',
+  'Use :flyout-placement="\'up\'" so the pinned settings flyout opens upward':
+    'Use :flyout-placement="\'up\'" para o flyout de settings pinado abrir para cima',
+  'Fired with the group id when the trigger is clicked': 'Disparado com o id do grupo ao clicar no trigger',
+  'Fired with the group id when the trigger is clicked (alias of click)':
+    'Disparado com o id do grupo ao clicar no trigger (alias de click)',
   'Numeric value — renders as text (99+ when above 99)': 'Valor numérico — renderiza como texto (99+ acima de 99)',
   'On/off state': 'Estado ligado/desligado',
   'Open state (v-model:open)': 'Estado aberto (v-model:open)',

@@ -1,1 +1,1 @@
-export const PACKAGE = '@tcarnaes/design-system'
+export const PACKAGE = '@netragate/design-system'

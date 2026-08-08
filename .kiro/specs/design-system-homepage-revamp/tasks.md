@@ -107,7 +107,7 @@ Transformar a home page do playground em uma página editorial de boas-vindas no
   - [x] 6.1 Implementar o componente `playground/components/HomeQuickStartSection.vue`
     - Emitir evento `docs: []`
     - Estado interno: `copied = ref(false)`, `canCopy = ref(typeof navigator !== 'undefined' && !!navigator.clipboard)`
-    - Exibir comando npm (`npm install @tcarnaes/design-system`) e snippet de importação básica
+    - Exibir comando npm (`npm install @netragate/design-system`) e snippet de importação básica
     - Botão de copiar com `v-if="canCopy"`, ao clicar: `navigator.clipboard.writeText(cmd)` → `copied = true` → `setTimeout(() => copied = false, 1500)`
     - Feedback visual de cópia usando chave `homeQuickStart.copiedLabel` com duração de 1500ms
     - Link "View full docs" que emite `docs` ao clicar, com `aria-label` descritivo

@@ -9,7 +9,8 @@ export const buttonVariants = cva(
           'border-0 bg-primary text-primary-foreground shadow-[var(--ds-button-shadow)] hover:bg-primary/90 hover:shadow-[var(--ds-button-shadow-hover)] active:shadow-[var(--ds-button-shadow-pressed)]',
         primary:
           'border-0 bg-primary text-primary-foreground shadow-[var(--ds-button-shadow)] hover:bg-primary/90 hover:shadow-[var(--ds-button-shadow-hover)] active:shadow-[var(--ds-button-shadow-pressed)]',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        secondary:
+          'border-0 bg-secondary text-secondary-foreground ds-button-secondary-surface hover:bg-secondary/80',
         outline:
           'border-0 bg-background shadow-[var(--ds-button-shadow)] hover:bg-[--ds-color-bg-hovered] hover:text-text-hovered hover:shadow-[var(--ds-button-shadow-hover)] active:shadow-[var(--ds-button-shadow-pressed)]',
         ghost: 'bg-white/[0.03] hover:bg-[--ds-color-bg-hovered] hover:text-text-hovered',

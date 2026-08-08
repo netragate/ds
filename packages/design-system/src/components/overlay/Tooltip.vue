@@ -17,6 +17,9 @@ const props = withDefaults(
     /** @deprecated Use `variant` instead. */
     appearance?: OverlayAppearance
     class?: string
+    triggerClass?: string
+    /** Custom element reference to anchor the tooltip positioning relative to */
+    targetRef?: HTMLElement | null
     /** Delay in milliseconds before showing the tooltip. Default: 300ms */
     delay?: number
     /** Keyboard shortcut to display alongside the tooltip content */
@@ -26,6 +29,8 @@ const props = withDefaults(
     placement: 'top',
     variant: undefined,
     appearance: undefined,
+    triggerClass: undefined,
+    targetRef: undefined,
     delay: 300,
     shortcut: undefined,
   },
@@ -86,7 +91,7 @@ function computePosition(
 async function updatePosition(): Promise<void> {
   await nextTick()
 
-  const trigger = triggerRef.value
+  const trigger = props.targetRef ?? triggerRef.value
   const tooltip = tooltipRef.value
 
   if (!trigger || !tooltip) {
@@ -163,7 +168,7 @@ const tooltipStyle = computed(() => ({
 <template>
   <span
     ref="triggerRef"
-    class="inline-flex"
+    :class="cn('inline-flex w-full', props.triggerClass)"
     @mouseenter="show"
     @mouseleave="hide"
     @focusin="show"

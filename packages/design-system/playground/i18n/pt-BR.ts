@@ -175,7 +175,7 @@ export const ptBR: PlaygroundMessages = {
     collapseMenu: 'Recolher menu',
     introLead: 'compõe um grid de página inteira a partir de quatro slots.',
     introBody:
-      'Header e footer ocupam a largura total por padrão; o menu fica ao lado da área de conteúdo principal. Coloque toda a navegação em #menu. Com :settings-menu="true", fixe no rodapé um SidebarMenuGroup ou SidebarMenuItem isolado cujo id corresponda a settingsMenuId (padrão settings) — grupo com filhos abre flyout no hover; item único vira link simples. Use :footer-width="\'content\'" para manter o footer sob a coluna de conteúdo. Com v-model:active-menu-id vazio, o primeiro item do menu é selecionado automaticamente.',
+      'Header e footer ocupam a largura total por padrão; o menu fica ao lado da área de conteúdo principal. Coloque toda a navegação em #menu. Com :settings-menu="true", fixe no rodapé um SidebarMenuGroup ou SidebarMenuItem isolado cujo id seja igual a settingsMenuId (padrão settings — qualquer string, ex. admin.settings). Grupo com filhos abre flyout no hover — use :flyout-placement="\'up\'" quando estiver pinado embaixo; item único vira link simples. Dá para alternar grupo vs item sem remount. Use :footer-width="\'content\'" para manter o footer sob a coluna de conteúdo. Com v-model:active-menu-id vazio, o primeiro item do menu é selecionado automaticamente.',
     stylingNote:
       'O AppLayout não estiliza o conteúdo dos slots. Declare refs no script setup e envolva cada região com classes Tailwind — veja o snippet Usage abaixo.',
     panelDescription:

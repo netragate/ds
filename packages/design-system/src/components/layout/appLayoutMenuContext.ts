@@ -4,12 +4,14 @@ export type SettingsFooterMode = 'none' | 'group' | 'single'
 
 export interface AppLayoutMenuContext {
   settingsMenu: ComputedRef<boolean>
-  settingsMenuId: string
+  settingsMenuId: ComputedRef<string>
   settingsFooterMode: Ref<SettingsFooterMode>
   settingsGroupTarget: Ref<HTMLElement | null>
   settingsSingleTarget: Ref<HTMLElement | null>
   registerSettingsGroup: () => void
   registerSettingsSingle: () => void
+  unregisterSettingsGroup: () => void
+  unregisterSettingsSingle: () => void
 }
 
 export const APP_LAYOUT_MENU_INJECTION_KEY: InjectionKey<AppLayoutMenuContext> =

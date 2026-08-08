@@ -35,6 +35,8 @@ const showFooter = ref(true)
 const showPanel = ref(true)
 const settingsMenu = ref(true)
 const settingsAsGroup = ref(true)
+const settingsMenuId = ref('settings')
+const settingsFlyoutPlacement = ref<'auto' | 'down' | 'up'>('up')
 const footerWidth = ref<'full' | 'content'>('full')
 const menuWidthRem = ref(12)
 const menuWidth = computed(() => `${menuWidthRem.value}rem`)
@@ -76,7 +78,8 @@ const previewKey = computed(
       showFooter.value,
       showPanel.value,
       settingsMenu.value,
-      settingsAsGroup.value,
+      // settingsAsGroup / flyoutPlacement omitted — must switch live without remounting the shell
+      settingsMenuId.value,
       footerWidth.value,
       menuWidthRem.value,
       menuCollapsedWidthRem.value,
@@ -113,6 +116,7 @@ const code = computed(() => {
     `const showMenu = ref(${showMenu.value})`,
     `const showFooter = ref(${showFooter.value})`,
     `const settingsMenu = ref(${settingsMenu.value})`,
+    `const settingsMenuId = ref('${settingsMenuId.value.replace(/'/g, "\\'")}')`,
     `const footerWidth = ref<'full' | 'content'>('${footerWidth.value}')`,
     `const activeId = ref('${activeNav.value.replace(/'/g, "\\'")}')`,
     `const openKeys = ref<string[]>(${JSON.stringify(openKeys.value)})`,
@@ -139,6 +143,7 @@ const code = computed(() => {
     `  ${playgroundSnippetAttr('showMenu', showMenu.value)}`,
     `  ${playgroundSnippetAttr('showFooter', showFooter.value)}`,
     `  ${playgroundSnippetAttr('settingsMenu', settingsMenu.value)}`,
+    `  ${playgroundSnippetAttr('settingsMenuId', settingsMenuId.value)}`,
     `  ${playgroundSnippetAttr('footerWidth', footerWidth.value)}`,
   ]
 
@@ -170,14 +175,14 @@ const code = computed(() => {
     if (settingsMenu.value) {
       if (settingsAsGroup.value) {
         lines.push(
-          `      <SidebarMenuGroup ${templateStringAttr('id', 'settings')} ${templateStringAttr('label', 'Settings')} flyout-placement="up">`,
-          `        <SidebarMenuItem ${templateStringAttr('id', 'settings.profile')} ${templateStringAttr('label', 'Profile')} />`,
-          `        <SidebarMenuItem ${templateStringAttr('id', 'settings.team')} ${templateStringAttr('label', 'Team')} />`,
+          `      <SidebarMenuGroup ${templateStringAttr('id', settingsMenuId.value)} ${templateStringAttr('label', 'Settings')} ${templateStringAttr('flyoutPlacement', settingsFlyoutPlacement.value)} :child-ids="['${settingsMenuId.value}.profile', '${settingsMenuId.value}.team']">`,
+          `        <SidebarMenuItem ${templateStringAttr('id', `${settingsMenuId.value}.profile`)} ${templateStringAttr('label', 'Profile')} />`,
+          `        <SidebarMenuItem ${templateStringAttr('id', `${settingsMenuId.value}.team`)} ${templateStringAttr('label', 'Team')} />`,
           '      </SidebarMenuGroup>',
         )
       } else {
         lines.push(
-          `      <SidebarMenuItem ${templateStringAttr('id', 'settings')} ${templateStringAttr('label', 'Settings')} />`,
+          `      <SidebarMenuItem ${templateStringAttr('id', settingsMenuId.value)} ${templateStringAttr('label', 'Settings')} />`,
         )
       }
     }
@@ -282,6 +287,7 @@ const code = computed(() => {
         :show-menu="showMenu"
         :show-footer="showFooter"
         :settings-menu="settingsMenu"
+        :settings-menu-id="settingsMenuId"
         :footer-width="footerWidth"
         class="min-h-[26rem] h-[26rem] border-[#00E5B0]/20"
       >
@@ -329,17 +335,18 @@ const code = computed(() => {
 
           <SidebarMenuGroup
             v-if="settingsMenu && settingsAsGroup"
-            id="settings"
+            :id="settingsMenuId"
             :label="sidebar.settings"
             :icon="Settings"
-            flyout-placement="up"
+            :flyout-placement="settingsFlyoutPlacement"
+            :child-ids="[`${settingsMenuId}.profile`, `${settingsMenuId}.team`]"
           >
-            <SidebarMenuItem id="settings.profile" :label="sidebar.profile" :icon="Users" />
-            <SidebarMenuItem id="settings.team" :label="sidebar.team" :icon="Users" />
+            <SidebarMenuItem :id="`${settingsMenuId}.profile`" :label="sidebar.profile" :icon="Users" />
+            <SidebarMenuItem :id="`${settingsMenuId}.team`" :label="sidebar.team" :icon="Users" />
           </SidebarMenuGroup>
           <SidebarMenuItem
             v-else-if="settingsMenu"
-            id="settings"
+            :id="settingsMenuId"
             :label="sidebar.settings"
             :icon="Settings"
           />
@@ -427,6 +434,29 @@ const code = computed(() => {
             <Switch v-model="settingsAsGroup" size="sm" />
             {{ t('layoutPlayground.settingsAsGroup') }}
           </label>
+          <div v-if="settingsMenu" class="space-y-1 px-2 py-1">
+            <label class="block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+              {{ propTemplateBinding('settingsMenuId') }}
+            </label>
+            <input
+              v-model="settingsMenuId"
+              type="text"
+              class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+            />
+          </div>
+          <div v-if="settingsMenu && settingsAsGroup" class="space-y-1 px-2 py-1">
+            <label class="block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+              {{ propTemplateBinding('flyoutPlacement') }}
+            </label>
+            <select
+              v-model="settingsFlyoutPlacement"
+              class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+            >
+              <option value="auto">auto</option>
+              <option value="down">down</option>
+              <option value="up">up</option>
+            </select>
+          </div>
         </div>
 
         <div class="min-w-0 space-y-4">

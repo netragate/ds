@@ -46,7 +46,7 @@ const iconQuery = ref('')
 const iconSize = ref(20)
 const iconColor = ref('#00D4FF')
 const iconSizes = [12, 16, 20, 24]
-const PACKAGE = '@tcarnaes/design-system'
+const PACKAGE = '@netragate/design-system'
 const copy = useCopy('')
 
 const filteredIcons = computed(() =>

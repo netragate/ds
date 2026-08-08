@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Build playground
-        run: npm run build:playground -w @tcarnaes/design-system
+        run: npm run build:playground -w @netragate/design-system
         env:
           PAGES_BASE: /ds/
 

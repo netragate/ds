@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 import SidebarMenu from '../navigation/SidebarMenu.vue'
 import SidebarMenuShell from '../navigation/SidebarMenuShell.vue'
 import AppLayoutMenuToggle from './AppLayoutMenuToggle.vue'
@@ -38,10 +38,29 @@ function registerSettingsGroup(): void {
 }
 
 function registerSettingsSingle(): void {
-  if (settingsFooterMode.value !== 'group') {
-    settingsFooterMode.value = 'single'
+  settingsFooterMode.value = 'single'
+}
+
+function unregisterSettingsGroup(): void {
+  if (settingsFooterMode.value === 'group') {
+    settingsFooterMode.value = 'none'
   }
 }
+
+function unregisterSettingsSingle(): void {
+  if (settingsFooterMode.value === 'single') {
+    settingsFooterMode.value = 'none'
+  }
+}
+
+watch(
+  () => props.settingsMenu,
+  (enabled) => {
+    if (!enabled) {
+      settingsFooterMode.value = 'none'
+    }
+  },
+)
 
 const showSettingsFooter = computed(
   () => props.settingsMenu && settingsFooterMode.value !== 'none',
@@ -49,12 +68,14 @@ const showSettingsFooter = computed(
 
 provide(APP_LAYOUT_MENU_INJECTION_KEY, {
   settingsMenu: computed(() => props.settingsMenu),
-  settingsMenuId: props.settingsMenuId,
+  settingsMenuId: computed(() => props.settingsMenuId),
   settingsFooterMode,
   settingsGroupTarget,
   settingsSingleTarget,
   registerSettingsGroup,
   registerSettingsSingle,
+  unregisterSettingsGroup,
+  unregisterSettingsSingle,
 })
 </script>
 
@@ -82,16 +103,25 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
           <slot />
         </div>
 
-        <div v-if="showSettingsFooter" class="mt-auto shrink-0 border-t border-border pt-2">
+        <!--
+          Keep both teleport hosts mounted and visible whenever settingsMenu is on.
+          Do not v-show-hide the host — teleported nodes would disappear with it.
+        -->
+        <div
+          v-if="settingsMenu"
+          class="mt-auto shrink-0"
+          :class="showSettingsFooter ? 'border-t border-border pt-2' : undefined"
+          data-settings-footer-host
+        >
           <div
-            v-show="settingsFooterMode === 'group'"
             ref="settingsGroupTarget"
             class="flex w-full flex-col"
+            data-settings-footer="group"
           />
           <div
-            v-show="settingsFooterMode === 'single'"
             ref="settingsSingleTarget"
             class="flex flex-col gap-0.5"
+            data-settings-footer="single"
           />
         </div>
       </div>

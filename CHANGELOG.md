@@ -111,7 +111,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Initial Vue 3 design system package [`@tcarnaes/design-system`](https://www.npmjs.com/package/@tcarnaes/design-system), ported from [Dsci](https://github.com/thiagocarnaes/Dsci) / Figma [Criar design system](https://www.figma.com/design/mKLQl7ztUfChQ0jDJtxDMw/Criar-design-system).
+- Initial Vue 3 design system package [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system), ported from [Dsci](https://github.com/thiagocarnaes/Dsci) / Figma [Criar design system](https://www.figma.com/design/mKLQl7ztUfChQ0jDJtxDMw/Criar-design-system).
 - Design tokens (navy/cyan palette), Tailwind CSS 4 theme, and Vite playground.
 - Core UI components with Vitest unit tests.
 - GitHub Actions workflow for playground deploy to GitHub Pages.
