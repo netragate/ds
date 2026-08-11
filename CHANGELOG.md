@@ -108,10 +108,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Primary button hover feedback (symmetric glow shadow; playground `ds-glow-primary` no longer overrides hover).
 
 ## [0.1.0] - 2026-06-16
-
-### Added
-
-- Initial Vue 3 design system package [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system), ported from [Dsci](https://github.com/thiagocarnaes/Dsci) / Figma [Criar design system](https://www.figma.com/design/mKLQl7ztUfChQ0jDJtxDMw/Criar-design-system).
-- Design tokens (navy/cyan palette), Tailwind CSS 4 theme, and Vite playground.
-- Core UI components with Vitest unit tests.
-- GitHub Actions workflow for playground deploy to GitHub Pages.

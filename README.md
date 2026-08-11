@@ -2,8 +2,8 @@
 
 Monorepo do design system Vue 3 [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system).
 
-- **Repositório:** [github.com/thiagocarnaes/ds](https://github.com/thiagocarnaes/ds)
-- **Playground (GitHub Pages):** [thiagocarnaes.github.io/ds](https://thiagocarnaes.github.io/ds/)
+- **Repositório:** [github.com/netragate/ds](https://github.com/netragate/ds)
+- **Playground (GitHub Pages):** [netragate.github.io/ds](https://netragate.github.io/ds/)
 - **Pacote npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system) 
 
 ## O que tem aqui

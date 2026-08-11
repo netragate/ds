@@ -150,7 +150,7 @@ const localizedGroups = computed(() =>
           <ExternalLink :size="12" />
         </a>
         <a
-          href="https://github.com/thiagocarnaes/ds"
+          href="https://github.com/netragate/ds"
           target="_blank"
           rel="noopener noreferrer"
           class="pg-text-muted inline-flex items-center gap-1.5 text-xs transition-colors hover:text-[var(--pg-accent)]"

@@ -63,7 +63,7 @@ provide('openDrawer', openDrawer)
             <Moon v-else :size="16" />
           </button>
           <a
-            href="https://github.com/thiagocarnaes/ds"
+            href="https://github.com/netragate/ds"
             target="_blank"
             rel="noopener noreferrer"
             class="pg-github-link pg-text-muted shrink-0 transition-colors"

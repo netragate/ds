@@ -3,8 +3,8 @@
 Biblioteca de componentes **Vue 3** com design tokens, Tailwind CSS 4 e suporte a **light/dark mode**.
 
 - **npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system)
-- **Repositório:** [github.com/thiagocarnaes/ds](https://github.com/thiagocarnaes/ds)
-- **Playground:** [thiagocarnaes.github.io/ds](https://thiagocarnaes.github.io/ds/)
+- **Repositório:** [github.com/netragate/ds](https://github.com/netragate/ds)
+- **Playground:** [netragate.github.io/ds](https://netragate.github.io/ds/)
 
 ## Requisitos
 
