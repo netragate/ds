@@ -66,7 +66,7 @@ document.documentElement.classList.toggle('dark', isDark)
 O playground local (`npm run dev`) inclui:
 
 - **Home** — cards interativos por categoria (forms, layout, feedback, foundations)
-- **Library** — catálogo dos **58 componentes** com descrição, snippet de uso e botão *Abrir playground* quando houver demo
+- **Library** — catálogo dos **62 componentes** com descrição, snippet de uso e botão *Abrir playground* quando houver demo
 - **Docs** — instalação, toasts, DataTable, dark mode
 - **32 demos no drawer** — Button, IconButton, Link, Input, Textarea, Label, DateInput, FormField, DataTable, Layout, Dialog, etc.; controles atualizam o snippet **Usage** em tempo real
 - **Showcase** — demos compostos (ex.: AI Chat), não exportados como componente da lib
