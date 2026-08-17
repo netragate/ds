@@ -741,6 +741,32 @@ describe('Tooltip', () => {
 
     wrapper.unmount()
   })
+
+  it('does not force the trigger wrapper to full width, so the slotted trigger keeps its natural size', () => {
+    const wrapper = mount(Tooltip, {
+      props: { content: 'Hint' },
+      slots: { default: '<button type="button">Toggle</button>' },
+      attachTo: document.body,
+    })
+
+    expect(wrapper.find('span.inline-flex').classes()).not.toContain('w-full')
+
+    wrapper.unmount()
+  })
+
+  it('merges a custom triggerClass onto the trigger wrapper', () => {
+    const wrapper = mount(Tooltip, {
+      props: { content: 'Hint', triggerClass: 'w-full' },
+      slots: { default: '<button type="button">Toggle</button>' },
+      attachTo: document.body,
+    })
+
+    const trigger = wrapper.find('span.inline-flex')
+    expect(trigger.classes()).toContain('inline-flex')
+    expect(trigger.classes()).toContain('w-full')
+
+    wrapper.unmount()
+  })
 })
 
 describe('Popover', () => {

@@ -168,7 +168,7 @@ const tooltipStyle = computed(() => ({
 <template>
   <span
     ref="triggerRef"
-    :class="cn('inline-flex w-full', props.triggerClass)"
+    :class="cn('inline-flex', props.triggerClass)"
     @mouseenter="show"
     @mouseleave="hide"
     @focusin="show"
