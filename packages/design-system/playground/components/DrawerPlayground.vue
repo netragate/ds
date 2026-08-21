@@ -40,9 +40,57 @@ const selectValue = ref('')
 const selectMultipleValue = ref<string[]>(['design-system', 'react'])
 const selectSearchable = ref(true)
 const selectCreatable = ref(false)
+const selectServerSearch = ref(false)
+const selectMinSearchChars = ref(3)
+const selectLoading = ref(false)
 const selectDisabled = ref(false)
 const selectPlaceholderSingle = ref('')
 const selectPlaceholderMulti = ref('')
+
+const selectCatalogAll = [
+  { label: 'Design System', value: 'design-system' },
+  { label: 'React', value: 'react' },
+  { label: 'TypeScript', value: 'typescript' },
+  { label: 'Tailwind CSS', value: 'tailwind' },
+  { label: 'Figma', value: 'figma' },
+  { label: 'Vue', value: 'vue' },
+  { label: 'Vite', value: 'vite' },
+  { label: 'Vitest', value: 'vitest' },
+  { label: 'Pinia', value: 'pinia' },
+  { label: 'Storybook', value: 'storybook' },
+]
+
+const selectOptions = ref([...selectCatalogAll])
+let selectSearchTimer: ReturnType<typeof setTimeout> | null = null
+
+watch(selectServerSearch, (enabled) => {
+  if (enabled) {
+    selectCreatable.value = false
+    selectOptions.value = []
+  } else {
+    selectLoading.value = false
+    selectOptions.value = [...selectCatalogAll]
+  }
+})
+
+function onSelectServerSearch(query: string): void {
+  if (!selectServerSearch.value) return
+  if (selectSearchTimer) clearTimeout(selectSearchTimer)
+  const term = query.trim().toLowerCase()
+  if (!term) {
+    selectLoading.value = false
+    selectOptions.value = []
+    return
+  }
+  selectLoading.value = true
+  selectSearchTimer = setTimeout(() => {
+    selectOptions.value = selectCatalogAll.filter((option) =>
+      option.label.toLowerCase().includes(term),
+    )
+    selectLoading.value = false
+    selectSearchTimer = null
+  }, 300)
+}
 
 const buttonVariant = ref<
   'default' | 'primary' | 'secondary' | 'ghost' | 'outline' | 'destructive' | 'clean' | 'link'
@@ -166,6 +214,7 @@ watch(locale, () => {
 
 onUnmounted(() => {
   if (chatReplyTimer) clearTimeout(chatReplyTimer)
+  if (selectSearchTimer) clearTimeout(selectSearchTimer)
 })
 const breadcrumbDepth = ref(3)
 const breadcrumbSeparator = ref('/')
@@ -227,14 +276,6 @@ function resetToastPreview(): void {
 const selectPlayground = computed(() => messages.value.selectPlayground)
 const breadcrumbItems = computed(() => messages.value.breadcrumbPlayground.items)
 
-const selectOptions = [
-  { label: 'Design System', value: 'design-system' },
-  { label: 'React', value: 'react' },
-  { label: 'TypeScript', value: 'typescript' },
-  { label: 'Tailwind CSS', value: 'tailwind' },
-  { label: 'Figma', value: 'figma' },
-]
-
 const codeSnippet = computed(() => {
   const buttonAttrs = [
     playgroundSnippetAttr('variant', buttonVariant.value),
@@ -258,24 +299,30 @@ import { Button } from '${PACKAGE}'
     Action
   </Button>
 </template>`,
-    Select: selectMultiple.value
-      ? `<Select
+    Select: (() => {
+      const creatableAttr = selectServerSearch.value
+        ? ''
+        : `\n  ${playgroundSnippetAttr('creatable', selectCreatable.value)}`
+      const serverAttrs = selectServerSearch.value
+        ? `\n  ${playgroundSnippetAttr('serverSearch', true)}\n  ${playgroundSnippetAttr('minSearchChars', selectMinSearchChars.value)}\n  ${playgroundSnippetAttr('loading', selectLoading.value)}\n  @search="onSearch"`
+        : ''
+      return selectMultiple.value
+        ? `<Select
   v-model="tags"
   ${templateBooleanAttr('multiple', true)}
   ${templateStringAttr('placeholder', selectPlaceholderMulti.value || 'Select technologies...')}
-  ${playgroundSnippetAttr('searchable', selectSearchable.value)}
-  ${playgroundSnippetAttr('creatable', selectCreatable.value)}
-  ${playgroundSnippetAttr('disabled', selectDisabled.value)}
+  ${playgroundSnippetAttr('searchable', selectSearchable.value)}${creatableAttr}
+  ${playgroundSnippetAttr('disabled', selectDisabled.value)}${serverAttrs}
   :options="options"
 />`
-      : `<Select
+        : `<Select
   v-model="value"
   ${templateStringAttr('placeholder', selectPlaceholderSingle.value || 'Select an option...')}
-  ${playgroundSnippetAttr('searchable', selectSearchable.value)}
-  ${playgroundSnippetAttr('creatable', selectCreatable.value)}
-  ${playgroundSnippetAttr('disabled', selectDisabled.value)}
+  ${playgroundSnippetAttr('searchable', selectSearchable.value)}${creatableAttr}
+  ${playgroundSnippetAttr('disabled', selectDisabled.value)}${serverAttrs}
   :options="options"
-/>`,
+/>`
+    })(),
     Breadcrumbs: `<Breadcrumb ${playgroundSnippetAttr('separator', breadcrumbSeparator.value)}>
 ${breadcrumbItems.value
   .slice(0, breadcrumbDepth.value)
@@ -407,21 +454,67 @@ function optionStyle(active: boolean) {
           <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :style="!selectMultiple ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }" @click="selectMultiple = false">{{ selectPlayground.modeSingle }}</button>
           <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :style="selectMultiple ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }" @click="selectMultiple = true">{{ selectPlayground.modeMulti }}</button>
         </div>
-        <Select v-if="!selectMultiple" v-model="selectValue" :options="selectOptions" :searchable="selectSearchable" :creatable="selectCreatable" :disabled="selectDisabled" :placeholder="selectPlaceholderSingle || selectPlayground.placeholderSingle" />
-        <Select v-else v-model="selectMultipleValue" multiple :options="selectOptions" :searchable="selectSearchable" :creatable="selectCreatable" :disabled="selectDisabled" :placeholder="selectPlaceholderMulti || selectPlayground.placeholderMulti" />
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <Select
+          v-if="!selectMultiple"
+          v-model="selectValue"
+          :options="selectOptions"
+          :searchable="selectSearchable"
+          :creatable="selectServerSearch ? false : selectCreatable"
+          :server-search="selectServerSearch"
+          :min-search-chars="selectMinSearchChars"
+          :loading="selectLoading"
+          :disabled="selectDisabled"
+          :placeholder="selectPlaceholderSingle || selectPlayground.placeholderSingle"
+          @search="onSelectServerSearch"
+        />
+        <Select
+          v-else
+          v-model="selectMultipleValue"
+          multiple
+          :options="selectOptions"
+          :searchable="selectSearchable"
+          :creatable="selectServerSearch ? false : selectCreatable"
+          :server-search="selectServerSearch"
+          :min-search-chars="selectMinSearchChars"
+          :loading="selectLoading"
+          :disabled="selectDisabled"
+          :placeholder="selectPlaceholderMulti || selectPlayground.placeholderMulti"
+          @search="onSelectServerSearch"
+        />
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
             <Switch v-model="selectSearchable" size="sm" />
             searchable
           </label>
-          <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
-            <Switch v-model="selectCreatable" size="sm" />
+          <label
+            class="flex items-center gap-2 text-xs"
+            :class="selectServerSearch ? 'cursor-not-allowed text-[#4D6A87]/60' : 'cursor-pointer text-[#4D6A87]'"
+          >
+            <Switch v-model="selectCreatable" size="sm" :disabled="selectServerSearch" />
             creatable
+          </label>
+          <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
+            <Switch v-model="selectServerSearch" size="sm" />
+            serverSearch
           </label>
           <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
             <Switch v-model="selectDisabled" size="sm" />
             disabled
           </label>
+          <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
+            <Switch v-model="selectLoading" size="sm" :disabled="!selectServerSearch" />
+            loading
+          </label>
+        </div>
+        <div v-if="selectServerSearch">
+          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">minSearchChars</label>
+          <input
+            v-model.number="selectMinSearchChars"
+            type="number"
+            min="0"
+            max="10"
+            class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+          />
         </div>
         <div>
           <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">placeholder</label>

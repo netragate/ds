@@ -13,8 +13,20 @@ export interface SelectProps {
   options: SelectOption[]
   multiple?: boolean
   searchable?: boolean
-  /** When true, typing a value that is not in options offers creating it. */
+  /**
+   * When true, typing a value that is not in options offers creating it.
+   * Ignored when `serverSearch` is true.
+   */
   creatable?: boolean
+  /**
+   * When true, options are not filtered locally. Parent owns filtering via the
+   * `search` event and by updating `options`. Disables create-from-query.
+   */
+  serverSearch?: boolean
+  /** Minimum characters before emitting `search` (serverSearch only). */
+  minSearchChars?: number
+  /** Shows a searching empty state while the parent loads remote options. */
+  loading?: boolean
   disabled?: boolean
   placeholder?: string
   id?: string
@@ -26,12 +38,16 @@ const props = withDefaults(defineProps<SelectProps>(), {
   multiple: false,
   searchable: true,
   creatable: false,
+  serverSearch: false,
+  minSearchChars: 0,
+  loading: false,
   disabled: false,
   placeholder: 'Select an option...',
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | string[]]
+  search: [query: string]
 }>()
 
 const open = ref(false)
@@ -89,14 +105,23 @@ const selectedOptions = computed(() =>
   props.options.filter((option) => selectedValues.value.includes(option.value)),
 )
 
+const creatableEnabled = computed(() => props.creatable && !props.serverSearch)
+
+const needsMoreSearchChars = computed(() => {
+  if (!props.serverSearch) return false
+  const min = Math.max(0, props.minSearchChars)
+  return query.value.trim().length < min
+})
+
 const filteredOptions = computed(() => {
+  if (props.serverSearch) return props.options
   const term = query.value.trim().toLowerCase()
   if (!term) return props.options
   return props.options.filter((option) => option.label.toLowerCase().includes(term))
 })
 
 const createCandidate = computed(() => {
-  if (!props.creatable) return ''
+  if (!creatableEnabled.value) return ''
   const term = query.value.trim()
   if (!term) return ''
   const exists = props.options.some(
@@ -105,6 +130,15 @@ const createCandidate = computed(() => {
       option.label.toLowerCase() === term.toLowerCase(),
   )
   return exists ? '' : term
+})
+
+const emptyMessage = computed(() => {
+  if (props.serverSearch && needsMoreSearchChars.value) {
+    const min = Math.max(0, props.minSearchChars)
+    return `Type at least ${min} character${min === 1 ? '' : 's'}…`
+  }
+  if (props.serverSearch && props.loading) return 'Searching…'
+  return 'No results found'
 })
 
 const singleLabel = computed(() => {
@@ -155,6 +189,13 @@ function createFromQuery(): void {
   selectOption(term)
 }
 
+function emitServerSearch(term: string): void {
+  if (!props.serverSearch) return
+  const min = Math.max(0, props.minSearchChars)
+  const trimmed = term.trim()
+  emit('search', trimmed.length >= min ? trimmed : '')
+}
+
 function onDocumentPointerDown(event: PointerEvent): void {
   if (!open.value) return
   const target = event.target as Node
@@ -175,6 +216,10 @@ function onKeydown(event: KeyboardEvent): void {
   }
 }
 
+watch(query, (term) => {
+  emitServerSearch(term)
+})
+
 watch(open, async (isOpen) => {
   if (isOpen) {
     await nextTick()
@@ -185,6 +230,9 @@ watch(open, async (isOpen) => {
     })
     if (props.searchable) {
       searchRef.value?.focus()
+    }
+    if (props.serverSearch) {
+      emitServerSearch(query.value)
     }
     return
   }
@@ -321,7 +369,7 @@ onUnmounted(() => {
             v-else-if="filteredOptions.length === 0"
             class="px-3 py-4 text-center text-xs text-muted-foreground"
           >
-            No results found
+            {{ emptyMessage }}
           </p>
         </div>
 

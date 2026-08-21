@@ -122,14 +122,14 @@ const SettingsIcon = iconographyComponents.settings
     `  <Select
     v-model="role"
     :placeholder="'Choose a role'"
-    :options="[
-      { label: 'Designer', value: 'designer' },
-      { label: 'Engineer', value: 'engineer' },
-    ]"
+    :options="roles"
     :multiple="false"
     :searchable="true"
-    :creatable="false"
+    :server-search="true"
+    :min-search-chars="3"
+    :loading="loading"
     :disabled="false"
+    @search="onSearch"
   />`,
   ),
   Label: usage('Label', '  <Label :for="\'email\'">Email</Label>'),

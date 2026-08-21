@@ -105,6 +105,16 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Empty state heading (required)': 'Título do estado vazio (obrigatório)',
   'Empty state title': 'Título do estado vazio',
   'Enable option search/filter': 'Habilita busca/filtro de opções',
+  'Allow creating a new option from the search query (ignored when serverSearch is true)':
+    'Permite criar uma nova opção a partir da busca (ignorado quando serverSearch é true)',
+  'Disable local filtering; parent filters options via the search event (disables creatable)':
+    'Desliga o filtro local; o pai filtra options via o evento search (desativa creatable)',
+  'Minimum characters before emitting search (serverSearch only)':
+    'Mínimo de caracteres antes de emitir search (somente serverSearch)',
+  'Show searching empty state while remote options load':
+    'Exibe estado de busca enquanto options remotas carregam',
+  'Emitted when the search query changes (serverSearch mode)':
+    'Emitido quando a query de busca muda (modo serverSearch)',
   'Error message (takes precedence over helper)': 'Mensagem de erro (tem precedência sobre helper)',
   'Error message shown when :error is true': 'Mensagem de erro exibida quando :error é true',
   'Error validation state': 'Estado de validação de erro',

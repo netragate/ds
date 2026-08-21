@@ -175,14 +175,35 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('options', 'SelectOption[]', undefined, 'Available options ({ label, value })'),
       p('multiple', 'boolean', 'false', 'Allow multiple selection'),
       p('searchable', 'boolean', 'true', 'Enable option search/filter'),
-      p('creatable', 'boolean', 'false', 'Allow creating a new option from the search query'),
+      p(
+        'creatable',
+        'boolean',
+        'false',
+        'Allow creating a new option from the search query (ignored when serverSearch is true)',
+      ),
+      p(
+        'serverSearch',
+        'boolean',
+        'false',
+        'Disable local filtering; parent filters options via the search event (disables creatable)',
+      ),
+      p(
+        'minSearchChars',
+        'number',
+        '0',
+        'Minimum characters before emitting search (serverSearch only)',
+      ),
+      p('loading', 'boolean', 'false', 'Show searching empty state while remote options load'),
       p('disabled', 'boolean', 'false', 'Disables the select'),
       p('placeholder', 'string', 'Select an option...', 'Placeholder when nothing is selected'),
       p('id', 'string', undefined, 'Trigger element id'),
       cls(),
     ],
     models: [m('modelValue', 'string | string[]', "''", 'Selected value(s)')],
-    events: [e('update:modelValue', 'string | string[]', 'Emitted when selection changes')],
+    events: [
+      e('update:modelValue', 'string | string[]', 'Emitted when selection changes'),
+      e('search', 'string', 'Emitted when the search query changes (serverSearch mode)'),
+    ],
   },
 
   Label: {
