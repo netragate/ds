@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.8.0] - 2026-08-22
+
+### Added
+
+- **`SidebarMenu` / `AppLayout` `submenuMode`** — `'flyout' | 'inline'` (default `'flyout'`). Flyout keeps the hover panel; `inline` expands/collapses group children below the trigger on click. Collapsed rail and pinned settings footer groups always stay flyout.
+- **Playground Layout demo** — control to switch `submenuMode` live and update the usage snippet.
+
+### Changed
+
+- **`SidebarMenuGroup`** — respects menu-level `submenuMode`; reuses `openKeys` / `defaultOpen` for inline expand; chevron rotates when inline-open.
+
+## [0.7.13] - 2026-08-22
+
+### Added
+
+- **`Tooltip.flip`** — when the preferred placement would overflow the viewport, flip to the opposite side and clamp residual overflow (default `true`; set `:flip="false"` to keep the preferred side and only clamp).
+
+### Changed
+
+- **Typography tokens** — `--ds-font-xs` raised to **14px** (same readability target as the header locale `Select` / `text-sm`); `--ds-font-sm` stays **14px**. Larger steps bumped for hierarchy: `base` 17px, `md` 18px, `lg` 22px, `xl` 26px, `2xl` 33px, `display` 44px. ADS `--ds-font-size-*` aligned (`xsmall` 13px, `small`/`medium` 14px, `base` 17px, `large` 22px, `xlarge` 26px, `xxlarge` 34px). Root `html` font-size remains 16px.
+- **Tailwind v4 `@theme` font sizes** — wire `--text-xs` … `--text-2xl` and `--text-display` to the design tokens so utilities like `text-xs` / `text-sm` actually use the scale. Previously only `--font-size-*` was defined (ignored by Tailwind v4), so most UI stayed at the default 12px while `Select` looked correct.
+- **Playground chrome** — dense hardcoded sizes in `playground.css` (10–13px) raised to ~14px; docs headings to 16px. Arbitrary `text-[8px]`–`text-[11px]` in demos/cards replaced with `text-xs`. Locale Select left unchanged.
+- **Home sections** — Purpose / Principles / Quick Nav titles and body copy stepped up (`text-base` / `text-sm`) so benefit cards match the new scale.
+- **Component micro-type** — Badge overlay pill, Lozenge, Avatar `xs`, Sidebar group labels/shell, DataTable filter hints, DateInput weekday headers, and Tooltip shortcut `kbd` no longer use `text-[9px]`–`text-[11px]`; they use `text-xs` (token-driven).
+- **Foundations typography table** — documented px values updated to the new ADS scale.
+- **Package metadata** — version `0.7.13`; description notes 60+ components.
+
+### Fixed
+
+- **`Badge`** — removed HTML comments from the template that created a multi-root fragment; VTU/`wrapper.classes()` / inline styles now bind to the pill root as expected.
+- **Iconography copy snippet tests** — expectations updated to the `iconographyComponents['…']` import snippet (no longer bare `<IconName />`).
+- **`dateUtils` calendar test** — asserts `isToday` on the current month grid (June-only grid no longer includes “today” outside June).
+- **Collapsed `SidebarMenuItem` Tooltip** — assertion tolerates `targetRef` resolving after mount while still requiring outline / right placement and no native `title`.
+
 ## [0.5.2] - 2026-06-29
 
 ### Added

@@ -93,7 +93,7 @@ function formatDate(iso: string): string {
           >
             <!-- Type badge -->
             <span
-              class="mt-0.5 inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide"
+              class="mt-0.5 inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-wide"
               :class="badgeClass(change.type)"
             >
               {{ typeLabel(change.type) }}

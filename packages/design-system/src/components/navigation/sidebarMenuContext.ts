@@ -1,10 +1,15 @@
 import type { Component } from 'vue'
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
+/** How nested `SidebarMenuGroup` children are revealed. */
+export type SidebarSubmenuMode = 'flyout' | 'inline'
+
 export interface SidebarMenuContext {
   collapsed: ComputedRef<boolean>
   inFlyout: ComputedRef<boolean>
   showLabels: ComputedRef<boolean>
+  /** Menu-level submenu policy (`flyout` by default). */
+  submenuMode: ComputedRef<SidebarSubmenuMode>
   activeId: Ref<string>
   openKeys: Ref<string[]>
   depth: number

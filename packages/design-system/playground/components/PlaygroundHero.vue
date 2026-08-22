@@ -62,7 +62,7 @@ const { t } = usePlaygroundLocale()
         <span class="font-mono text-2xl font-bold" style="color: var(--pg-accent)">
           {{ designSystemVersionBadge }}
         </span>
-        <span class="text-[10px] uppercase tracking-wider text-[#4D6A87]">{{ t('homeStats.version') }}</span>
+        <span class="text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('homeStats.version') }}</span>
       </div>
     </div>
   </section>

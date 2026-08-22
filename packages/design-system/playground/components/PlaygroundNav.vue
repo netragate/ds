@@ -17,7 +17,7 @@ function scrollTo(id: string): void {
   <aside
     class="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-border/60 bg-background/95 py-8 pl-6 pr-4 lg:flex"
   >
-    <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Playground</p>
+    <p class="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">Playground</p>
     <p class="mb-8 text-sm font-semibold text-foreground">Design System</p>
     <nav class="flex flex-col gap-1">
       <button

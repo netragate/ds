@@ -36,7 +36,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 w-full rounded-xl p-4">
       <Tabs v-model="activeTab" class="ds-drawer-tabs w-full">
         <TabList class="h-auto w-full justify-start gap-1 bg-transparent p-0">

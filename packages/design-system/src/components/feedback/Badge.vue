@@ -61,8 +61,8 @@ const iconPixelSize = computed(() => (props.size === 'sm' ? 16 : 18))
 
 const pillSizeClass = computed(() =>
   props.size === 'sm'
-    ? 'min-h-4 min-w-4 px-1 text-[9px]'
-    : 'min-h-4.5 min-w-4.5 px-1 text-[10px]',
+    ? 'min-h-4 min-w-4 px-1 text-xs'
+    : 'min-h-4.5 min-w-4.5 px-1 text-xs',
 )
 
 const wrapClasses = computed(() =>
@@ -93,7 +93,6 @@ const pillStyle = computed(() => ({
 </script>
 
 <template>
-  <!-- Icon + count overlay (notification-style) -->
   <span v-if="hasIcon" :class="wrapClasses" :style="wrapStyle">
     <component
       :is="IconComponent"
@@ -115,7 +114,6 @@ const pillStyle = computed(() => ({
     </span>
   </span>
 
-  <!-- Classic pill badge (no icon) -->
   <span v-else :class="wrapClasses" :style="wrapStyle">
     <slot>{{ displayText }}</slot>
   </span>

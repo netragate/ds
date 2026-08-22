@@ -22,7 +22,7 @@ const people = computed(() => {
     <template #icon><Users :size="14" /></template>
     <div class="space-y-5">
       <div>
-        <p class="mb-3 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">group</p>
+        <p class="mb-3 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">group</p>
         <div class="flex -space-x-2">
           <Avatar v-for="p in people" :key="p.name" :name="p.name" size="sm" class="ring-2 ring-[#0D1B2E]" />
           <span
@@ -37,7 +37,7 @@ const people = computed(() => {
           <Avatar :name="person.name" size="md" />
           <div>
             <p class="text-xs font-medium text-[#E8EDF5]">{{ person.name }}</p>
-            <p class="text-[10px] text-[#4D6A87]">{{ person.role }}</p>
+            <p class="text-xs text-[#4D6A87]">{{ person.role }}</p>
           </div>
         </div>
       </div>

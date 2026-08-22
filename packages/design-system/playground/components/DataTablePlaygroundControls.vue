@@ -47,7 +47,7 @@ function optionStyle(active: boolean) {
 <template>
   <div class="space-y-4">
     <div>
-      <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
         {{ t('dataTable.controls.features') }}
       </p>
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -99,7 +99,7 @@ function optionStyle(active: boolean) {
     </div>
 
     <div>
-      <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
         {{ t('dataTable.controls.pageSizeOptions') }}
       </p>
       <div class="flex flex-wrap gap-1">
@@ -123,12 +123,12 @@ function optionStyle(active: boolean) {
     </div>
 
     <div>
-      <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
         {{ t('dataTable.controls.textFields') }}
       </p>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <label class="mb-1 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <label class="mb-1 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             search-placeholder
           </label>
           <input
@@ -139,7 +139,7 @@ function optionStyle(active: boolean) {
           />
         </div>
         <div>
-          <label class="mb-1 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">empty-title</label>
+          <label class="mb-1 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">empty-title</label>
           <input
             :value="emptyTitle"
             type="text"
@@ -149,7 +149,7 @@ function optionStyle(active: boolean) {
           />
         </div>
         <div class="sm:col-span-2">
-          <label class="mb-1 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <label class="mb-1 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             empty-description
           </label>
           <input

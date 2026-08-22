@@ -365,7 +365,7 @@ import { Alert, Badge, Progress, Skeleton, Spinner } from '@netragate/design-sys
 
 ### Layout
 
-`AppLayout` organiza as regiões da página (grid + painel lateral), mas **não estiliza** header, menu, conteúdo, panel ou footer. Use o slot `#menu` com `SidebarMenuItem` / `SidebarMenuGroup` — o shell e **toggle com chevron** já vêm montados. Com `:settings-menu="true"`, fixe no rodapé do menu o nó cujo `id` corresponde a `:settings-menu-id` (padrão `settings`) — pode ser um `SidebarMenuGroup` (flyout) ou um `SidebarMenuItem` isolado (link). Veja o demo **Layout** no playground.
+`AppLayout` organiza as regiões da página (grid + painel lateral), mas **não estiliza** header, menu, conteúdo, panel ou footer. Use o slot `#menu` com `SidebarMenuItem` / `SidebarMenuGroup` — o shell e **toggle com chevron** já vêm montados. Com `:settings-menu="true"`, fixe no rodapé do menu o nó cujo `id` corresponde a `:settings-menu-id` (padrão `settings`) — pode ser um `SidebarMenuGroup` (flyout) ou um `SidebarMenuItem` isolado (link). Use `:submenu-mode` para escolher flyout vs expand inline nos grupos do menu. Veja o demo **Layout** no playground.
 
 ```vue
 <script setup lang="ts">
@@ -381,6 +381,7 @@ const activeId = ref('dashboard')
 const openKeys = ref<string[]>([])
 const settingsMenu = ref(true)
 const settingsMenuId = ref('settings')
+const submenuMode = ref<'flyout' | 'inline'>('flyout')
 const pageTitle = ref('Dashboard')
 </script>
 
@@ -396,6 +397,7 @@ const pageTitle = ref('Dashboard')
     :menu-label="menuLabel"
     :settings-menu="settingsMenu"
     :settings-menu-id="settingsMenuId"
+    :submenu-mode="submenuMode"
   >
     <template #header>
       <div class="flex items-center justify-between border-b border-border bg-card px-4 py-3">
@@ -431,6 +433,8 @@ const pageTitle = ref('Dashboard')
   </AppLayout>
 </template>
 ```
+
+**Submenu:** `:submenu-mode="'flyout'"` (padrão) abre filhos no hover em painel flutuante; `:submenu-mode="'inline'"` expande/colapsa os filhos **abaixo** do grupo no clique. Com menu collapsed (rail) ou grupo de settings pinado no rodapé, o comportamento continua flyout.
 
 **Settings no rodapé:** com `:settings-menu="true"`, declare no `#menu` um `SidebarMenuGroup` **ou** um `SidebarMenuItem` isolado cujo `id` seja **igual** a `settings-menu-id` (padrão `settings`). O id pode ser qualquer string (ex.: `admin.settings`) — o pin compara igualdade exata. Grupo → flyout no hover; item único → link no rodapé. Não declare os dois com o mesmo id ao mesmo tempo.
 

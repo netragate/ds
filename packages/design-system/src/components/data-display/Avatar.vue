@@ -27,7 +27,7 @@ const imgError = ref(false)
 const palette = ['#00D4FF', '#2979FF', '#00E5B0', '#FF8B00', '#A78BFA', '#FF3D57']
 
 const sizeClasses: Record<AvatarSize, string> = {
-  xs: 'size-6 text-[10px]',
+  xs: 'size-6 text-xs',
   sm: 'size-8 text-xs',
   md: 'size-10 text-sm',
   lg: 'size-12 text-base',

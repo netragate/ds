@@ -19,11 +19,11 @@ const code = computed(() =>
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <Progress :value="value" :indeterminate="indeterminate" />
       <div v-if="!indeterminate">
-        <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+        <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
           value — {{ value }}%
         </label>
         <input v-model.number="value" type="range" min="0" max="100" class="w-full accent-[#00D4FF]" />

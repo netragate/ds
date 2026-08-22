@@ -23,7 +23,7 @@ const visible = computed(() => props.members.slice(0, props.max))
 const overflow = computed(() => Math.max(0, props.members.length - props.max))
 
 const overflowSizeClasses: Record<AvatarSize, string> = {
-  xs: 'size-6 text-[10px]',
+  xs: 'size-6 text-xs',
   sm: 'size-8 text-xs',
   md: 'size-10 text-sm',
   lg: 'size-12 text-base',

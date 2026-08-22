@@ -92,7 +92,7 @@ function setMode(next: DataMode): void {
         >
           <button
             type="button"
-            class="rounded-md px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors"
+            class="rounded-md px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors"
             :style="
               mode === 'client'
                 ? { background: '#2979FF22', color: '#2979FF' }
@@ -104,7 +104,7 @@ function setMode(next: DataMode): void {
           </button>
           <button
             type="button"
-            class="rounded-md px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors"
+            class="rounded-md px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors"
             :style="
               mode === 'api'
                 ? { background: '#2979FF22', color: '#2979FF' }

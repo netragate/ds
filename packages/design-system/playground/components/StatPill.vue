@@ -29,6 +29,6 @@ onMounted(() => {
     <span class="font-mono text-2xl font-bold" :style="{ color }">
       {{ value }}{{ suffix }}
     </span>
-    <span class="text-[10px] uppercase tracking-wider text-[#4D6A87]">{{ label }}</span>
+    <span class="text-xs uppercase tracking-wider text-[#4D6A87]">{{ label }}</span>
   </div>
 </template>

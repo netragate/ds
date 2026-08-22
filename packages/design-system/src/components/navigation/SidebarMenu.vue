@@ -4,15 +4,22 @@ import { cn } from '@/lib/utils'
 import {
   SIDEBAR_MENU_INJECTION_KEY,
   type SidebarMenuContext,
+  type SidebarSubmenuMode,
 } from './sidebarMenuContext'
 
 const props = withDefaults(
   defineProps<{
     collapsed?: boolean
+    /**
+     * How group children open: `flyout` (hover panel, default) or `inline` (click to expand below).
+     * Collapsed rail always uses flyout.
+     */
+    submenuMode?: SidebarSubmenuMode
     class?: string
   }>(),
   {
     collapsed: false,
+    submenuMode: 'flyout',
   },
 )
 
@@ -151,6 +158,7 @@ const context: SidebarMenuContext = {
   collapsed: computed(() => props.collapsed),
   inFlyout: computed(() => false),
   showLabels: computed(() => !props.collapsed),
+  submenuMode: computed(() => props.submenuMode),
   activeId,
   openKeys,
   depth: 0,

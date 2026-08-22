@@ -97,6 +97,15 @@
   --radius-2xl:  var(--ds-radius-2xl);
   --radius-3xl:  var(--ds-radius-3xl);
   --radius-full: var(--ds-radius-full);
+  --text-xs: var(--ds-font-xs);
+  --text-sm: var(--ds-font-sm);
+  --text-base: var(--ds-font-base);
+  --text-md: var(--ds-font-md);
+  --text-lg: var(--ds-font-lg);
+  --text-xl: var(--ds-font-xl);
+  --text-2xl: var(--ds-font-2xl);
+  --text-display: var(--ds-font-display);
+  /* Legacy aliases (pre–Tailwind v4 --text-* rename) */
   --font-size-xs: var(--ds-font-xs);
   --font-size-sm: var(--ds-font-sm);
   --font-size-base: var(--ds-font-base);
@@ -104,7 +113,6 @@
   --font-size-lg: var(--ds-font-lg);
   --font-size-xl: var(--ds-font-xl);
   --font-size-2xl: var(--ds-font-2xl);
-  --text-display: var(--ds-font-display);
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.20), 0 1px 2px -1px rgba(0, 0, 0, 0.12);
   --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.22);
   --shadow-lg: 0 20px 48px -8px rgba(0, 0, 0, 0.35);

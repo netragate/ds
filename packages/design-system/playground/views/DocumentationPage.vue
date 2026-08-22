@@ -126,7 +126,7 @@ const localizedGroups = computed(() =>
     <div class="pg-docs-hero pg-playground-panel rounded-2xl p-4 sm:p-6 md:p-8">
       <div class="mb-4 flex items-center gap-2">
         <BookOpen :size="16" class="text-primary" />
-        <span class="pg-text-muted font-mono text-[10px] uppercase tracking-wider">{{ t('docs.badge') }}</span>
+        <span class="pg-text-muted font-mono text-xs uppercase tracking-wider">{{ t('docs.badge') }}</span>
       </div>
       <h2 class="mb-2 text-xl font-bold sm:text-2xl" style="color: var(--pg-text)">{{ t('docs.title') }}</h2>
       <p class="pg-text-subtle mb-6 max-w-2xl text-sm leading-relaxed">
@@ -226,14 +226,14 @@ const localizedGroups = computed(() =>
           class="border-b px-4 py-3 last:border-b-0"
           style="border-color: var(--pg-border)"
         >
-          <p class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+          <p class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
             {{ group.label }}
           </p>
           <div class="flex flex-wrap gap-2">
             <code
               v-for="item in group.items"
               :key="item"
-              class="pg-docs-tag rounded-md px-2 py-0.5 font-mono text-[10px]"
+              class="pg-docs-tag rounded-md px-2 py-0.5 font-mono text-xs"
             >
               {{ item }}
             </code>

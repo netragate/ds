@@ -32,12 +32,12 @@ const benefits: PurposeBenefit[] = [
 
 <template>
   <section class="mb-10 lg:mb-14" :aria-label="t('homePurpose.sectionTitle')">
-    <h2 class="mb-4 text-xs font-semibold uppercase tracking-widest" style="color: var(--pg-text-muted)">
+    <h2 class="mb-4 text-sm font-semibold uppercase tracking-widest" style="color: var(--pg-text-muted)">
       {{ t('homePurpose.sectionTitle') }}
     </h2>
 
     <!-- Mission paragraph -->
-    <p class="mb-8 max-w-2xl text-sm leading-relaxed" style="color: var(--pg-text-subtle)">
+    <p class="mb-8 max-w-2xl text-base leading-relaxed" style="color: var(--pg-text-subtle)">
       {{ t('homePurpose.mission') }}
     </p>
 
@@ -63,10 +63,10 @@ const benefits: PurposeBenefit[] = [
 
         <!-- Content -->
         <div class="flex flex-col gap-1.5">
-          <h3 class="text-sm font-semibold" style="color: var(--pg-text)">
+          <h3 class="text-base font-semibold" style="color: var(--pg-text)">
             {{ t(benefit.titleKey) }}
           </h3>
-          <p class="text-xs leading-relaxed" style="color: var(--pg-text-subtle)">
+          <p class="text-sm leading-relaxed" style="color: var(--pg-text-subtle)">
             {{ t(benefit.descKey) }}
           </p>
         </div>

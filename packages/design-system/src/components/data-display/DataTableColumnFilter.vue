@@ -125,7 +125,7 @@ const enumPlaceholder = computed(() =>
     :class="layout === 'popover' ? 'flex w-full min-w-[12rem] flex-col gap-2' : 'flex min-w-[12rem] flex-col gap-1.5'"
   >
     <label class="flex w-full flex-col gap-1">
-      <span class="text-[11px] text-muted-foreground">{{ labels.filterDateFrom }}</span>
+      <span class="text-xs text-muted-foreground">{{ labels.filterDateFrom }}</span>
       <DateInput
         v-model="dateFrom"
         size="sm"
@@ -135,7 +135,7 @@ const enumPlaceholder = computed(() =>
       />
     </label>
     <label class="flex w-full flex-col gap-1">
-      <span class="text-[11px] text-muted-foreground">{{ labels.filterDateTo }}</span>
+      <span class="text-xs text-muted-foreground">{{ labels.filterDateTo }}</span>
       <DateInput
         v-model="dateTo"
         size="sm"

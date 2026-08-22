@@ -42,7 +42,7 @@ const toggleLeft = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-full min-h-0 w-full flex-col px-2 py-2">
+  <div class="flex min-h-full w-full flex-col px-2 py-2">
     <div
       v-if="showToggle || menuLabel"
       class="relative mb-2 w-full shrink-0"
@@ -50,7 +50,7 @@ const toggleLeft = computed(() => {
     >
       <span
         v-if="menuLabel"
-        class="pointer-events-none truncate font-mono text-[10px] uppercase tracking-wider text-[#A78BFA] transition-opacity duration-300 ease-in-out"
+        class="pointer-events-none truncate font-mono text-xs uppercase tracking-wider text-[#A78BFA] transition-opacity duration-300 ease-in-out"
         :class="[
           showToggle
             ? 'absolute left-0 top-1/2 max-w-[calc(100%-2.5rem)] -translate-y-1/2'
@@ -71,7 +71,7 @@ const toggleLeft = computed(() => {
     </div>
 
     <div
-      class="flex min-h-0 flex-1 flex-col transition-transform duration-300 ease-in-out"
+      class="flex w-full flex-1 flex-col transition-transform duration-300 ease-in-out"
       :style="{
         width: contentWidth,
         minWidth: contentWidth,

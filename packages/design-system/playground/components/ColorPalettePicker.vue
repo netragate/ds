@@ -38,7 +38,7 @@ function isSelected(color: string): boolean {
   <div>
     <p
       v-if="label"
-      class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]"
+      class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]"
     >
       {{ label }}
     </p>
@@ -81,7 +81,7 @@ function isSelected(color: string): boolean {
         />
         <Pipette v-if="!isCustom" :size="size === 'sm' ? 10 : 12" class="text-[#4D6A87]" />
       </label>
-      <span v-if="isCustom" class="font-mono text-[10px] text-[#4D6A87]">{{ model }}</span>
+      <span v-if="isCustom" class="font-mono text-xs text-[#4D6A87]">{{ model }}</span>
     </div>
   </div>
 </template>

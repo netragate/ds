@@ -144,7 +144,7 @@ onUnmounted(() => {
     <div class="pg-docs-hero pg-playground-panel rounded-2xl p-4 sm:p-6 md:p-8">
       <div class="mb-4 flex items-center gap-2">
         <Box :size="16" class="text-primary" />
-        <span class="pg-text-muted font-mono text-[10px] uppercase tracking-wider">
+        <span class="pg-text-muted font-mono text-xs uppercase tracking-wider">
           {{ t('componentCatalog.badge') }}
         </span>
       </div>
@@ -221,7 +221,7 @@ onUnmounted(() => {
         >
           <div class="min-w-0">
             <label class="pg-catalog-mobile-select">
-              <span class="pg-text-muted mb-1.5 block font-mono text-[10px] uppercase tracking-wider">
+              <span class="pg-text-muted mb-1.5 block font-mono text-xs uppercase tracking-wider">
                 {{ t('componentCatalog.selectLabel') }}
               </span>
               <select
@@ -245,7 +245,7 @@ onUnmounted(() => {
               {{ selectedName }}
               <span
                 v-if="isShowcase"
-                class="ml-2 inline-flex items-center rounded-md px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider"
+                class="ml-2 inline-flex items-center rounded-md px-2 py-0.5 font-mono text-xs uppercase tracking-wider"
                 style="background: var(--pg-nav-active-bg); color: var(--pg-accent)"
               >Showcase</span>
             </h3>
@@ -272,14 +272,14 @@ onUnmounted(() => {
           </template>
           <template v-else>
             <div>
-              <p class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+              <p class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
                 {{ t('componentCatalog.apiHeading') }}
               </p>
               <ComponentApiReference v-if="selectedEntry" :entry="selectedEntry" />
             </div>
 
             <div>
-              <p class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+              <p class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
                 {{ t('componentCatalog.usageHeading') }}
               </p>
               <p

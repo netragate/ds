@@ -17,10 +17,10 @@ const highlighted = computed(() => highlightUsage(props.code))
 <template>
   <div class="pg-usage-dark ds-usage-block min-w-0">
     <div class="mb-2 flex items-center justify-between gap-3">
-      <p class="pg-usage-label font-mono text-[9px] uppercase tracking-wider">{{ t('usage.label') }}</p>
+      <p class="pg-usage-label font-mono text-xs uppercase tracking-wider">{{ t('usage.label') }}</p>
       <button
         type="button"
-        class="pg-usage-copy inline-flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 font-mono text-[10px] transition-colors"
+        class="pg-usage-copy inline-flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs transition-colors"
         @click="copy(code)"
       >
         <Copy :size="12" />
@@ -28,7 +28,7 @@ const highlighted = computed(() => highlightUsage(props.code))
       </button>
     </div>
     <pre
-      class="pg-usage-code ds-usage-code rounded-lg p-3 font-mono text-[10px] leading-relaxed"
+      class="pg-usage-code ds-usage-code rounded-lg p-3 font-mono text-xs leading-relaxed"
     ><code v-html="highlighted" /></pre>
   </div>
 </template>

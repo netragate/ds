@@ -263,7 +263,8 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
             await btn.trigger('click')
             await nextTick()
 
-            const expected = `<${iconItem.label.replace(/\s+/g, '')} />`
+            const componentName = iconItem.label.replace(/\s+/g, '')
+            const expected = `import { iconographyComponents } from '@netragate/design-system'\n\nconst ${componentName}Icon = iconographyComponents['${iconItem.name}']`
             expect(writeText).toHaveBeenCalledWith(expected)
           }
         },
@@ -305,7 +306,9 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     await accessibilityBtn!.trigger('click')
     await nextTick()
 
-    expect(writeText).toHaveBeenCalledWith('<Accessibility />')
+    expect(writeText).toHaveBeenCalledWith(
+      `import { iconographyComponents } from '@netragate/design-system'\n\nconst AccessibilityIcon = iconographyComponents['accessibility']`,
+    )
     wrapper.unmount()
   })
 
@@ -339,7 +342,9 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     await airVentBtn!.trigger('click')
     await nextTick()
 
-    expect(writeText).toHaveBeenCalledWith('<AirVent />')
+    expect(writeText).toHaveBeenCalledWith(
+      `import { iconographyComponents } from '@netragate/design-system'\n\nconst AirVentIcon = iconographyComponents['air-vent']`,
+    )
     wrapper.unmount()
   })
 })

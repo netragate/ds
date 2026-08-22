@@ -250,7 +250,7 @@ function dayButtonClass(day: { inMonth: boolean; isSelected: boolean; isToday: b
         <span
           v-for="(label, index) in weekdayLabels"
           :key="`${label}-${index}`"
-          class="flex size-8 items-center justify-center text-[11px] font-medium uppercase text-muted-foreground"
+          class="flex size-8 items-center justify-center text-xs font-medium uppercase text-muted-foreground"
         >
           {{ label }}
         </span>

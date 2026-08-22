@@ -33,7 +33,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <RadioGroup
         :key="String(disabled)"
@@ -49,7 +49,7 @@ const code = computed(() => {
         <Switch v-model="disabled" size="sm" />
         disabled
       </label>
-      <p class="font-mono text-[10px] text-[#4D6A87]">
+      <p class="font-mono text-xs text-[#4D6A87]">
         selected: {{ plan }}
       </p>
     </div>

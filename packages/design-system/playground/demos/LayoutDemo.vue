@@ -34,6 +34,7 @@ const showMenu = ref(true)
 const showFooter = ref(true)
 const showPanel = ref(true)
 const settingsMenu = ref(true)
+const submenuMode = ref<'flyout' | 'inline'>('flyout')
 const settingsAsGroup = ref(true)
 const settingsMenuId = ref('settings')
 const settingsFlyoutPlacement = ref<'auto' | 'down' | 'up'>('up')
@@ -70,6 +71,10 @@ watch(showPanel, (enabled) => {
   }
 })
 
+watch(submenuMode, () => {
+  openKeys.value = []
+})
+
 const previewKey = computed(
   () =>
     [
@@ -78,6 +83,7 @@ const previewKey = computed(
       showFooter.value,
       showPanel.value,
       settingsMenu.value,
+      submenuMode.value,
       // settingsAsGroup / flyoutPlacement omitted — must switch live without remounting the shell
       settingsMenuId.value,
       footerWidth.value,
@@ -116,6 +122,7 @@ const code = computed(() => {
     `const showMenu = ref(${showMenu.value})`,
     `const showFooter = ref(${showFooter.value})`,
     `const settingsMenu = ref(${settingsMenu.value})`,
+    `const submenuMode = ref<'flyout' | 'inline'>('${submenuMode.value}')`,
     `const settingsMenuId = ref('${settingsMenuId.value.replace(/'/g, "\\'")}')`,
     `const footerWidth = ref<'full' | 'content'>('${footerWidth.value}')`,
     `const activeId = ref('${activeNav.value.replace(/'/g, "\\'")}')`,
@@ -143,6 +150,7 @@ const code = computed(() => {
     `  ${playgroundSnippetAttr('showMenu', showMenu.value)}`,
     `  ${playgroundSnippetAttr('showFooter', showFooter.value)}`,
     `  ${playgroundSnippetAttr('settingsMenu', settingsMenu.value)}`,
+    `  ${playgroundSnippetAttr('submenuMode', submenuMode.value)}`,
     `  ${playgroundSnippetAttr('settingsMenuId', settingsMenuId.value)}`,
     `  ${playgroundSnippetAttr('footerWidth', footerWidth.value)}`,
   ]
@@ -232,7 +240,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
 
     <div
       class="mb-4 rounded-xl border border-[#00E5B0]/15 p-4"
@@ -242,10 +250,10 @@ const code = computed(() => {
         <strong class="text-[#E8EDF5]">AppLayout</strong> {{ t('layoutPlayground.introLead') }}
         {{ t('layoutPlayground.introBody') }}
       </p>
-      <p class="mb-3 rounded-md border border-[#00E5B0]/20 bg-[#00E5B0]/5 px-3 py-2 text-[11px] leading-relaxed text-[#7BA3C8]">
+      <p class="mb-3 rounded-md border border-[#00E5B0]/20 bg-[#00E5B0]/5 px-3 py-2 text-xs leading-relaxed text-[#7BA3C8]">
         {{ t('layoutPlayground.stylingNote') }}
       </p>
-      <div class="grid grid-cols-1 gap-2 text-[10px] sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
         <div class="rounded-md px-2 py-1.5" style="background: rgba(0,212,255,0.08); color: #00D4FF">
           <span class="font-mono uppercase">{{ t('layoutPlayground.slots.header') }}</span>
         </div>
@@ -265,7 +273,7 @@ const code = computed(() => {
     </div>
 
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
-      <p class="font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('layoutPlayground.preview') }}</p>
+      <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('layoutPlayground.preview') }}</p>
 
       <AppLayout
         :key="previewKey"
@@ -288,8 +296,9 @@ const code = computed(() => {
         :show-footer="showFooter"
         :settings-menu="settingsMenu"
         :settings-menu-id="settingsMenuId"
+        :submenu-mode="submenuMode"
         :footer-width="footerWidth"
-        class="min-h-[26rem] h-[26rem] border-[#00E5B0]/20"
+        class="min-h-[26rem] border-[#00E5B0]/20"
       >
         <template #header>
           <div
@@ -297,9 +306,9 @@ const code = computed(() => {
             style="background: rgba(0,212,255,0.06)"
           >
             <div class="flex items-center gap-2">
-              <span class="font-mono text-[10px] uppercase tracking-wider text-[#00D4FF]">{{ t('layoutPlayground.regions.header.label') }}</span>
+              <span class="font-mono text-xs uppercase tracking-wider text-[#00D4FF]">{{ t('layoutPlayground.regions.header.label') }}</span>
               <span
-                class="flex size-6 items-center justify-center rounded-md text-[10px] font-bold text-[#060D18]"
+                class="flex size-6 items-center justify-center rounded-md text-xs font-bold text-[#060D18]"
                 style="background: linear-gradient(135deg, #0052CC, #00D4FF)"
               >
                 DS
@@ -313,11 +322,11 @@ const code = computed(() => {
         <template #menu>
           <SidebarMenuItem id="dashboard" :label="sidebar.dashboard" :icon="BarChart2" />
 
-          <SidebarMenuGroup id="components" :label="sidebar.components" :icon="Gem" default-open>
+          <SidebarMenuGroup id="components" :label="sidebar.components" :icon="Gem">
             <SidebarMenuItem id="components.overview" :label="sidebar.overview" :icon="Layers" />
             <SidebarMenuItem id="components.button" :label="sidebar.button" :icon="Box" />
 
-            <SidebarMenuGroup id="components.forms" :label="sidebar.forms" :icon="Type" default-open>
+            <SidebarMenuGroup id="components.forms" :label="sidebar.forms" :icon="Type">
               <SidebarMenuItem id="components.forms.input" :label="sidebar.input" :icon="Type" />
               <SidebarMenuItem id="components.forms.select" :label="sidebar.select" :icon="Target" />
             </SidebarMenuGroup>
@@ -356,7 +365,7 @@ const code = computed(() => {
           class="flex h-full min-h-0 w-full flex-col rounded p-2"
           style="background: rgba(0,229,176,0.06)"
         >
-          <p class="mb-2 font-mono text-[10px] uppercase tracking-wider text-[#00E5B0]">{{ t('layoutPlayground.slots.content') }}</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#00E5B0]">{{ t('layoutPlayground.slots.content') }}</p>
           <div
             class="pg-playground-preview flex flex-1 flex-col items-center justify-center gap-3 rounded-lg px-4 py-6 text-center"
           >
@@ -375,10 +384,10 @@ const code = computed(() => {
             style="background: rgba(0,212,255,0.06)"
           >
             <div class="mb-3 flex items-center justify-between gap-2 border-b border-[#00D4FF]/20 pb-2">
-              <span class="font-mono text-[10px] uppercase tracking-wider text-[#00D4FF]">{{ t('layoutPlayground.panelTag') }}</span>
+              <span class="font-mono text-xs uppercase tracking-wider text-[#00D4FF]">{{ t('layoutPlayground.panelTag') }}</span>
               <button
                 type="button"
-                class="rounded px-2 py-0.5 font-mono text-[10px] text-[#4D6A87] transition-colors hover:bg-muted/40 hover:text-foreground"
+                class="rounded px-2 py-0.5 font-mono text-xs text-[#4D6A87] transition-colors hover:bg-muted/40 hover:text-foreground"
                 @click="closePanel()"
               >
                 {{ t('layoutPlayground.close') }}
@@ -398,15 +407,15 @@ const code = computed(() => {
             class="flex w-full items-center justify-between gap-3 rounded p-2 text-xs"
             style="background: rgba(255,139,0,0.06)"
           >
-            <span class="font-mono text-[10px] uppercase tracking-wider text-[#FF8B00]">{{ t('layoutPlayground.regions.footer.label') }}</span>
-            <span class="font-mono text-[10px] text-[#4D6A87]">{{ t('app.footer') }}</span>
+            <span class="font-mono text-xs uppercase tracking-wider text-[#FF8B00]">{{ t('layoutPlayground.regions.footer.label') }}</span>
+            <span class="font-mono text-xs text-[#4D6A87]">{{ t('app.footer') }}</span>
           </div>
         </template>
       </AppLayout>
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div class="min-w-0 space-y-2">
-          <p class="mb-1 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('layoutPlayground.regionsTitle') }}</p>
+          <p class="mb-1 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('layoutPlayground.regionsTitle') }}</p>
           <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
             <Switch v-model="showHeader" size="sm" />
             {{ propTemplateBinding('showHeader') }}
@@ -427,6 +436,23 @@ const code = computed(() => {
             <Switch v-model="settingsMenu" size="sm" />
             {{ propTemplateBinding('settingsMenu') }}
           </label>
+
+          <div class="space-y-1 px-2 py-1">
+            <label class="mb-1 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('submenuMode') }}</label>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="mode in (['flyout', 'inline'] as const)"
+                :key="mode"
+                type="button"
+                class="rounded-md px-2.5 py-1 font-mono text-[10px] transition-colors"
+                :style="playgroundOptionStyle(submenuMode === mode)"
+                @click="submenuMode = mode"
+              >
+                {{ mode }}
+              </button>
+            </div>
+          </div>
+
           <label
             v-if="settingsMenu"
             class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]"
@@ -435,7 +461,7 @@ const code = computed(() => {
             {{ t('layoutPlayground.settingsAsGroup') }}
           </label>
           <div v-if="settingsMenu" class="space-y-1 px-2 py-1">
-            <label class="block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <label class="block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ propTemplateBinding('settingsMenuId') }}
             </label>
             <input
@@ -445,7 +471,7 @@ const code = computed(() => {
             />
           </div>
           <div v-if="settingsMenu && settingsAsGroup" class="space-y-1 px-2 py-1">
-            <label class="block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <label class="block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ propTemplateBinding('flyoutPlacement') }}
             </label>
             <select
@@ -461,7 +487,7 @@ const code = computed(() => {
 
         <div class="min-w-0 space-y-4">
           <div>
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ t('layoutPlayground.menuWidthLabel', { width: menuWidth }) }}
             </label>
             <input
@@ -474,7 +500,7 @@ const code = computed(() => {
             />
           </div>
           <div>
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ propTemplateBinding('menuCollapsedWidth') }} — {{ menuCollapsedWidth }}
             </label>
             <input
@@ -487,7 +513,7 @@ const code = computed(() => {
             />
           </div>
           <div>
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('menuLabel') }}</label>
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('menuLabel') }}</label>
             <input
               v-model="menuLabel"
               type="text"
@@ -504,14 +530,14 @@ const code = computed(() => {
           </label>
 
           <div v-if="showPanel">
-            <p class="mb-2 mt-1 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">panel</p>
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('panelWidth') }}</label>
+            <p class="mb-2 mt-1 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">panel</p>
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('panelWidth') }}</label>
             <input
               v-model="panelWidth"
               type="text"
               class="mb-3 w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
             />
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ propTemplateBinding('panelMinWidth') }} — {{ panelMinWidth }}
             </label>
             <input
@@ -522,7 +548,7 @@ const code = computed(() => {
               step="1"
               class="mb-3 w-full accent-[#00E5B0]"
             />
-            <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('panelMaxWidth') }}</label>
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('panelMaxWidth') }}</label>
             <input
               v-model="panelMaxWidth"
               type="text"
@@ -539,7 +565,7 @@ const code = computed(() => {
           </div>
 
           <div v-if="showFooter && showMenu">
-            <p class="mb-2 mt-1 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+            <p class="mb-2 mt-1 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
               {{ t('layoutPlayground.footerWidthLabel') }}
             </p>
             <div class="flex flex-wrap gap-2">
@@ -547,7 +573,7 @@ const code = computed(() => {
                 v-for="option in (['full', 'content'] as const)"
                 :key="option"
                 type="button"
-                class="rounded-md px-2.5 py-1 font-mono text-[10px] transition-colors"
+                class="rounded-md px-2.5 py-1 font-mono text-xs transition-colors"
                 :style="playgroundOptionStyle(footerWidth === option)"
                 @click="footerWidth = option"
               >

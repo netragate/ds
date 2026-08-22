@@ -55,7 +55,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center rounded-xl">
         <Input
@@ -77,7 +77,7 @@ const code = computed(() => {
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">type</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">type</p>
           <button
             v-for="item in typeOptions"
             :key="item"
@@ -90,7 +90,7 @@ const code = computed(() => {
           </button>
         </div>
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('buttonPlayground.sizeLabel').toLowerCase() }}
           </p>
           <button
@@ -107,7 +107,7 @@ const code = computed(() => {
       </div>
 
       <div>
-        <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">placeholder</label>
+        <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">placeholder</label>
         <input
           v-model="placeholder"
           type="text"
@@ -117,7 +117,7 @@ const code = computed(() => {
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">minLength</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">minLength</label>
           <input
             v-model.number="minLength"
             type="number"
@@ -126,7 +126,7 @@ const code = computed(() => {
           />
         </div>
         <div>
-          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">maxLength</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">maxLength</label>
           <input
             v-model.number="maxLength"
             type="number"
@@ -142,7 +142,7 @@ const code = computed(() => {
       </label>
 
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">state</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">state</p>
         <button
           v-for="item in stateOptions"
           :key="item"

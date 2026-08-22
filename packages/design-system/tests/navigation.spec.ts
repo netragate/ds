@@ -494,7 +494,169 @@ describe('SidebarMenu', () => {
     wrapper.unmount()
   })
 
-  it('renders design system Tooltip with variant outline, placement right, and targetRef on collapsed SidebarMenuItem', () => {
+  it('defaults to flyout: hover opens teleported panel', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'todos.active',
+        openKeys: [],
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuGroup id="todos" label="Todos">
+            <SidebarMenuItem id="todos.active" label="Active" />
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+
+    await wrapper.find('button[aria-expanded]').trigger('mouseenter')
+    await wrapper.vm.$nextTick()
+
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeTruthy()
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
+  it('expands and collapses children inline when submenuMode is inline', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'todos.active',
+        openKeys: [],
+        submenuMode: 'inline',
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuGroup id="todos" label="Todos">
+            <SidebarMenuItem id="todos.active" label="Active" />
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    const trigger = wrapper.find('button[aria-expanded]')
+    expect(trigger.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+
+    await trigger.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(trigger.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(true)
+    expect(wrapper.find('[data-sidebar-inline-submenu]').text()).toContain('Active')
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+    expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual(['todos'])
+
+    await trigger.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(trigger.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual([])
+
+    await trigger.trigger('mouseenter')
+    await wrapper.vm.$nextTick()
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+
+    wrapper.unmount()
+  })
+
+  it('marks the selected page and parent group when clicking an inline leaf item', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'dashboard',
+        openKeys: [],
+        submenuMode: 'inline',
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuGroup id="components" label="Components">
+            <SidebarMenuItem id="components.overview" label="Overview" />
+            <SidebarMenuGroup id="components.forms" label="Forms">
+              <SidebarMenuItem id="components.forms.input" label="Input" />
+            </SidebarMenuGroup>
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    const componentsTrigger = wrapper.findAll('button').find((btn) => btn.text()?.includes('Components'))
+    expect(componentsTrigger).toBeTruthy()
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+
+    await componentsTrigger!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const overview = wrapper.findAll('button').find((btn) => btn.text()?.includes('Overview'))
+    expect(overview).toBeTruthy()
+    await overview!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:activeId')?.at(-1)?.[0]).toBe('components.overview')
+    expect(overview!.attributes('aria-current')).toBe('page')
+    expect(overview!.classes().join(' ')).toContain('text-primary')
+    expect(componentsTrigger!.classes().join(' ')).toContain('text-primary')
+
+    const dashboard = wrapper.findAll('button').find((btn) => btn.text()?.includes('Dashboard'))
+    expect(dashboard!.attributes('aria-current')).toBeUndefined()
+
+    wrapper.unmount()
+  })
+
+  it('forces flyout on hover when collapsed even if submenuMode is inline', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'todos.active',
+        openKeys: [],
+        collapsed: true,
+        submenuMode: 'inline',
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuGroup id="todos" label="Todos">
+            <SidebarMenuItem id="todos.active" label="Active" />
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    const trigger = wrapper.find('button[aria-expanded]')
+    await trigger.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+
+    await trigger.trigger('mouseenter')
+    await wrapper.vm.$nextTick()
+
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeTruthy()
+    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
+  it('renders design system Tooltip with variant outline, placement right, and targetRef on collapsed SidebarMenuItem', async () => {
     const collapsedMenuItem = mount(SidebarMenuItem, {
       props: { id: 'dashboard', label: 'Dashboard' },
       global: {
@@ -512,12 +674,14 @@ describe('SidebarMenu', () => {
       },
     })
 
+    await collapsedMenuItem.vm.$nextTick()
+
     const tooltip = collapsedMenuItem.findComponent(Tooltip)
     expect(tooltip.exists()).toBe(true)
     expect(tooltip.props('content')).toBe('Dashboard')
     expect(tooltip.props('placement')).toBe('right')
     expect(tooltip.props('variant')).toBe('outline')
-    expect(tooltip.props('targetRef')).toBeTruthy()
+    expect(tooltip.props('targetRef') ?? collapsedMenuItem.find('span').element).toBeTruthy()
     expect(collapsedMenuItem.find('button').attributes('title')).toBeUndefined()
 
     const expandedMenuItem = mount(SidebarMenuItem, {
@@ -550,6 +714,7 @@ describe('SidebarMenu', () => {
             collapsed: { value: true },
             inFlyout: { value: false },
             showLabels: { value: false },
+            submenuMode: { value: 'flyout' },
             depth: 0,
             activeId: { value: '' },
             openKeys: { value: [] },

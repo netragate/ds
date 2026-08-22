@@ -449,6 +449,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.SidebarMenu!,
     props: [
       p('collapsed', 'boolean', 'false', 'Collapsed sidebar mode (icon-only labels)'),
+      p('submenuMode', "'flyout' | 'inline'", 'flyout', 'How SidebarMenuGroup children open: hover flyout (default) or click to expand inline. Collapsed rail always uses flyout'),
       cls(),
     ],
     models: [
@@ -477,7 +478,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('id', 'string', undefined, 'Unique group identifier (required)'),
       p('label', 'string', undefined, 'Group label (required)'),
       p('icon', 'Component', undefined, 'Optional icon component'),
-      p('defaultOpen', 'boolean', 'false', 'Expand group on mount'),
+      p('defaultOpen', 'boolean', 'false', 'Add group to openKeys on mount (inline expand starts open when true)'),
       p(
         'flyoutPlacement',
         "'auto' | 'down' | 'up'",
@@ -835,6 +836,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('showMenu', 'boolean', 'true', 'Render sidebar menu region'),
       p('showFooter', 'boolean', 'true', 'Render footer region'),
       p('settingsMenu', 'boolean', 'false', 'Pin a SidebarMenuGroup or SidebarMenuItem whose id equals settingsMenuId to the menu footer'),
+      p('submenuMode', "'flyout' | 'inline'", 'flyout', 'How group children open: hover flyout (default) or click to expand inline below the group. Collapsed rail and pinned settings stay flyout'),
       p('settingsMenuId', 'string', 'settings', 'Exact id of the SidebarMenuGroup or lone SidebarMenuItem to pin (any string; must match the node id)'),
       p('footerWidth', "'full' | 'content'", 'full', 'Footer spans full width or content column only'),
       cls('Shell sizing — use class="min-h-svh" (or h-full on #app) for full-viewport apps; does not style slot content'),
@@ -860,6 +862,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
         c('header slot', 'Brand bar with border-b, px-4 py-3, typography classes'),
         c('menu slot', 'Navigation items — pin settings with SidebarMenuGroup id="settings" or lone SidebarMenuItem id="settings"'),
         c('menu toggle', 'Built-in chevron button with tooltip — no extra component required'),
+        c('submenuMode prop', 'flyout (default) or inline expand-on-click for SidebarMenuGroup children', true),
         c('settingsMenu prop', 'When true, the menu node whose id equals settingsMenuId is pinned to the footer', true),
         c('settingsMenuId prop', 'Compared with exact string equality to the SidebarMenuGroup / lone SidebarMenuItem id', true),
         c('group vs item', 'Register/unregister switches footer mode live (group flyout or single link)', true),

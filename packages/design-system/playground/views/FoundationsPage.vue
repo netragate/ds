@@ -177,13 +177,13 @@ const gradientTokens: string[] = [
 
 // ── Typography scale ─────────────────────────────────────────────────────────
 const fontSizes: { name: string; token: string; px: string }[] = [
-  { name: 'xsmall',  token: '--ds-font-size-xsmall',  px: '11px' },
-  { name: 'small',   token: '--ds-font-size-small',   px: '12px' },
+  { name: 'xsmall',  token: '--ds-font-size-xsmall',  px: '13px' },
+  { name: 'small',   token: '--ds-font-size-small',   px: '14px' },
   { name: 'medium',  token: '--ds-font-size-medium',  px: '14px' },
-  { name: 'base',    token: '--ds-font-size-base',    px: '16px' },
-  { name: 'large',   token: '--ds-font-size-large',   px: '20px' },
-  { name: 'xlarge',  token: '--ds-font-size-xlarge',  px: '24px' },
-  { name: 'xxlarge', token: '--ds-font-size-xxlarge', px: '32px' },
+  { name: 'base',    token: '--ds-font-size-base',    px: '17px' },
+  { name: 'large',   token: '--ds-font-size-large',   px: '22px' },
+  { name: 'xlarge',  token: '--ds-font-size-xlarge',  px: '26px' },
+  { name: 'xxlarge', token: '--ds-font-size-xxlarge', px: '34px' },
 ]
 
 const fontWeights: { name: string; token: string; value: number }[] = [
@@ -291,7 +291,7 @@ const borderWidthTokens: { token: string; px: string }[] = [
     <div class="pg-foundations-hero pg-playground-panel rounded-2xl p-4 sm:p-6 md:p-8 mb-6">
       <div class="mb-4 flex items-center gap-2">
         <Layers :size="16" class="text-primary" />
-        <span class="pg-text-muted font-mono text-[10px] uppercase tracking-wider">{{ t('foundationsPage.badge') }}</span>
+        <span class="pg-text-muted font-mono text-xs uppercase tracking-wider">{{ t('foundationsPage.badge') }}</span>
       </div>
       <h2 class="mb-2 text-xl font-bold sm:text-2xl" style="color: var(--pg-text)">{{ t('foundationsPage.title') }}</h2>
       <p class="pg-text-subtle max-w-2xl text-sm leading-relaxed">
@@ -548,7 +548,7 @@ const borderWidthTokens: { token: string; px: string }[] = [
             v-for="s in iconSizes"
             :key="s"
             type="button"
-            class="rounded px-2 py-0.5 font-mono text-[10px] transition-colors"
+            class="rounded px-2 py-0.5 font-mono text-xs transition-colors"
             :style="iconSize === s ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }"
             @click="iconSize = s"
           >
@@ -571,7 +571,7 @@ const borderWidthTokens: { token: string; px: string }[] = [
           </button>
         </div>
       </div>
-      <p class="mt-3 text-[10px] text-[#4D6A87]">{{ t('iconsPlayground.footerHint') }}</p>
+      <p class="mt-3 text-xs text-[#4D6A87]">{{ t('iconsPlayground.footerHint') }}</p>
     </section>
   </div>
 </template>

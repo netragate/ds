@@ -45,7 +45,7 @@ const shouldRender = computed(() => principles.length >= 4)
     :aria-label="t('homePrinciples.sectionTitle')"
   >
     <h2
-      class="mb-6 text-xs font-semibold uppercase tracking-widest"
+      class="mb-6 text-sm font-semibold uppercase tracking-widest"
       style="color: var(--pg-text-muted)"
     >
       {{ t('homePrinciples.sectionTitle') }}
@@ -73,10 +73,10 @@ const shouldRender = computed(() => principles.length >= 4)
 
         <!-- Content -->
         <div class="flex flex-col gap-1.5">
-          <h3 class="text-sm font-semibold" style="color: var(--pg-text)">
+          <h3 class="text-base font-semibold" style="color: var(--pg-text)">
             {{ t(principle.titleKey) }}
           </h3>
-          <p class="text-xs leading-relaxed" style="color: var(--pg-text-subtle)">
+          <p class="text-sm leading-relaxed" style="color: var(--pg-text-subtle)">
             {{ t(principle.descKey) }}
           </p>
         </div>

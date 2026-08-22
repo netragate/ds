@@ -12,7 +12,7 @@ const { t } = usePlaygroundLocale()
     <template #icon><Tag :size="14" /></template>
     <div class="space-y-4">
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">lozenge</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">lozenge</p>
         <div class="flex flex-wrap gap-2">
           <Lozenge variant="default">{{ t('labelsPlayground.statuses.backlog') }}</Lozenge>
           <Lozenge variant="success">{{ t('labelsPlayground.statuses.done') }}</Lozenge>
@@ -23,7 +23,7 @@ const { t } = usePlaygroundLocale()
         </div>
       </div>
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">badge</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">badge</p>
         <div class="flex flex-wrap gap-3">
           <Badge :value="3" variant="default" />
           <Badge :value="12" variant="primary" />

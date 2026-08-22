@@ -5,9 +5,19 @@ import {
   type SidebarMenuContext,
 } from './sidebarMenuContext'
 
-const props = defineProps<{
-  parentGroupId: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    parentGroupId: string
+    /**
+     * Inline branch: register items under the parent group without forcing nested
+     * groups into hover-flyout mode.
+     */
+    inline?: boolean
+  }>(),
+  {
+    inline: false,
+  },
+)
 
 const parent = inject(SIDEBAR_MENU_INJECTION_KEY)
 
@@ -16,9 +26,10 @@ if (!parent) {
 }
 
 const flyoutContext: SidebarMenuContext = {
-  collapsed: computed(() => false),
-  inFlyout: computed(() => true),
-  showLabels: computed(() => true),
+  collapsed: computed(() => (props.inline ? parent.collapsed.value : false)),
+  inFlyout: computed(() => !props.inline),
+  showLabels: computed(() => (props.inline ? parent.showLabels.value : true)),
+  submenuMode: parent.submenuMode,
   activeId: parent.activeId,
   openKeys: parent.openKeys,
   depth: parent.depth + 1,

@@ -10,4 +10,4 @@ export { default as SidebarMenuItem } from './SidebarMenuItem.vue'
 export { default as SidebarMenuGroup } from './SidebarMenuGroup.vue'
 export { default as SidebarMenuShell } from './SidebarMenuShell.vue'
 
-export type { SidebarMenuItemProps, SidebarMenuGroupProps } from './sidebarMenuContext'
+export type { SidebarMenuItemProps, SidebarMenuGroupProps, SidebarSubmenuMode } from './sidebarMenuContext'

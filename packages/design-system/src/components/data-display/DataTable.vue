@@ -328,7 +328,7 @@ watch(
                   <span>{{ column.label }}</span>
                   <span
                     v-if="sortPriority(column)"
-                    class="inline-flex size-4 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary"
+                    class="inline-flex size-4 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary"
                   >
                     {{ sortPriority(column) }}
                   </span>

@@ -29,7 +29,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center gap-3 rounded-xl">
         <Switch
@@ -42,7 +42,7 @@ const code = computed(() => {
       </div>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">size</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">size</p>
           <button
             v-for="item in sizeOptions"
             :key="item"

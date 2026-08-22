@@ -58,7 +58,7 @@ function handleCardKeydown(event: KeyboardEvent, path: string): void {
 
 <template>
   <section class="mb-10 lg:mb-14" :aria-label="t('homeQuickNav.sectionTitle')">
-    <h2 class="mb-6 text-xs font-semibold uppercase tracking-widest" style="color: var(--pg-text-muted)">
+    <h2 class="mb-6 text-sm font-semibold uppercase tracking-widest" style="color: var(--pg-text-muted)">
       {{ t('homeQuickNav.sectionTitle') }}
     </h2>
 
@@ -88,10 +88,10 @@ function handleCardKeydown(event: KeyboardEvent, path: string): void {
 
         <!-- Content -->
         <div class="flex flex-1 flex-col gap-1.5">
-          <h3 class="text-sm font-semibold" style="color: var(--pg-text)">
+          <h3 class="text-base font-semibold" style="color: var(--pg-text)">
             {{ t(card.titleKey) }}
           </h3>
-          <p class="text-xs leading-relaxed" style="color: var(--pg-text-subtle)">
+          <p class="text-sm leading-relaxed" style="color: var(--pg-text-subtle)">
             {{ t(card.descKey) }}
           </p>
         </div>
@@ -99,7 +99,7 @@ function handleCardKeydown(event: KeyboardEvent, path: string): void {
         <!-- Footer row: stat + arrow -->
         <div class="flex items-center justify-between">
           <span
-            class="rounded-md px-2 py-0.5 font-mono text-[11px] font-medium"
+            class="rounded-md px-2 py-0.5 font-mono text-xs font-medium"
             style="background: var(--pg-nav-active-bg); color: var(--pg-accent)"
           >
             {{ card.stat }}

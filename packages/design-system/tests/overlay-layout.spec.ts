@@ -767,6 +767,119 @@ describe('Tooltip', () => {
 
     wrapper.unmount()
   })
+
+  it('flips left placement to the right when the preferred side overflows', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320 })
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 480 })
+
+    const wrapper = mount(Tooltip, {
+      props: { content: 'Flip me left', placement: 'left', delay: 0 },
+      slots: { default: '<button type="button">Toggle</button>' },
+      attachTo: document.body,
+    })
+
+    const triggerEl = wrapper.find('span.inline-flex').element as HTMLElement
+    // Trigger near the left edge so preferred `left` placement cannot fit a wide tooltip.
+    triggerEl.getBoundingClientRect = () =>
+      ({
+        top: 200,
+        bottom: 232,
+        left: 40,
+        right: 72,
+        width: 32,
+        height: 32,
+        x: 40,
+        y: 200,
+        toJSON: () => ({}),
+      }) as DOMRect
+
+    await wrapper.find('span.inline-flex').trigger('mouseenter')
+    vi.runAllTimers()
+    await flushPromises()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+
+    const bubble = document.body.querySelector('[role="tooltip"]') as HTMLElement | null
+    expect(bubble).not.toBeNull()
+    bubble!.getBoundingClientRect = () =>
+      ({
+        top: 0,
+        bottom: 24,
+        left: 0,
+        right: 160,
+        width: 160,
+        height: 24,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }) as DOMRect
+
+    window.dispatchEvent(new Event('resize'))
+    await flushPromises()
+    await wrapper.vm.$nextTick()
+
+    const left = Number.parseFloat(bubble!.style.left || '0')
+    // Preferred left would be 40 - 160 - 8 = -128; flip places to the right of the trigger (~80).
+    expect(left).toBeGreaterThanOrEqual(triggerEl.getBoundingClientRect().right)
+
+    wrapper.unmount()
+  })
+
+  it('keeps preferred placement when flip is disabled', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320 })
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 480 })
+
+    const wrapper = mount(Tooltip, {
+      props: { content: 'No flip', placement: 'left', flip: false, delay: 0 },
+      slots: { default: '<button type="button">Toggle</button>' },
+      attachTo: document.body,
+    })
+
+    const triggerEl = wrapper.find('span.inline-flex').element as HTMLElement
+    triggerEl.getBoundingClientRect = () =>
+      ({
+        top: 200,
+        bottom: 232,
+        left: 40,
+        right: 72,
+        width: 32,
+        height: 32,
+        x: 40,
+        y: 200,
+        toJSON: () => ({}),
+      }) as DOMRect
+
+    await wrapper.find('span.inline-flex').trigger('mouseenter')
+    vi.runAllTimers()
+    await flushPromises()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+
+    const bubble = document.body.querySelector('[role="tooltip"]') as HTMLElement | null
+    expect(bubble).not.toBeNull()
+    bubble!.getBoundingClientRect = () =>
+      ({
+        top: 0,
+        bottom: 24,
+        left: 0,
+        right: 160,
+        width: 160,
+        height: 24,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }) as DOMRect
+
+    window.dispatchEvent(new Event('resize'))
+    await flushPromises()
+    await wrapper.vm.$nextTick()
+
+    const left = Number.parseFloat(bubble!.style.left || '0')
+    // Without flip, clamp keeps overflowed left placement at the viewport margin.
+    expect(left).toBeLessThanOrEqual(8)
+
+    wrapper.unmount()
+  })
 })
 
 describe('Popover', () => {

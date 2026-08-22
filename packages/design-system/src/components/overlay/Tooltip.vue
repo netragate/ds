@@ -9,10 +9,18 @@ import {
 
 export type { TooltipAppearance }
 
+export type TooltipPlacement =
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | 'top-start'
+  | 'top-end'
+
 const props = withDefaults(
   defineProps<{
     content: string
-    placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end'
+    placement?: TooltipPlacement
     variant?: OverlayAppearance
     /** @deprecated Use `variant` instead. */
     appearance?: OverlayAppearance
@@ -24,6 +32,11 @@ const props = withDefaults(
     delay?: number
     /** Keyboard shortcut to display alongside the tooltip content */
     shortcut?: string
+    /**
+     * When true (default), flip to the opposite side if the preferred placement
+     * would overflow the viewport, then clamp residual overflow.
+     */
+    flip?: boolean
   }>(),
   {
     placement: 'top',
@@ -33,6 +46,7 @@ const props = withDefaults(
     targetRef: undefined,
     delay: 300,
     shortcut: undefined,
+    flip: true,
   },
 )
 
@@ -48,44 +62,133 @@ const visible = ref(false)
 const coords = ref({ top: 0, left: 0 })
 let showTimer: ReturnType<typeof setTimeout> | null = null
 
-function computePosition(
+const VIEWPORT_MARGIN = 8
+const GAP = 8
+
+function positionFor(
+  placement: TooltipPlacement,
   trigger: DOMRect,
   tooltip: DOMRect,
 ): { top: number; left: number } {
-  const gap = 8
-
-  switch (props.placement) {
+  switch (placement) {
     case 'right':
       return {
         top: trigger.top + trigger.height / 2 - tooltip.height / 2,
-        left: trigger.right + gap,
+        left: trigger.right + GAP,
       }
     case 'left':
       return {
         top: trigger.top + trigger.height / 2 - tooltip.height / 2,
-        left: trigger.left - tooltip.width - gap,
+        left: trigger.left - tooltip.width - GAP,
       }
     case 'bottom':
       return {
-        top: trigger.bottom + gap,
+        top: trigger.bottom + GAP,
         left: trigger.left + trigger.width / 2 - tooltip.width / 2,
       }
     case 'top-start':
       return {
-        top: trigger.top - tooltip.height - gap,
+        top: trigger.top - tooltip.height - GAP,
         left: trigger.left,
       }
     case 'top-end':
       return {
-        top: trigger.top - tooltip.height - gap,
+        top: trigger.top - tooltip.height - GAP,
         left: trigger.right - tooltip.width,
       }
     default:
       return {
-        top: trigger.top - tooltip.height - gap,
+        top: trigger.top - tooltip.height - GAP,
         left: trigger.left + trigger.width / 2 - tooltip.width / 2,
       }
   }
+}
+
+function overflowsViewport(
+  pos: { top: number; left: number },
+  tooltip: DOMRect,
+): { x: boolean; y: boolean } {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : Number.POSITIVE_INFINITY
+  const vh = typeof window !== 'undefined' ? window.innerHeight : Number.POSITIVE_INFINITY
+  return {
+    x: pos.left < VIEWPORT_MARGIN || pos.left + tooltip.width > vw - VIEWPORT_MARGIN,
+    y: pos.top < VIEWPORT_MARGIN || pos.top + tooltip.height > vh - VIEWPORT_MARGIN,
+  }
+}
+
+function oppositePlacement(placement: TooltipPlacement): TooltipPlacement {
+  switch (placement) {
+    case 'left':
+      return 'right'
+    case 'right':
+      return 'left'
+    case 'bottom':
+      return 'top'
+    case 'top-start':
+    case 'top-end':
+    case 'top':
+    default:
+      return 'bottom'
+  }
+}
+
+function clampToViewport(
+  pos: { top: number; left: number },
+  tooltip: DOMRect,
+): { top: number; left: number } {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : tooltip.width
+  const vh = typeof window !== 'undefined' ? window.innerHeight : tooltip.height
+  return {
+    left: Math.min(
+      Math.max(pos.left, VIEWPORT_MARGIN),
+      Math.max(VIEWPORT_MARGIN, vw - tooltip.width - VIEWPORT_MARGIN),
+    ),
+    top: Math.min(
+      Math.max(pos.top, VIEWPORT_MARGIN),
+      Math.max(VIEWPORT_MARGIN, vh - tooltip.height - VIEWPORT_MARGIN),
+    ),
+  }
+}
+
+function computePosition(
+  trigger: DOMRect,
+  tooltip: DOMRect,
+): { top: number; left: number } {
+  const preferred = props.placement
+  let pos = positionFor(preferred, trigger, tooltip)
+
+  if (!props.flip) {
+    return clampToViewport(pos, tooltip)
+  }
+
+  const overflow = overflowsViewport(pos, tooltip)
+  const isHorizontal = preferred === 'left' || preferred === 'right'
+  const needsFlip = isHorizontal ? overflow.x : overflow.y
+
+  if (needsFlip) {
+    const flipped = oppositePlacement(preferred)
+    const flippedPos = positionFor(flipped, trigger, tooltip)
+    const flippedOverflow = overflowsViewport(flippedPos, tooltip)
+    const flippedBetter = isHorizontal
+      ? !flippedOverflow.x || flippedOverflow.x === overflow.x
+      : !flippedOverflow.y || flippedOverflow.y === overflow.y
+    if (flippedBetter && (isHorizontal ? !flippedOverflow.x : !flippedOverflow.y)) {
+      pos = flippedPos
+    } else if (flippedBetter) {
+      // Prefer flipped even if still tight; clamp will finish.
+      const preferredScore = isHorizontal
+        ? Math.min(pos.left, window.innerWidth - (pos.left + tooltip.width))
+        : Math.min(pos.top, window.innerHeight - (pos.top + tooltip.height))
+      const flippedScore = isHorizontal
+        ? Math.min(flippedPos.left, window.innerWidth - (flippedPos.left + tooltip.width))
+        : Math.min(flippedPos.top, window.innerHeight - (flippedPos.top + tooltip.height))
+      if (flippedScore > preferredScore) {
+        pos = flippedPos
+      }
+    }
+  }
+
+  return clampToViewport(pos, tooltip)
 }
 
 async function updatePosition(): Promise<void> {
@@ -129,7 +232,7 @@ watch(visible, (isVisible) => {
 })
 
 watch(
-  () => props.placement,
+  () => [props.placement, props.flip] as const,
   () => {
     if (visible.value) {
       updatePosition()
@@ -192,7 +295,7 @@ const tooltipStyle = computed(() => ({
       :style="tooltipStyle"
     >
       {{ content }}
-      <kbd v-if="shortcut" class="ml-2 rounded border px-1 text-[10px]">{{ shortcut }}</kbd>
+      <kbd v-if="shortcut" class="ml-2 rounded border px-1 text-xs">{{ shortcut }}</kbd>
     </span>
   </Teleport>
 </template>

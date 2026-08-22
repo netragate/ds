@@ -56,7 +56,7 @@ const code = computed(() => buildCodeLines().join('\n'))
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center rounded-xl py-8">
         <Popover v-if="showTrigger" v-model:open="previewOpen" :variant="variant">
@@ -73,7 +73,7 @@ const code = computed(() => buildCodeLines().join('\n'))
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('variant') }}</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ propTemplateBinding('variant') }}</p>
           <button
             v-for="item in variantOptions"
             :key="item"
@@ -87,7 +87,7 @@ const code = computed(() => buildCodeLines().join('\n'))
         </div>
 
         <div class="space-y-2">
-          <p class="font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ copy.controlsTitle }}</p>
+          <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ copy.controlsTitle }}</p>
           <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
             <Switch v-model="showTrigger" size="sm" />
             {{ copy.showTrigger }}

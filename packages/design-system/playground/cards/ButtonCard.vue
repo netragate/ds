@@ -66,7 +66,7 @@ function optionStyle(active: boolean) {
       </div>
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
         <div class="min-w-0">
-          <p class="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-1.5 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('buttonPlayground.variantLabel') }}
           </p>
           <button
@@ -81,7 +81,7 @@ function optionStyle(active: boolean) {
           </button>
         </div>
         <div class="min-w-0">
-          <p class="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-1.5 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('buttonPlayground.sizeLabel') }}
           </p>
           <button
@@ -96,7 +96,7 @@ function optionStyle(active: boolean) {
           </button>
         </div>
         <div class="min-w-0">
-          <p class="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-1.5 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('buttonPlayground.stateLabel') }}
           </p>
           <label class="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-0.5 text-xs text-[#4D6A87]">
@@ -110,7 +110,7 @@ function optionStyle(active: boolean) {
         </div>
       </div>
       <div>
-        <p class="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+        <p class="mb-1.5 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
           {{ t('buttonPlayground.iconLabel') }}
         </p>
         <Select

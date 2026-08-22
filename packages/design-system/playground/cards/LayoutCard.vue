@@ -28,7 +28,7 @@ const regionShellClass =
     <template #icon><LayoutTemplate :size="14" /></template>
 
     <div class="flex min-h-0 flex-1 flex-col">
-      <p class="mb-4 shrink-0 text-[11px] leading-relaxed text-[#7BA3C8]">
+      <p class="mb-4 shrink-0 text-xs leading-relaxed text-[#7BA3C8]">
         {{ t('layoutPlayground.description') }}
       </p>
 
@@ -43,7 +43,7 @@ const regionShellClass =
             :class="[regionShellClass, 'min-h-8']"
             style="background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.35)"
           >
-            <span class="font-mono text-[9px] uppercase tracking-wider text-[#00D4FF]">
+            <span class="font-mono text-xs uppercase tracking-wider text-[#00D4FF]">
               {{ t('layoutPlayground.regions.header.label') }}
             </span>
           </div>
@@ -54,7 +54,7 @@ const regionShellClass =
             :class="[regionShellClass, 'h-full min-h-[10rem]']"
             style="background: rgba(167,139,250,0.08); border-color: rgba(167,139,250,0.35)"
           >
-            <span class="font-mono text-[10px] uppercase tracking-wider text-[#A78BFA]">
+            <span class="font-mono text-xs uppercase tracking-wider text-[#A78BFA]">
               {{ t('layoutPlayground.regions.menu.label') }}
             </span>
           </div>
@@ -64,7 +64,7 @@ const regionShellClass =
           :class="[regionShellClass, 'h-full min-h-[10rem] flex-col gap-2']"
           style="background: rgba(0,229,176,0.08); border-color: rgba(0,229,176,0.35)"
         >
-          <span class="font-mono text-[9px] uppercase tracking-wider text-[#00E5B0]">
+          <span class="font-mono text-xs uppercase tracking-wider text-[#00E5B0]">
             {{ t('layoutPlayground.regions.content.label') }}
           </span>
           <Button variant="outline" size="sm" @click="panelOpen = true">
@@ -79,7 +79,7 @@ const regionShellClass =
           >
             <button
               type="button"
-              class="font-mono text-[9px] uppercase tracking-wider text-[#00D4FF] underline-offset-2 hover:underline"
+              class="font-mono text-xs uppercase tracking-wider text-[#00D4FF] underline-offset-2 hover:underline"
               @click="closePanel()"
             >
               {{ t('layoutPlayground.panelClose') }}
@@ -92,7 +92,7 @@ const regionShellClass =
             :class="[regionShellClass, 'min-h-8']"
             style="background: rgba(255,139,0,0.08); border-color: rgba(255,139,0,0.35)"
           >
-            <span class="font-mono text-[9px] uppercase tracking-wider text-[#FF8B00]">
+            <span class="font-mono text-xs uppercase tracking-wider text-[#FF8B00]">
               {{ t('layoutPlayground.regions.footer.label') }}
             </span>
           </div>
@@ -106,8 +106,8 @@ const regionShellClass =
           class="rounded-lg px-2.5 py-2"
           :style="{ background: `${region.color}08`, border: `1px solid ${region.color}20` }"
         >
-          <p class="text-[10px] font-medium text-[#E8EDF5]">{{ region.label }}</p>
-          <p class="text-[9px] text-[#4D6A87]">{{ region.hint }}</p>
+          <p class="text-xs font-medium text-[#E8EDF5]">{{ region.label }}</p>
+          <p class="text-xs text-[#4D6A87]">{{ region.hint }}</p>
         </div>
       </div>
     </div>

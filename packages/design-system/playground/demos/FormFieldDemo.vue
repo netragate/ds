@@ -87,12 +87,12 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="flex gap-2">
         <button
           type="button"
-          class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+          class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
           :style="
             withIcon
               ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' }
@@ -104,7 +104,7 @@ const code = computed(() => {
         </button>
         <button
           type="button"
-          class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+          class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
           :style="
             !withIcon
               ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' }
@@ -150,7 +150,7 @@ const code = computed(() => {
       </FormField>
 
       <div>
-        <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">label</label>
+        <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">label</label>
         <input
           v-model="fieldLabel"
           type="text"
@@ -159,7 +159,7 @@ const code = computed(() => {
       </div>
 
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">state</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">state</p>
         <button
           v-for="item in stateOptions"
           :key="item"

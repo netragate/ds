@@ -18,11 +18,13 @@ const props = withDefaults(
     toggleMenu: () => void
     settingsMenu?: boolean
     settingsMenuId?: string
+    submenuMode?: 'flyout' | 'inline'
   }>(),
   {
     menuCollapsible: true,
     settingsMenu: false,
     settingsMenuId: 'settings',
+    submenuMode: 'flyout',
   },
 )
 
@@ -81,7 +83,7 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
 
 <template>
   <SidebarMenuShell
-    class="h-full"
+    class="min-h-full"
     :collapsed="collapsed"
     :menu-label="menuLabel"
     :menu-width="menuWidth"
@@ -96,10 +98,11 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
       v-model:active-id="activeId"
       v-model:open-keys="openKeys"
       :collapsed="collapsed"
-      class="flex h-full min-h-0 flex-1 flex-col"
+      :submenu-mode="submenuMode"
+      class="flex min-h-0 w-full flex-1 flex-col"
     >
-      <div class="flex min-h-0 flex-1 flex-col">
-        <div class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
+      <div class="flex w-full flex-1 flex-col">
+        <div class="flex w-full flex-col gap-0.5">
           <slot />
         </div>
 

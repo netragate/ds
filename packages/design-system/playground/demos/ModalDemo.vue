@@ -128,14 +128,14 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <div class="flex gap-2">
         <button
           v-for="item in variants"
           :key="item"
           type="button"
-          class="flex-1 rounded-md px-3 py-2 font-mono text-[10px] uppercase tracking-wide transition-colors"
+          class="flex-1 rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wide transition-colors"
           :style="variantPillStyle(variant === item)"
           @click="variant = item"
         >
@@ -152,7 +152,7 @@ const code = computed(() => {
       </button>
 
       <div class="space-y-2 border-t border-border/60 pt-4">
-        <p class="font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ copy.controlsTitle }}</p>
+        <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ copy.controlsTitle }}</p>
         <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
           <Switch v-model="showHeader" size="sm" />
           {{ copy.showHeader }}

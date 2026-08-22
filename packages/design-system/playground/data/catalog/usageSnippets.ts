@@ -208,13 +208,13 @@ import { FormField, Input } from '${PACKAGE}'
   Badge: usage(
     'Badge',
     `  <!-- Count only -->
-  <Badge :value="12" variant="primary" />
+  <Badge :value="12" :variant="'primary'" />
 
   <!-- Icon + count (badge at bottom-right) -->
   <Badge
-    icon="bell"
+    :icon="'bell'"
     :value="3"
-    variant="primary"
+    :variant="'primary'"
   />`,
   ),
   Spinner: usage(
@@ -566,6 +566,7 @@ const showHeader = ref(true)
 const showMenu = ref(true)
 const showFooter = ref(true)
 const settingsMenu = ref(true)
+const submenuMode = ref<'flyout' | 'inline'>('flyout')
 const settingsMenuId = ref('settings')
 const footerWidth = ref<'full' | 'content'>('full')
 const activeId = ref('dashboard')
@@ -594,6 +595,7 @@ const pageTitle = ref('Dashboard')
     :show-menu="showMenu"
     :show-footer="showFooter"
     :settings-menu="settingsMenu"
+    :submenu-mode="submenuMode"
     :settings-menu-id="settingsMenuId"
     :footer-width="footerWidth"
   >

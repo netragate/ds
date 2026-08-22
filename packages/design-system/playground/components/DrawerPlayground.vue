@@ -361,7 +361,7 @@ function optionStyle(active: boolean) {
   <div>
     <!-- Button -->
     <template v-if="name === 'Button'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-6">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div class="pg-playground-preview flex h-24 items-center justify-center rounded-xl">
@@ -376,20 +376,20 @@ function optionStyle(active: boolean) {
             </Button>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">Button States</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">Button States</p>
             <div class="flex items-center gap-3">
               <div class="flex flex-col items-center gap-1">
-                <span class="text-[9px] text-[#4D6A87]">default</span>
+                <span class="text-xs text-[#4D6A87]">default</span>
                 <Button :variant="buttonVariant" size="sm">Btn</Button>
               </div>
               <ArrowRight :size="14" class="text-[#4D6A87]" />
               <div class="flex flex-col items-center gap-1">
-                <span class="text-[9px] text-[#4D6A87]">hover</span>
+                <span class="text-xs text-[#4D6A87]">hover</span>
                 <Button :variant="buttonVariant" size="sm" style="box-shadow: var(--ds-button-shadow-hover); transform: translateY(-2px)">Btn</Button>
               </div>
               <ArrowRight :size="14" class="text-[#4D6A87]" />
               <div class="flex flex-col items-center gap-1">
-                <span class="text-[9px] text-[#4D6A87]">pressed</span>
+                <span class="text-xs text-[#4D6A87]">pressed</span>
                 <Button :variant="buttonVariant" size="sm" style="box-shadow: var(--ds-button-shadow-pressed); transform: translateY(1px) scale(0.98)">Btn</Button>
               </div>
             </div>
@@ -397,7 +397,7 @@ function optionStyle(active: boolean) {
         </div>
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.variantLabel') }}</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.variantLabel') }}</p>
             <button
               v-for="item in ['default', 'primary', 'secondary', 'ghost', 'outline', 'destructive', 'clean', 'link']"
               :key="item"
@@ -410,7 +410,7 @@ function optionStyle(active: boolean) {
             </button>
           </div>
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.sizeLabel') }}</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.sizeLabel') }}</p>
             <button
               v-for="item in ['sm', 'md', 'lg']"
               :key="item"
@@ -423,7 +423,7 @@ function optionStyle(active: boolean) {
             </button>
           </div>
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.stateLabel') }}</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.stateLabel') }}</p>
             <label class="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
               <Switch v-model="buttonDisabled" size="sm" />
               disabled
@@ -435,7 +435,7 @@ function optionStyle(active: boolean) {
           </div>
         </div>
         <div class="mt-4">
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.iconLabel') }}</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('buttonPlayground.iconLabel') }}</p>
           <Select
             v-model="buttonIconValue"
             :options="iconographySelectOptions"
@@ -448,7 +448,7 @@ function optionStyle(active: boolean) {
 
     <!-- Select -->
     <template v-else-if="name === 'Select'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 w-full space-y-4 rounded-xl p-4">
         <div class="flex gap-2">
           <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :style="!selectMultiple ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' } : { color: '#4D6A87' }" @click="selectMultiple = false">{{ selectPlayground.modeSingle }}</button>
@@ -507,7 +507,7 @@ function optionStyle(active: boolean) {
           </label>
         </div>
         <div v-if="selectServerSearch">
-          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">minSearchChars</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">minSearchChars</label>
           <input
             v-model.number="selectMinSearchChars"
             type="number"
@@ -517,7 +517,7 @@ function optionStyle(active: boolean) {
           />
         </div>
         <div>
-          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">placeholder</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">placeholder</label>
           <input
             v-if="!selectMultiple"
             v-model="selectPlaceholderSingle"
@@ -538,7 +538,7 @@ function optionStyle(active: boolean) {
 
     <!-- Breadcrumbs -->
     <template v-else-if="name === 'Breadcrumbs'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
         <Breadcrumb :separator="breadcrumbSeparator" class="text-sm">
           <BreadcrumbItem
@@ -551,7 +551,7 @@ function optionStyle(active: boolean) {
           </BreadcrumbItem>
         </Breadcrumb>
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('breadcrumbPlayground.separatorLabel') }}
           </p>
           <div class="mb-3 flex flex-wrap gap-1">
@@ -575,7 +575,7 @@ function optionStyle(active: boolean) {
           />
         </div>
         <div>
-          <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('breadcrumbPlayground.depthLabel', { depth: breadcrumbDepth }) }}
           </label>
           <input v-model.number="breadcrumbDepth" type="range" min="1" max="10" class="w-full accent-[#00D4FF]" />
@@ -585,9 +585,9 @@ function optionStyle(active: boolean) {
 
     <!-- AI Chat -->
     <template v-else-if="name === 'AI Chat'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
-        <p class="font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('chatPlayground.live.modelsLabel') }}</p>
+        <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('chatPlayground.live.modelsLabel') }}</p>
         <div class="flex gap-2">
           <button
             v-for="model in chatModels"
@@ -613,10 +613,10 @@ function optionStyle(active: boolean) {
             <div v-if="msg.role === 'user'" class="flex justify-end gap-2">
               <div class="pg-chat-user-bubble max-w-[85%] rounded-xl rounded-tr-sm px-3 py-2 text-xs">
                 {{ msg.text }}
-                <p class="mt-1.5 text-right text-[10px] text-[#4D6A87]">{{ msg.time }}</p>
+                <p class="mt-1.5 text-right text-xs text-[#4D6A87]">{{ msg.time }}</p>
               </div>
               <span
-                class="flex size-6 shrink-0 items-center justify-center rounded text-[10px] font-semibold text-[#7BA3C8]"
+                class="flex size-6 shrink-0 items-center justify-center rounded text-xs font-semibold text-[#7BA3C8]"
                 style="background: rgba(0,212,255,0.15); border: 1px solid rgba(0,212,255,0.2)"
               >
                 {{ t('chatPlayground.live.userBadge') }}
@@ -628,7 +628,7 @@ function optionStyle(active: boolean) {
               </span>
               <div class="pg-chat-ai-bubble max-w-[85%] rounded-xl rounded-tl-sm px-3 py-2 text-xs leading-relaxed">
                 {{ msg.text }}
-                <p class="mt-2 text-[10px] text-[#4D6A87]">{{ msg.time }}</p>
+                <p class="mt-2 text-xs text-[#4D6A87]">{{ msg.time }}</p>
               </div>
             </div>
           </template>
@@ -649,13 +649,13 @@ function optionStyle(active: boolean) {
             </div>
           </div>
         </div>
-        <p class="font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('chatPlayground.live.suggestionsLabel') }}</p>
+        <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('chatPlayground.live.suggestionsLabel') }}</p>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="chip in chatSuggestions"
             :key="chip"
             type="button"
-            class="rounded-full border border-border px-3 py-1 text-[10px] text-[#7BA3C8] transition-colors hover:border-primary/40 hover:text-primary"
+            class="rounded-full border border-border px-3 py-1 text-xs text-[#7BA3C8] transition-colors hover:border-primary/40 hover:text-primary"
             @click="sendChatMessage(chip)"
           >
             {{ chip }}
@@ -683,7 +683,7 @@ function optionStyle(active: boolean) {
 
     <!-- Alert -->
     <template v-else-if="name === 'Alert'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
         <Alert
           :key="alertPreviewKey"
@@ -696,7 +696,7 @@ function optionStyle(active: boolean) {
         </Alert>
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">variant</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">variant</p>
             <button
               v-for="item in ['info', 'success', 'warning', 'error']"
               :key="item"
@@ -709,7 +709,7 @@ function optionStyle(active: boolean) {
             </button>
           </div>
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">options</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">options</p>
             <div class="flex w-full items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
               <Switch v-model="alertDismissible" size="sm" @update:model-value="resetAlertPreview()" />
               dismissible
@@ -732,7 +732,7 @@ function optionStyle(active: boolean) {
 
     <!-- Toast -->
     <template v-else-if="name === 'Toast'">
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
         <Toast
           :key="toastPreviewKey"
@@ -744,7 +744,7 @@ function optionStyle(active: boolean) {
         </Toast>
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">variant</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">variant</p>
             <button
               v-for="item in ['info', 'success', 'warning', 'error']"
               :key="item"
@@ -757,7 +757,7 @@ function optionStyle(active: boolean) {
             </button>
           </div>
           <div class="min-w-0">
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">position</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">position</p>
             <div class="space-y-1">
               <div
                 v-for="(row, rowIndex) in toastPositionRows"
@@ -768,7 +768,7 @@ function optionStyle(active: boolean) {
                   v-for="item in row"
                   :key="item.value"
                   type="button"
-                  class="rounded px-1 py-1.5 text-center font-mono text-[9px] uppercase tracking-wide"
+                  class="rounded px-1 py-1.5 text-center font-mono text-xs uppercase tracking-wide"
                   :style="optionStyle(toastPosition === item.value)"
                   @click="toastPosition = item.value"
                 >
@@ -776,7 +776,7 @@ function optionStyle(active: boolean) {
                 </button>
               </div>
             </div>
-            <p class="mb-2 mt-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">options</p>
+            <p class="mb-2 mt-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">options</p>
             <div class="flex w-full items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
               <Switch v-model="toastDismissible" size="sm" @update:model-value="resetToastPreview()" />
               dismissible
@@ -798,7 +798,7 @@ function optionStyle(active: boolean) {
 
     <!-- Fallback -->
     <template v-else>
-      <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+      <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
       <div class="pg-playground-panel mb-6 flex min-h-[120px] items-center justify-center rounded-xl p-6">
         <span class="text-sm text-[#4D6A87]">{{ t('drawer.previewFallback', { name }) }}</span>
       </div>

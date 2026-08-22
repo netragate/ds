@@ -48,7 +48,7 @@ async function copyIcon(name: string, label: string): Promise<void> {
           v-for="s in sizes"
           :key="s"
           type="button"
-          class="rounded px-2 py-0.5 font-mono text-[10px] transition-colors"
+          class="rounded px-2 py-0.5 font-mono text-xs transition-colors"
           :style="
             iconSize === s
               ? { background: 'rgba(0,212,255,0.15)', color: '#00D4FF' }
@@ -75,6 +75,6 @@ async function copyIcon(name: string, label: string): Promise<void> {
         </button>
       </div>
     </div>
-    <p class="mt-3 text-[10px] text-[#4D6A87]">{{ t('iconsPlayground.footerHint') }}</p>
+    <p class="mt-3 text-xs text-[#4D6A87]">{{ t('iconsPlayground.footerHint') }}</p>
   </PlayCard>
 </template>

@@ -79,7 +79,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div
         class="min-h-[8rem] rounded-lg border border-dashed border-border/60 bg-muted/20"
@@ -129,7 +129,7 @@ const code = computed(() => {
       </div>
 
       <div>
-        <label class="mb-2 block font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+        <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
           {{ t('paginationPlayground.totalRecordsLabel', { count: totalRecords }) }}
         </label>
         <input

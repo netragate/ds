@@ -100,7 +100,7 @@ const lozengeStyle = computed(() => ({
   <span
     :class="
       cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] uppercase tracking-wide',
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs uppercase tracking-wide',
         isBold ? 'font-bold' : 'font-semibold',
         props.class,
       )

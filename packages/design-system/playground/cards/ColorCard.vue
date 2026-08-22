@@ -38,10 +38,10 @@ async function copyHex(hex: string): Promise<void> {
             boxShadow: `0 0 12px ${color.hex}40`,
           }"
         />
-        <p class="text-[11px] font-medium text-[#E8EDF5]">{{ color.name }}</p>
-        <p class="font-mono text-[10px] text-[#4D6A87]">{{ color.hex }}</p>
+        <p class="text-xs font-medium text-[#E8EDF5]">{{ color.name }}</p>
+        <p class="font-mono text-xs text-[#4D6A87]">{{ color.hex }}</p>
       </button>
     </div>
-    <p class="mt-4 text-[10px] text-[#4D6A87]">{{ t('colorPlayground.footerHint') }}</p>
+    <p class="mt-4 text-xs text-[#4D6A87]">{{ t('colorPlayground.footerHint') }}</p>
   </PlayCard>
 </template>

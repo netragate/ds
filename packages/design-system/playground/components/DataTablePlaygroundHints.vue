@@ -24,7 +24,7 @@ const activeFiltersSummary = computed(() =>
 
 <template>
   <div class="space-y-3">
-    <ul class="space-y-1.5 text-[11px] leading-relaxed text-[#7BA3C8]">
+    <ul class="space-y-1.5 text-xs leading-relaxed text-[#7BA3C8]">
       <li v-for="hint in hints" :key="hint" class="flex gap-2">
         <span class="text-[#2979FF]">→</span>
         <span>{{ hint }}</span>
@@ -32,7 +32,7 @@ const activeFiltersSummary = computed(() =>
     </ul>
 
     <div
-      class="flex flex-wrap gap-2 rounded-lg px-3 py-2 font-mono text-[10px]"
+      class="flex flex-wrap gap-2 rounded-lg px-3 py-2 font-mono text-xs"
       style="background: rgba(41,121,255,0.08); border: 1px solid rgba(41,121,255,0.2)"
     >
       <span class="text-[#7BA3C8]">{{ t('dataTable.sortLabel') }}</span>

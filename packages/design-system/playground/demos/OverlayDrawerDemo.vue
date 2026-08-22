@@ -62,14 +62,14 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <div class="flex flex-wrap gap-2">
         <button
           v-for="item in placementOptions"
           :key="item"
           type="button"
-          class="rounded-md px-3 py-1.5 font-mono text-[10px] uppercase"
+          class="rounded-md px-3 py-1.5 font-mono text-xs uppercase"
           :style="playgroundOptionStyle(placement === item)"
           @click="placement = item"
         >

@@ -41,7 +41,7 @@ const monoCopy = useCopy('DM Mono')
       />
       <div class="flex-1 space-y-4 overflow-y-auto">
         <div v-for="row in scale" :key="row.key" class="flex items-baseline gap-4">
-          <span class="w-14 shrink-0 font-mono text-[9px] uppercase text-[#4D6A87]">{{ row.label }}</span>
+          <span class="w-14 shrink-0 font-mono text-xs uppercase text-[#4D6A87]">{{ row.label }}</span>
           <span
             class="truncate text-[#E8EDF5]"
             :style="{
@@ -55,10 +55,10 @@ const monoCopy = useCopy('DM Mono')
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-3" style="border-top: 1px solid rgba(0, 229, 176, 0.08)">
-        <button type="button" class="font-mono text-[10px] text-[#4D6A87]" @click="sansCopy.copy()">
+        <button type="button" class="font-mono text-xs text-[#4D6A87]" @click="sansCopy.copy()">
           {{ sansCopy.copied.value ? t('usage.copied') : 'DM Sans' }}
         </button>
-        <button type="button" class="font-mono text-[10px] text-[#4D6A87]" @click="monoCopy.copy()">
+        <button type="button" class="font-mono text-xs text-[#4D6A87]" @click="monoCopy.copy()">
           {{ monoCopy.copied.value ? t('usage.copied') : 'DM Mono' }}
         </button>
       </div>

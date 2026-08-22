@@ -27,7 +27,7 @@ const code = computed((): string => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
       {{ t('drawer.livePlayground') }}
     </p>
     <label class="mb-4 flex items-center gap-2">

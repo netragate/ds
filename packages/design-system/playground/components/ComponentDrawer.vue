@@ -45,7 +45,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
           <div class="min-w-0 flex-1 pr-2">
             <div class="mb-0.5 flex items-center gap-2">
               <GlowDot />
-              <span class="pg-text-muted font-mono text-[10px] uppercase tracking-wider">{{ t('drawer.component') }}</span>
+              <span class="pg-text-muted font-mono text-xs uppercase tracking-wider">{{ t('drawer.component') }}</span>
             </div>
             <h2 class="text-xl font-bold" style="color: var(--pg-text)">{{ name }}</h2>
             <p v-if="description" class="pg-text-muted mt-1 text-xs leading-relaxed">

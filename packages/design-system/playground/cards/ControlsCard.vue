@@ -32,7 +32,7 @@ const checkboxLabels = computed(() => messages.value.controlsPlayground.checkbox
     <div class="mb-4 flex gap-2">
       <button
         type="button"
-        class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+        class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
         :style="
           tab === 'toggle'
             ? { background: 'rgba(255,139,0,0.15)', color: '#FF8B00' }
@@ -44,7 +44,7 @@ const checkboxLabels = computed(() => messages.value.controlsPlayground.checkbox
       </button>
       <button
         type="button"
-        class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+        class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
         :style="
           tab === 'checkbox'
             ? { background: 'rgba(255,139,0,0.15)', color: '#FF8B00' }

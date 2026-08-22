@@ -27,7 +27,7 @@ const withIcon = ref(true)
     <div class="mb-4 flex gap-2">
       <button
         type="button"
-        class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+        class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
         :style="
           withIcon
             ? { background: 'rgba(0,229,176,0.15)', color: '#00E5B0' }
@@ -39,7 +39,7 @@ const withIcon = ref(true)
       </button>
       <button
         type="button"
-        class="rounded-md px-2 py-1 text-[10px] font-medium transition-colors"
+        class="rounded-md px-2 py-1 text-xs font-medium transition-colors"
         :style="
           !withIcon
             ? { background: 'rgba(0,229,176,0.15)', color: '#00E5B0' }
@@ -179,7 +179,7 @@ const withIcon = ref(true)
         </template>
       </FormField>
     </div>
-    <div class="mt-4 flex flex-wrap gap-3 text-[10px] text-[#4D6A87]">
+    <div class="mt-4 flex flex-wrap gap-3 text-xs text-[#4D6A87]">
       <span>● {{ t('inputsPlayground.states.default') }}</span>
       <span style="color: #00d4ff">● {{ t('inputsPlayground.states.focus') }}</span>
       <span style="color: #ff3d57">● {{ t('inputsPlayground.states.error') }}</span>

@@ -44,7 +44,7 @@ const hovered = ref(false)
       <div class="flex items-center gap-2">
         <span
           v-if="tag"
-          class="rounded px-1.5 py-0.5 font-mono text-[9px]"
+          class="rounded px-1.5 py-0.5 font-mono text-xs"
           :style="{ background: accentColor + '18', color: accentColor }"
         >
           {{ tag }}

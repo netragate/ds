@@ -24,6 +24,14 @@ describe('dateUtils', () => {
     const grid = buildCalendarMonthGrid(2026, 5, '2026-06-16', 'pt-BR')
     expect(grid).toHaveLength(42)
     expect(grid.some((day) => day.iso === '2026-06-16' && day.isSelected)).toBe(true)
-    expect(grid.some((day) => day.iso === toIsoDate(new Date()) && day.isToday)).toBe(true)
+
+    const now = new Date()
+    const currentGrid = buildCalendarMonthGrid(
+      now.getFullYear(),
+      now.getMonth(),
+      toIsoDate(now),
+      'pt-BR',
+    )
+    expect(currentGrid.some((day) => day.iso === toIsoDate(now) && day.isToday)).toBe(true)
   })
 })

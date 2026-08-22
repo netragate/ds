@@ -26,7 +26,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
 <template>
   <div class="space-y-5">
     <section v-if="entry.composable">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.composableHeading', { name: entry.composable.name }) }}
       </h5>
       <p v-if="entry.composable.description" class="pg-text-subtle mb-3 text-xs leading-relaxed">
@@ -57,7 +57,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
       </div>
 
       <template v-if="hasRows(entry.composable.options)">
-        <h5 class="pg-text-muted mb-2 mt-4 font-mono text-[10px] uppercase tracking-wider">
+        <h5 class="pg-text-muted mb-2 mt-4 font-mono text-xs uppercase tracking-wider">
           {{
             t('componentCatalog.composableOptionsHeading', {
               name: entry.composable.optionsName ?? 'Options',
@@ -93,7 +93,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
     </section>
 
     <section v-if="hasRows(entry.models)">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.modelsHeading') }}
       </h5>
       <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pg-border)">
@@ -124,7 +124,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
     </section>
 
     <section v-if="hasRows(entry.props)">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.propsHeading') }}
       </h5>
       <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pg-border)">
@@ -155,7 +155,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
     </section>
 
     <section v-if="hasRows(entry.slots)">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.slotsHeading') }}
       </h5>
       <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pg-border)">
@@ -184,7 +184,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
     </section>
 
     <section v-if="entry.composition?.parts?.length">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.compositionHeading') }}
       </h5>
       <p v-if="entry.composition.description" class="pg-text-subtle mb-3 text-xs leading-relaxed">
@@ -218,7 +218,7 @@ function hasRows<T>(rows: T[] | undefined): rows is T[] {
     </section>
 
     <section v-if="hasRows(entry.events)">
-      <h5 class="pg-text-muted mb-2 font-mono text-[10px] uppercase tracking-wider">
+      <h5 class="pg-text-muted mb-2 font-mono text-xs uppercase tracking-wider">
         {{ t('componentCatalog.eventsHeading') }}
       </h5>
       <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pg-border)">

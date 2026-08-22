@@ -21,9 +21,9 @@ const spacing = [
     <template #icon><Layers :size="14" /></template>
     <div class="space-y-3">
       <div v-for="item in spacing" :key="item.token" class="flex items-center gap-3">
-        <span class="w-16 font-mono text-[10px] text-[#4D6A87]">{{ item.px }}px</span>
+        <span class="w-16 font-mono text-xs text-[#4D6A87]">{{ item.px }}px</span>
         <div class="h-2 rounded-full bg-primary/80" :style="{ width: `${item.px * 2}px` }" />
-        <span class="font-mono text-[10px] text-[#4D6A87]">({{ item.token }})</span>
+        <span class="font-mono text-xs text-[#4D6A87]">({{ item.token }})</span>
       </div>
     </div>
   </PlayCard>

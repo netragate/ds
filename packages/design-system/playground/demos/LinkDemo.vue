@@ -35,7 +35,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center rounded-xl py-8">
         <Link
@@ -54,7 +54,7 @@ const code = computed(() => {
       </div>
 
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">mode</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">mode</p>
         <button
           v-for="item in modeOptions"
           :key="item"

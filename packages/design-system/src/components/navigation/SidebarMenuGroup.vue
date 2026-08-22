@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { ChevronRight } from 'lucide-vue-next'
-import { computed, inject, nextTick, onBeforeMount, onMounted, onUnmounted, ref, toValue, watch } from 'vue'
+import {
+  computed,
+  inject,
+  nextTick,
+  onBeforeMount,
+  onMounted,
+  onUnmounted,
+  ref,
+  toValue,
+  watch,
+} from 'vue'
 import type { Component } from 'vue'
 import { cn } from '@/lib/utils'
 import {
@@ -65,6 +75,20 @@ const isPinnedSettingsGroup = computed(
         && isPinnedSettingsGroupId(props.id, layoutMenu.settingsMenuId.value),
     ),
 )
+
+/**
+ * Inline expand only when the menu asks for it and the rail can show labels.
+ * Collapsed rail, flyout nesting, and pinned settings footer always stay flyout.
+ */
+const useInlineSubmenu = computed(
+  () =>
+    sidebarMenu.submenuMode?.value === 'inline'
+    && !sidebarMenu.collapsed.value
+    && !sidebarMenu.inFlyout.value
+    && !isPinnedSettingsGroup.value,
+)
+
+const inlineOpen = computed(() => sidebarMenu.isOpen(props.id))
 
 const settingsTeleportTarget = computed(() => layoutMenu?.settingsGroupTarget.value ?? null)
 
@@ -138,6 +162,12 @@ watch(
   },
 )
 
+watch(useInlineSubmenu, (inline) => {
+  if (inline) {
+    hideFlyout()
+  }
+})
+
 const showFlyoutHeader = computed(
   () => sidebarMenu.collapsed.value && !sidebarMenu.inFlyout.value,
 )
@@ -156,7 +186,15 @@ const iconClasses = computed(() =>
 )
 
 const chevronClasses = computed(() =>
-  cn(sidebarMenuChevronClass(), groupActive.value && '!text-primary'),
+  cn(
+    sidebarMenuChevronClass(),
+    groupActive.value && '!text-primary',
+    useInlineSubmenu.value && inlineOpen.value && 'rotate-90',
+  ),
+)
+
+const ariaExpanded = computed(() =>
+  useInlineSubmenu.value ? inlineOpen.value : flyoutOpen.value,
 )
 
 function findScrollParent(element: HTMLElement | null): HTMLElement | Window {
@@ -272,6 +310,10 @@ async function updateFlyoutPosition(): Promise<void> {
 }
 
 function showFlyout(): void {
+  if (useInlineSubmenu.value) {
+    return
+  }
+
   clearTimeout(hideTimer)
   sidebarMenu.closePeerFlyouts(sidebarMenu.depth, props.id)
   flyoutOpen.value = true
@@ -298,6 +340,10 @@ function isMovingToDeeperFlyout(related: Node | null): boolean {
 }
 
 function scheduleHideFlyout(event?: MouseEvent): void {
+  if (useInlineSubmenu.value) {
+    return
+  }
+
   const related = event?.relatedTarget ?? null
 
   if (related instanceof Node) {
@@ -325,7 +371,12 @@ function scheduleHideFlyout(event?: MouseEvent): void {
 }
 
 function onTriggerClick(): void {
-  sidebarMenu.setActive(props.id)
+  if (useInlineSubmenu.value) {
+    sidebarMenu.toggleOpen(props.id)
+  } else {
+    sidebarMenu.setActive(props.id)
+  }
+
   emit('click', props.id)
   emit('select', props.id)
 }
@@ -366,7 +417,7 @@ watch(
         ref="buttonRef"
         type="button"
         :class="triggerClasses"
-        :aria-expanded="flyoutOpen"
+        :aria-expanded="ariaExpanded"
         @click="onTriggerClick"
         @mouseenter="showFlyout"
         @mouseleave="scheduleHideFlyout($event)"
@@ -378,9 +429,21 @@ watch(
         <ChevronRight :class="chevronClasses" />
       </button>
 
+      <!-- Inline expand: children in the sidebar flow -->
+      <div
+        v-if="useInlineSubmenu && inlineOpen"
+        class="ml-3 flex flex-col gap-0.5 border-l border-border/60 py-0.5 pl-2"
+        data-sidebar-inline-submenu
+      >
+        <SidebarMenuFlyout :parent-group-id="id" inline>
+          <slot />
+        </SidebarMenuFlyout>
+      </div>
+
+      <!-- Flyout panel (default / collapsed / settings) -->
       <Teleport to="body">
         <div
-          v-if="flyoutOpen"
+          v-if="flyoutOpen && !useInlineSubmenu"
           ref="flyoutRef"
           data-sidebar-flyout
           :data-sidebar-depth="sidebarMenu.depth"

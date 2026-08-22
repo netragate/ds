@@ -92,13 +92,13 @@ function breakpointLabel(value: number | null): string {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="mb-4 flex flex-wrap gap-2">
       <button
         v-for="item in ['container', 'stack', 'grid']"
         :key="item"
         type="button"
-        class="rounded-md px-3 py-1.5 font-mono text-[10px] uppercase"
+        class="rounded-md px-3 py-1.5 font-mono text-xs uppercase"
         :style="playgroundOptionStyle(tab === item)"
         @click="tab = item as typeof tab"
       >
@@ -108,7 +108,7 @@ function breakpointLabel(value: number | null): string {
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <template v-if="tab === 'container'">
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">max-width</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">max-width</p>
           <div class="flex flex-wrap gap-1">
             <button
               v-for="item in containerMaxWidthOptions"
@@ -133,7 +133,7 @@ function breakpointLabel(value: number | null): string {
       <template v-else-if="tab === 'stack'">
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">direction</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">direction</p>
             <button
               v-for="item in stackDirectionOptions"
               :key="item"
@@ -146,7 +146,7 @@ function breakpointLabel(value: number | null): string {
             </button>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">gap</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">gap</p>
             <div class="flex flex-wrap gap-1">
               <button
                 v-for="item in stackGapOptions"
@@ -161,7 +161,7 @@ function breakpointLabel(value: number | null): string {
             </div>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">align</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">align</p>
             <button
               v-for="item in stackAlignOptions"
               :key="item"
@@ -174,7 +174,7 @@ function breakpointLabel(value: number | null): string {
             </button>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">justify</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">justify</p>
             <button
               v-for="item in stackJustifyOptions"
               :key="item"
@@ -205,7 +205,7 @@ function breakpointLabel(value: number | null): string {
       <template v-else>
         <div class="space-y-3">
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">cols</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">cols</p>
             <div class="flex flex-wrap gap-1">
               <button
                 v-for="item in gridColOptions"
@@ -220,7 +220,7 @@ function breakpointLabel(value: number | null): string {
             </div>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">md-cols</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">md-cols</p>
             <div class="flex flex-wrap gap-1">
               <button
                 v-for="item in gridBreakpointOptions"
@@ -235,7 +235,7 @@ function breakpointLabel(value: number | null): string {
             </div>
           </div>
           <div>
-            <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">lg-cols</p>
+            <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">lg-cols</p>
             <div class="flex flex-wrap gap-1">
               <button
                 v-for="item in gridBreakpointOptions"

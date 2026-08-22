@@ -47,7 +47,7 @@ const code = computed(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
+    <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
       <div class="pg-playground-preview flex items-center justify-center rounded-xl">
         <Chip
@@ -65,7 +65,7 @@ const code = computed(() => {
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
             {{ t('buttonPlayground.sizeLabel').toLowerCase() }}
           </p>
           <button
@@ -81,7 +81,7 @@ const code = computed(() => {
         </div>
 
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">state</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">state</p>
           <button
             v-for="item in stateOptions"
             :key="item"
@@ -95,7 +95,7 @@ const code = computed(() => {
         </div>
 
         <div>
-          <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">variant</p>
+          <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">variant</p>
           <button
             v-for="item in variantOptions"
             :key="item"
@@ -110,7 +110,7 @@ const code = computed(() => {
       </div>
 
       <div>
-        <p class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#4D6A87]">placeholder</p>
+        <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">placeholder</p>
         <input
           v-model="placeholder"
           type="text"

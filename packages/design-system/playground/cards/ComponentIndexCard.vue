@@ -81,19 +81,19 @@ function itemMeta(name: string) {
           />
         </span>
         <span
-          class="mt-1 font-mono text-[10px]"
+          class="mt-1 font-mono text-xs"
           :style="{ color: catColors[itemMeta(name).category] + 'AA' }"
         >
           {{ t(`categories.${itemMeta(name).category}`) }}
         </span>
-        <span class="text-[10px] text-[#4D6A87]">{{ itemMeta(name).count }}</span>
+        <span class="text-xs text-[#4D6A87]">{{ itemMeta(name).count }}</span>
       </button>
     </div>
 
     <div v-if="visibleShowcase.length" class="mt-6 border-t pt-5" style="border-color: var(--pg-card-divider)">
       <div class="mb-3 flex items-center gap-2">
         <Sparkles :size="12" class="text-[#A78BFA]" />
-        <span class="font-mono text-[9px] uppercase tracking-wider text-[#A78BFA]">
+        <span class="font-mono text-xs uppercase tracking-wider text-[#A78BFA]">
           {{ t('componentIndex.showcaseTitle') }}
         </span>
       </div>
@@ -109,10 +109,10 @@ function itemMeta(name: string) {
             {{ name }}
             <Maximize2 :size="9" class="opacity-0 transition-opacity group-hover:opacity-100 text-[#A78BFA]" />
           </span>
-          <span class="mt-1 font-mono text-[10px] text-[#A78BFA]/80">
+          <span class="mt-1 font-mono text-xs text-[#A78BFA]/80">
             {{ t('componentIndex.showcaseTitle') }}
           </span>
-          <span class="text-[10px] text-[#4D6A87]">{{ itemMeta(name).count }}</span>
+          <span class="text-xs text-[#4D6A87]">{{ itemMeta(name).count }}</span>
         </button>
       </div>
     </div>

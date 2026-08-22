@@ -58,7 +58,7 @@ function handleDocsClick(): void {
           <button
             v-if="canCopy"
             type="button"
-            class="pg-usage-copy shrink-0 inline-flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-[10px] transition-colors"
+            class="pg-usage-copy shrink-0 inline-flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs transition-colors"
             :aria-label="copied ? t('homeQuickStart.copiedLabel') : t('homeQuickStart.copyAriaLabel')"
             @click="copyToClipboard(installCmd)"
           >
