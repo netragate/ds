@@ -117,7 +117,7 @@ Campo de data com calendário. O **display** segue `locale` (`en` → `mm/dd/yyy
 - `:range="true"` — seleção início→fim no calendário (`{ from, to }`); abre **dois meses** lado a lado
 - `:show-time="true"` — embute `TimeInput` (`HH:mm:ss`); com `range`, o time também é range
 - `:max-range-days="7"` — limite **inclusivo** de dias no range (omitido / `≤0` = sem limite); dias fora do limite ficam desabilitados após o 1º clique
-- Em `range`, o rodapé usa **Confirm** / **Confirmar** (prop `confirmLabel`); o calendário só fecha ao confirmar
+- Em `range`, o rodapé usa **Confirm** / **Confirmar** (prop `confirmLabel`); o calendário só fecha ao confirmar e o `v-model` só é atualizado nesse momento (seleção e horário ficam pendentes até Confirm)
 
 ```vue
 <DateInput v-model="date" :locale="'pt-BR'" />

@@ -115,6 +115,14 @@ describe('DateInput', () => {
     await twelfth!.trigger('click')
     await wrapper.vm.$nextTick()
 
+    // Selection is pending until Confirm.
+    expect(wrapper.props('modelValue')).toEqual({ from: '', to: '' })
+
+    const confirm = wrapper.findAll('button').find((btn) => btn.text() === 'Confirm')
+    expect(confirm).toBeTruthy()
+    await confirm!.trigger('click')
+    await wrapper.vm.$nextTick()
+
     const value = wrapper.props('modelValue') as { from: string; to: string }
     expect(value.from <= value.to).toBe(true)
     expect(value.from).toMatch(/^\d{4}-\d{2}-\d{2}$/)
@@ -152,11 +160,17 @@ describe('DateInput', () => {
     expect(beyond!.attributes('disabled')).toBeDefined()
     await beyond!.trigger('click')
     await wrapper.vm.$nextTick()
-    // Draft kept; model unchanged until a valid end is chosen.
+    // Draft kept; model unchanged until Confirm after a valid end is chosen.
     expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-15', to: '' })
 
     const within = dayButtons().find((btn) => btn.text() === '12' && !btn.attributes('disabled'))
     await within!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-15', to: '' })
+
+    const confirm = wrapper.findAll('button').find((btn) => btn.text() === 'Confirm')
+    await confirm!.trigger('click')
     await wrapper.vm.$nextTick()
 
     expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-10', to: '2026-06-12' })
@@ -187,11 +201,11 @@ describe('DateInput', () => {
     wrapper.unmount()
   })
 
-  it('keeps the range calendar open until Confirm', async () => {
+  it('keeps the range calendar open until Confirm and commits only then', async () => {
     const wrapper = dateInputMount({
       props: {
         range: true,
-        modelValue: { from: '2026-06-10', to: '2026-06-12' },
+        modelValue: { from: '2026-06-01', to: '2026-06-02' },
         locale: 'en',
         'onUpdate:modelValue': (value) => wrapper.setProps({ modelValue: value }),
       },
@@ -211,7 +225,7 @@ describe('DateInput', () => {
     await dayButtons().find((btn) => btn.text() === '12')!.trigger('click')
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-10', to: '2026-06-12' })
+    expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-01', to: '2026-06-02' })
     expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('true')
 
     const confirm = wrapper.findAll('button').find((btn) => btn.text() === 'Confirm')
@@ -220,6 +234,7 @@ describe('DateInput', () => {
     await confirm!.trigger('click')
     await wrapper.vm.$nextTick()
 
+    expect(wrapper.props('modelValue')).toEqual({ from: '2026-06-10', to: '2026-06-12' })
     expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
     wrapper.unmount()
   })

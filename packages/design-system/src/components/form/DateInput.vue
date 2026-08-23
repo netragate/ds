@@ -76,6 +76,10 @@ const displayValue = ref('')
 const viewDate = ref(new Date())
 /** First click in range mode before `to` is chosen. */
 const rangeDraftFrom = ref('')
+/** Range selection while the panel is open — committed only on Confirm. */
+const pendingRange = ref<DateRangeValue | null>(null)
+/** Time selection while the panel is open (range + showTime). */
+const pendingTimes = ref<{ from: string; to: string } | null>(null)
 const panelStyle = ref<Record<string, string>>({
   top: '0px',
   left: '0px',
@@ -92,12 +96,6 @@ const resolvedTodayLabel = computed(() =>
 )
 const resolvedConfirmLabel = computed(() =>
   props.confirmLabel ?? (props.locale === 'pt-BR' ? 'Confirmar' : 'Confirm'),
-)
-const canConfirmRange = computed(
-  () =>
-    props.range
-    && !rangeDraftFrom.value
-    && Boolean(dateRangeModel.value.from && dateRangeModel.value.to),
 )
 const placeholder = computed(() => {
   if (props.placeholder) return props.placeholder
@@ -182,6 +180,15 @@ const dateRangeModel = computed((): DateRangeValue => {
   return emptyDateRange()
 })
 
+const activeDateRange = computed((): DateRangeValue => pendingRange.value ?? dateRangeModel.value)
+
+const canConfirmRange = computed(
+  () =>
+    props.range
+    && !rangeDraftFrom.value
+    && Boolean(activeDateRange.value.from && activeDateRange.value.to),
+)
+
 const singleDateModel = computed((): string => {
   if (props.showTime && isDateTime(props.modelValue)) {
     return props.modelValue.date
@@ -194,8 +201,8 @@ const singleDateModel = computed((): string => {
 
 const calendarSelection = computed(() => {
   if (props.range) {
-    const from = rangeDraftFrom.value || dateRangeModel.value.from
-    const to = rangeDraftFrom.value ? '' : dateRangeModel.value.to
+    const from = rangeDraftFrom.value || activeDateRange.value.from
+    const to = rangeDraftFrom.value ? '' : activeDateRange.value.to
     return { from, to }
   }
   return singleDateModel.value
@@ -239,6 +246,7 @@ const calendarPanels = computed(() => {
 const timeModel = computed({
   get: (): string | { from: string; to: string } => {
     if (props.range) {
+      if (pendingTimes.value) return pendingTimes.value
       if (isDateTimeRange(props.modelValue)) {
         return { from: props.modelValue.from.time, to: props.modelValue.to.time }
       }
@@ -251,12 +259,11 @@ const timeModel = computed({
   },
   set: (value: string | { from: string; to: string }) => {
     if (props.range) {
-      const dates = dateRangeModel.value
       const times = typeof value === 'object' ? value : { from: '', to: '' }
-      emit('update:modelValue', {
-        from: { date: dates.from, time: times.from },
-        to: { date: dates.to, time: times.to },
-      })
+      if (!pendingRange.value) {
+        pendingRange.value = { ...dateRangeModel.value }
+      }
+      pendingTimes.value = times
       return
     }
 
@@ -344,14 +351,37 @@ function emitDateOnly(iso: string): void {
 
 function emitDateRange(range: DateRangeValue): void {
   if (props.showTime) {
-    const current = isDateTimeRange(props.modelValue) ? props.modelValue : emptyDateTimeRange()
+    const times = pendingTimes.value
+      ?? (isDateTimeRange(props.modelValue)
+        ? { from: props.modelValue.from.time, to: props.modelValue.to.time }
+        : { from: '', to: '' })
     emit('update:modelValue', {
-      from: { date: range.from, time: current.from.time },
-      to: { date: range.to, time: current.to.time },
+      from: { date: range.from, time: times.from },
+      to: { date: range.to, time: times.to },
     })
   } else {
     emit('update:modelValue', range)
   }
+}
+
+function seedPendingFromModel(): void {
+  if (!props.range) return
+  pendingRange.value = { ...dateRangeModel.value }
+  if (props.showTime && isDateTimeRange(props.modelValue)) {
+    pendingTimes.value = {
+      from: props.modelValue.from.time,
+      to: props.modelValue.to.time,
+    }
+  } else if (props.showTime) {
+    pendingTimes.value = { from: '', to: '' }
+  } else {
+    pendingTimes.value = null
+  }
+}
+
+function discardPending(): void {
+  pendingRange.value = null
+  pendingTimes.value = null
 }
 
 function onDisplayInput(event: Event): void {
@@ -382,13 +412,17 @@ function toggleCalendar(): void {
   open.value = !open.value
   if (open.value) {
     rangeDraftFrom.value = ''
+    seedPendingFromModel()
     syncViewFromModel()
+  } else {
+    discardPending()
   }
 }
 
 function closeCalendar(): void {
   open.value = false
   rangeDraftFrom.value = ''
+  discardPending()
 }
 
 async function updatePanelPosition(): Promise<void> {
@@ -471,8 +505,13 @@ function selectDay(iso: string): void {
       return
     }
     rangeDraftFrom.value = ''
-    emitDateRange(normalized)
-    // Range stays open until Confirm — allows adjusting time / reviewing selection.
+    pendingRange.value = normalized
+    if (props.showTime && !pendingTimes.value) {
+      pendingTimes.value = isDateTimeRange(props.modelValue)
+        ? { from: props.modelValue.from.time, to: props.modelValue.to.time }
+        : { from: '', to: '' }
+    }
+    // Range stays open until Confirm — v-model commits only then.
     return
   }
 
@@ -489,6 +528,7 @@ function isDayBeyondMaxRange(iso: string): boolean {
 }
 
 function clearValue(): void {
+  discardPending()
   if (props.range) {
     if (props.showTime) {
       emit('update:modelValue', emptyDateTimeRange())
@@ -508,13 +548,9 @@ function selectToday(): void {
   const nowTime = roundTimeToSteps(new Date(), props.minuteStep, props.secondStep)
 
   if (props.range) {
+    pendingRange.value = { from: today, to: today }
     if (props.showTime) {
-      emit('update:modelValue', {
-        from: { date: today, time: nowTime },
-        to: { date: today, time: nowTime },
-      })
-    } else {
-      emitDateRange({ from: today, to: today })
+      pendingTimes.value = { from: nowTime, to: nowTime }
     }
     rangeDraftFrom.value = ''
     viewDate.value = new Date()
@@ -535,7 +571,12 @@ function selectToday(): void {
 
 function confirmRange(): void {
   if (!canConfirmRange.value) return
-  closeCalendar()
+  const range = pendingRange.value ?? dateRangeModel.value
+  if (!range.from || !range.to) return
+  emitDateRange(range)
+  discardPending()
+  open.value = false
+  rangeDraftFrom.value = ''
 }
 
 function shiftMonth(delta: number): void {
