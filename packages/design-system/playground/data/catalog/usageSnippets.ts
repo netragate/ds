@@ -72,6 +72,7 @@ const SettingsIcon = iconographyComponents.settings
     :locale="'pt-BR'"
     :range="false"
     :show-time="false"
+    :max-range-days="7"
     :disabled="false"
   />`,
   ),

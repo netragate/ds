@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.1] - 2026-08-23
+
+### Added
+
+- **`DateInput` `maxRangeDays`** — inclusive max length for `range` selection; out-of-limit calendar days are disabled after the first click.
+- **`DateInput` range confirm** — footer shows Confirm (not Today); calendar closes only on Confirm after `from`/`to` are set.
+
+### Changed
+
+- **`DateInput` `range`** — dual-month calendar (current + next) side by side so ranges can span months; adjacent-month filler days are hidden (shown only on the other panel).
+- **`DateInput` panel** — fixed positioning with viewport collision (flip above/below, shift left/right, clamp).
+- **`dateUtils`** — `inclusiveDaySpan` / `isDateRangeWithinMaxDays` helpers.
+
 ## [0.9.0] - 2026-08-23
 
 ### Added

@@ -114,12 +114,14 @@ import { FormField, Input } from '@netragate/design-system'
 
 Campo de data com calendário. O **display** segue `locale` (`en` → `mm/dd/yyyy`, `pt-BR` → `dd/mm/yyyy`); o valor persistido é ISO `YYYY-MM-DD`.
 
-- `:range="true"` — seleção início→fim no calendário (`{ from, to }`)
+- `:range="true"` — seleção início→fim no calendário (`{ from, to }`); abre **dois meses** lado a lado
 - `:show-time="true"` — embute `TimeInput` (`HH:mm:ss`); com `range`, o time também é range
+- `:max-range-days="7"` — limite **inclusivo** de dias no range (omitido / `≤0` = sem limite); dias fora do limite ficam desabilitados após o 1º clique
+- Em `range`, o rodapé usa **Confirm** / **Confirmar** (prop `confirmLabel`); o calendário só fecha ao confirmar
 
 ```vue
 <DateInput v-model="date" :locale="'pt-BR'" />
-<DateInput v-model="range" :range="true" :locale="'en'" />
+<DateInput v-model="range" :range="true" :max-range-days="7" :locale="'en'" />
 <DateInput v-model="dateTime" :show-time="true" :locale="'pt-BR'" />
 ```
 

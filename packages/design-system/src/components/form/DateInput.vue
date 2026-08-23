@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import type {
@@ -16,6 +16,7 @@ import {
   formatIsoForLocale,
   formatMonthYear,
   getWeekdayLabels,
+  isDateRangeWithinMaxDays,
   normalizeDateRange,
   parseIsoDate,
   parseLocaleDateInput,
@@ -32,10 +33,14 @@ export interface DateInputProps extends /* @vue-ignore */ FormInputVariants {
   modelValue?: DateInputModelValue
   range?: boolean
   showTime?: boolean
+  /** Inclusive max days for range selection. Omitted / ≤0 = unlimited. */
+  maxRangeDays?: number
   locale?: string
   disabled?: boolean
   clearLabel?: string
   todayLabel?: string
+  /** Label for the confirm button in range mode (defaults by locale). */
+  confirmLabel?: string
   minuteStep?: number
   secondStep?: number
   /** Overrides locale-based placeholder when set. */
@@ -49,11 +54,13 @@ const props = withDefaults(defineProps<DateInputProps>(), {
   modelValue: '',
   range: false,
   showTime: false,
+  maxRangeDays: undefined,
   locale: 'en',
   disabled: false,
   size: 'md',
   clearLabel: undefined,
   todayLabel: undefined,
+  confirmLabel: undefined,
   minuteStep: 1,
   secondStep: 1,
 })
@@ -63,17 +70,34 @@ const emit = defineEmits<{
 }>()
 
 const rootRef = ref<HTMLElement | null>(null)
+const panelRef = ref<HTMLElement | null>(null)
 const open = ref(false)
 const displayValue = ref('')
 const viewDate = ref(new Date())
 /** First click in range mode before `to` is chosen. */
 const rangeDraftFrom = ref('')
+const panelStyle = ref<Record<string, string>>({
+  top: '0px',
+  left: '0px',
+})
+
+const PANEL_GAP_PX = 6
+const VIEWPORT_PADDING_PX = 8
 
 const resolvedClearLabel = computed(() =>
   props.clearLabel ?? (props.locale === 'pt-BR' ? 'Limpar' : 'Clear'),
 )
 const resolvedTodayLabel = computed(() =>
   props.todayLabel ?? (props.locale === 'pt-BR' ? 'Hoje' : 'Today'),
+)
+const resolvedConfirmLabel = computed(() =>
+  props.confirmLabel ?? (props.locale === 'pt-BR' ? 'Confirmar' : 'Confirm'),
+)
+const canConfirmRange = computed(
+  () =>
+    props.range
+    && !rangeDraftFrom.value
+    && Boolean(dateRangeModel.value.from && dateRangeModel.value.to),
 )
 const placeholder = computed(() => {
   if (props.placeholder) return props.placeholder
@@ -95,6 +119,15 @@ const inputClasses = computed(() =>
 
 const monthLabel = computed(() =>
   formatMonthYear(viewDate.value.getFullYear(), viewDate.value.getMonth(), props.locale),
+)
+
+const nextViewDate = computed(() => {
+  const next = new Date(viewDate.value.getFullYear(), viewDate.value.getMonth() + 1, 1)
+  return next
+})
+
+const nextMonthLabel = computed(() =>
+  formatMonthYear(nextViewDate.value.getFullYear(), nextViewDate.value.getMonth(), props.locale),
 )
 
 function emptyDateRange(): DateRangeValue {
@@ -176,6 +209,32 @@ const calendarDays = computed(() =>
     props.locale,
   ),
 )
+
+const nextCalendarDays = computed(() =>
+  buildCalendarMonthGrid(
+    nextViewDate.value.getFullYear(),
+    nextViewDate.value.getMonth(),
+    calendarSelection.value,
+    props.locale,
+  ),
+)
+
+const calendarPanels = computed(() => {
+  const left = {
+    key: `${viewDate.value.getFullYear()}-${viewDate.value.getMonth()}`,
+    label: monthLabel.value,
+    days: calendarDays.value,
+  }
+  if (!props.range) return [left]
+  return [
+    left,
+    {
+      key: `${nextViewDate.value.getFullYear()}-${nextViewDate.value.getMonth()}`,
+      label: nextMonthLabel.value,
+      days: nextCalendarDays.value,
+    },
+  ]
+})
 
 const timeModel = computed({
   get: (): string | { from: string; to: string } => {
@@ -332,6 +391,70 @@ function closeCalendar(): void {
   rangeDraftFrom.value = ''
 }
 
+async function updatePanelPosition(): Promise<void> {
+  if (!open.value || !rootRef.value) return
+
+  const trigger = rootRef.value.getBoundingClientRect()
+  const viewportW = window.innerWidth
+  const viewportH = window.innerHeight
+  const maxPanelWidth = Math.max(0, viewportW - VIEWPORT_PADDING_PX * 2)
+
+  // Prefer below + left-aligned with the input.
+  let top = trigger.bottom + PANEL_GAP_PX
+  let left = trigger.left
+
+  panelStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`,
+    maxWidth: `${maxPanelWidth}px`,
+    ...(props.range ? {} : { width: `${Math.min(trigger.width, maxPanelWidth)}px` }),
+  }
+
+  await nextTick()
+  const panel = panelRef.value
+  if (!panel) return
+
+  // Second measure after paint for accurate dual-month width/height.
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+
+  const panelRect = panel.getBoundingClientRect()
+  const panelWidth = Math.min(panelRect.width || trigger.width, maxPanelWidth)
+  const panelHeight = panelRect.height
+
+  const spaceBelow = viewportH - trigger.bottom - VIEWPORT_PADDING_PX
+  const spaceAbove = trigger.top - VIEWPORT_PADDING_PX
+  const openUpward = spaceBelow < panelHeight && spaceAbove > spaceBelow
+
+  top = openUpward
+    ? trigger.top - panelHeight - PANEL_GAP_PX
+    : trigger.bottom + PANEL_GAP_PX
+
+  // Horizontal: keep in viewport; prefer aligning to trigger left, else flip to trigger right.
+  const overflowRight = left + panelWidth > viewportW - VIEWPORT_PADDING_PX
+  if (overflowRight) {
+    left = trigger.right - panelWidth
+  }
+  left = Math.min(left, viewportW - panelWidth - VIEWPORT_PADDING_PX)
+  left = Math.max(VIEWPORT_PADDING_PX, left)
+
+  // Vertical clamp (panel taller than viewport).
+  const maxTop = viewportH - Math.min(panelHeight, viewportH - VIEWPORT_PADDING_PX * 2) - VIEWPORT_PADDING_PX
+  top = Math.max(VIEWPORT_PADDING_PX, Math.min(top, maxTop))
+
+  panelStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`,
+    maxWidth: `${maxPanelWidth}px`,
+    ...(props.range ? {} : { width: `${Math.min(trigger.width, maxPanelWidth)}px` }),
+  }
+}
+
+watch(open, async (isOpen) => {
+  if (!isOpen) return
+  await nextTick()
+  await updatePanelPosition()
+})
+
 function selectDay(iso: string): void {
   if (props.range) {
     if (!rangeDraftFrom.value) {
@@ -339,12 +462,17 @@ function selectDay(iso: string): void {
       return
     }
 
+    if (isDayBeyondMaxRange(iso)) {
+      return
+    }
+
     const normalized = normalizeDateRange(rangeDraftFrom.value, iso)
+    if (!isDateRangeWithinMaxDays(normalized.from, normalized.to, props.maxRangeDays)) {
+      return
+    }
     rangeDraftFrom.value = ''
     emitDateRange(normalized)
-    if (!props.showTime) {
-      closeCalendar()
-    }
+    // Range stays open until Confirm — allows adjusting time / reviewing selection.
     return
   }
 
@@ -352,6 +480,12 @@ function selectDay(iso: string): void {
   if (!props.showTime) {
     closeCalendar()
   }
+}
+
+function isDayBeyondMaxRange(iso: string): boolean {
+  if (!props.range || !rangeDraftFrom.value) return false
+  if (props.maxRangeDays == null || props.maxRangeDays <= 0) return false
+  return !isDateRangeWithinMaxDays(rangeDraftFrom.value, iso, props.maxRangeDays)
 }
 
 function clearValue(): void {
@@ -382,7 +516,12 @@ function selectToday(): void {
     } else {
       emitDateRange({ from: today, to: today })
     }
-  } else if (props.showTime) {
+    rangeDraftFrom.value = ''
+    viewDate.value = new Date()
+    return
+  }
+
+  if (props.showTime) {
     emit('update:modelValue', { date: today, time: nowTime })
   } else {
     emitDateOnly(today)
@@ -394,6 +533,11 @@ function selectToday(): void {
   }
 }
 
+function confirmRange(): void {
+  if (!canConfirmRange.value) return
+  closeCalendar()
+}
+
 function shiftMonth(delta: number): void {
   const next = new Date(viewDate.value)
   next.setMonth(next.getMonth() + delta)
@@ -403,7 +547,7 @@ function shiftMonth(delta: number): void {
 function onDocumentPointerDown(event: MouseEvent): void {
   if (!open.value) return
   const target = event.target as Node
-  if (rootRef.value?.contains(target)) return
+  if (rootRef.value?.contains(target) || panelRef.value?.contains(target)) return
   closeCalendar()
 }
 
@@ -414,14 +558,19 @@ function onKeydown(event: KeyboardEvent): void {
 onMounted(() => {
   document.addEventListener('mousedown', onDocumentPointerDown)
   document.addEventListener('keydown', onKeydown)
+  window.addEventListener('resize', updatePanelPosition)
+  window.addEventListener('scroll', updatePanelPosition, true)
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousedown', onDocumentPointerDown)
   document.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('resize', updatePanelPosition)
+  window.removeEventListener('scroll', updatePanelPosition, true)
 })
 
 function dayButtonClass(day: {
+  iso: string
   inMonth: boolean
   isSelected: boolean
   isToday: boolean
@@ -429,18 +578,21 @@ function dayButtonClass(day: {
   isRangeEnd: boolean
   isInRange: boolean
 }): string {
+  const beyondMax = isDayBeyondMaxRange(day.iso)
   return cn(
     'inline-flex size-8 items-center justify-center rounded-md text-xs transition-colors',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
-    day.isSelected || day.isRangeStart || day.isRangeEnd
-      ? 'bg-primary text-primary-foreground shadow-[0_0_10px_rgba(0,212,255,0.35)]'
-      : day.isInRange
-        ? 'bg-primary/15 text-primary'
-        : day.isToday
-          ? 'border border-primary/40 text-primary'
-          : day.inMonth
-            ? 'text-foreground hover:bg-accent hover:text-accent-foreground'
-            : 'text-muted-foreground/40 hover:bg-accent/50 hover:text-muted-foreground',
+    beyondMax
+      ? 'cursor-not-allowed text-muted-foreground/30'
+      : day.isSelected || day.isRangeStart || day.isRangeEnd
+        ? 'bg-primary text-primary-foreground shadow-[0_0_10px_rgba(0,212,255,0.35)]'
+        : day.isInRange
+          ? 'bg-primary/15 text-primary'
+          : day.isToday
+            ? 'border border-primary/40 text-primary'
+            : day.inMonth
+              ? 'text-foreground hover:bg-accent hover:text-accent-foreground'
+              : 'text-muted-foreground/40 hover:bg-accent/50 hover:text-muted-foreground',
   )
 }
 </script>
@@ -473,51 +625,80 @@ function dayButtonClass(day: {
       <Calendar :size="14" aria-hidden="true" />
     </button>
 
-    <div
-      v-if="open"
-      class="absolute top-[calc(100%+0.375rem)] right-0 z-[var(--ds-z-dropdown)] w-full min-w-[16.5rem] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
-      @click.stop
-    >
-      <div class="mb-3 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          class="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          :aria-label="locale === 'pt-BR' ? 'Mês anterior' : 'Previous month'"
-          @click="shiftMonth(-1)"
+    <Teleport to="body">
+      <div
+        v-if="open"
+        ref="panelRef"
+        class="fixed z-[var(--ds-z-dropdown)] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+        :class="range ? 'w-max min-w-[16.5rem]' : 'min-w-[16.5rem]'"
+        :style="panelStyle"
+        @click.stop
+      >
+      <div
+        class="mb-3 flex gap-4"
+        :class="range ? 'flex-col sm:flex-row' : 'flex-col'"
+      >
+        <div
+          v-for="(panel, panelIndex) in calendarPanels"
+          :key="panel.key"
+          class="min-w-[15.5rem] flex-1"
         >
-          <ChevronLeft :size="16" aria-hidden="true" />
-        </button>
-        <p class="text-sm font-medium capitalize">{{ monthLabel }}</p>
-        <button
-          type="button"
-          class="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          :aria-label="locale === 'pt-BR' ? 'Próximo mês' : 'Next month'"
-          @click="shiftMonth(1)"
-        >
-          <ChevronRight :size="16" aria-hidden="true" />
-        </button>
-      </div>
+          <div class="mb-3 flex items-center justify-between gap-2">
+            <button
+              v-if="panelIndex === 0"
+              type="button"
+              class="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              :aria-label="locale === 'pt-BR' ? 'Mês anterior' : 'Previous month'"
+              @click="shiftMonth(-1)"
+            >
+              <ChevronLeft :size="16" aria-hidden="true" />
+            </button>
+            <span v-else class="inline-flex size-8" aria-hidden="true" />
 
-      <div class="mb-1 grid grid-cols-7 gap-1">
-        <span
-          v-for="(label, index) in weekdayLabels"
-          :key="`${label}-${index}`"
-          class="flex size-8 items-center justify-center text-xs font-medium uppercase text-muted-foreground"
-        >
-          {{ label }}
-        </span>
-      </div>
+            <p class="flex-1 text-center text-sm font-medium capitalize">{{ panel.label }}</p>
 
-      <div class="grid grid-cols-7 gap-1">
-        <button
-          v-for="day in calendarDays"
-          :key="day.iso"
-          type="button"
-          :class="dayButtonClass(day)"
-          @click="selectDay(day.iso)"
-        >
-          {{ day.day }}
-        </button>
+            <button
+              v-if="!range || panelIndex === calendarPanels.length - 1"
+              type="button"
+              class="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              :aria-label="locale === 'pt-BR' ? 'Próximo mês' : 'Next month'"
+              @click="shiftMonth(1)"
+            >
+              <ChevronRight :size="16" aria-hidden="true" />
+            </button>
+            <span v-else class="inline-flex size-8" aria-hidden="true" />
+          </div>
+
+          <div class="mb-1 grid grid-cols-7 gap-1">
+            <span
+              v-for="(label, index) in weekdayLabels"
+              :key="`${panel.key}-${label}-${index}`"
+              class="flex size-8 items-center justify-center text-xs font-medium uppercase text-muted-foreground"
+            >
+              {{ label }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-7 gap-1">
+            <template v-for="day in panel.days" :key="`${panel.key}-${day.iso}`">
+              <!-- Range dual-month: hide adjacent-month fillers (shown on the other panel). -->
+              <span
+                v-if="range && !day.inMonth"
+                class="size-8"
+                aria-hidden="true"
+              />
+              <button
+                v-else
+                type="button"
+                :class="dayButtonClass(day)"
+                :disabled="isDayBeyondMaxRange(day.iso)"
+                @click="selectDay(day.iso)"
+              >
+                {{ day.day }}
+              </button>
+            </template>
+          </div>
+        </div>
       </div>
 
       <div v-if="showTime" class="mt-3 border-t border-border pt-3">
@@ -541,6 +722,16 @@ function dayButtonClass(day: {
           {{ resolvedClearLabel }}
         </button>
         <button
+          v-if="range"
+          type="button"
+          class="text-xs font-medium text-primary transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+          :disabled="!canConfirmRange"
+          @click="confirmRange"
+        >
+          {{ resolvedConfirmLabel }}
+        </button>
+        <button
+          v-else
           type="button"
           class="text-xs font-medium text-primary transition-opacity hover:opacity-80"
           @click="selectToday"
@@ -548,6 +739,7 @@ function dayButtonClass(day: {
           {{ resolvedTodayLabel }}
         </button>
       </div>
-    </div>
+      </div>
+    </Teleport>
   </div>
 </template>

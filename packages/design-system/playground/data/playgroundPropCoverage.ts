@@ -103,7 +103,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
   Input: ['type', 'size', 'placeholder', 'minLength', 'maxLength', 'disabled', 'readonly', 'error', 'success', 'message'],
   Textarea: ['size', 'placeholder', 'rows', 'disabled', 'readonly', 'error', 'message'],
   Label: ['for'],
-  DateInput: ['size', 'locale', 'range', 'showTime', 'disabled', 'clearLabel', 'todayLabel', 'minuteStep', 'secondStep'],
+  DateInput: ['size', 'locale', 'range', 'showTime', 'maxRangeDays', 'disabled', 'clearLabel', 'todayLabel', 'confirmLabel', 'minuteStep', 'secondStep'],
   TimeInput: ['size', 'locale', 'range', 'disabled', 'clearLabel', 'minuteStep', 'secondStep'],
   Chip: ['size', 'variant', 'placeholder', 'disabled', 'error', 'message'],
   Switch: ['size', 'disabled'],

@@ -533,7 +533,7 @@ export const ptBR: PlaygroundMessages = {
     descriptions: {
       Button: 'Dispara um evento ou ação. Use :variant para comunicar hierarquia.',
       Input: 'Campo de texto com estados de erro, sucesso e desabilitado.',
-      DateInput: 'Seletor de data com locale, range opcional e TimeInput embutido.',
+      DateInput: 'Seletor de data com locale, range em dois meses e TimeInput embutido.',
       TimeInput: 'Seletor de hora (HH:mm:ss) com range opcional.',
       Switch: 'Controle compacto liga/desliga para configurações.',
       RadioGroup: 'Seleção exclusiva entre opções curtas.',

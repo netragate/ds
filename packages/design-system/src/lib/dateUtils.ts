@@ -37,6 +37,32 @@ export function normalizeDateRange(from: string, to: string): { from: string; to
   return { from: to, to: from }
 }
 
+/** Inclusive calendar-day count (same day → 1). Invalid ISO → `null`. */
+export function inclusiveDaySpan(from: string, to: string): number | null {
+  const start = parseIsoDate(from)
+  const end = parseIsoDate(to)
+  if (!start || !end) return null
+
+  const msPerDay = 24 * 60 * 60 * 1000
+  const diff = Math.round(Math.abs(end.getTime() - start.getTime()) / msPerDay)
+  return diff + 1
+}
+
+/**
+ * Whether `[from, to]` fits `maxRangeDays` (inclusive).
+ * Missing / non-positive `maxRangeDays` → always true.
+ */
+export function isDateRangeWithinMaxDays(
+  from: string,
+  to: string,
+  maxRangeDays?: number,
+): boolean {
+  if (maxRangeDays == null || maxRangeDays <= 0) return true
+  const span = inclusiveDaySpan(from, to)
+  if (span === null) return false
+  return span <= maxRangeDays
+}
+
 export function resolveIntlLocale(locale?: string): string {
   return locale === 'pt-BR' ? 'pt-BR' : 'en-US'
 }

@@ -533,7 +533,7 @@ export const en: PlaygroundMessages = {
     descriptions: {
       Button: 'Triggers an event or action. Use :variant to communicate hierarchy.',
       Input: 'Text field with error, success, and disabled states.',
-      DateInput: 'Date picker with locale-aware display, optional range, and optional embedded TimeInput.',
+      DateInput: 'Date picker with locale-aware display, dual-month range, and optional embedded TimeInput.',
       TimeInput: 'Time picker (HH:mm:ss) with optional from/to range.',
       Switch: 'Compact on/off control for settings and toggles.',
       RadioGroup: 'Exclusive selection from a short list of options.',

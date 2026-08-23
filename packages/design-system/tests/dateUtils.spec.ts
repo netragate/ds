@@ -4,6 +4,8 @@ import {
   compareIsoDate,
   dateInputPlaceholder,
   formatIsoForLocale,
+  inclusiveDaySpan,
+  isDateRangeWithinMaxDays,
   isIsoInRange,
   normalizeDateRange,
   parseLocaleDateInput,
@@ -31,6 +33,18 @@ describe('dateUtils', () => {
     })
     expect(isIsoInRange('2026-06-05', '2026-06-01', '2026-06-10')).toBe(true)
     expect(isIsoInRange('2026-06-15', '2026-06-01', '2026-06-10')).toBe(false)
+  })
+
+  it('computes inclusive day spans and maxRangeDays checks', () => {
+    expect(inclusiveDaySpan('2026-08-01', '2026-08-01')).toBe(1)
+    expect(inclusiveDaySpan('2026-08-01', '2026-08-07')).toBe(7)
+    expect(inclusiveDaySpan('2026-08-07', '2026-08-01')).toBe(7)
+    expect(inclusiveDaySpan('bad', '2026-08-01')).toBeNull()
+
+    expect(isDateRangeWithinMaxDays('2026-08-01', '2026-08-07', 7)).toBe(true)
+    expect(isDateRangeWithinMaxDays('2026-08-01', '2026-08-08', 7)).toBe(false)
+    expect(isDateRangeWithinMaxDays('2026-08-01', '2026-08-08')).toBe(true)
+    expect(isDateRangeWithinMaxDays('2026-08-01', '2026-08-08', 0)).toBe(true)
   })
 
   it('builds a 6-week calendar grid with range flags', () => {
