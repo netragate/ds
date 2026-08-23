@@ -70,6 +70,19 @@ const SettingsIcon = iconographyComponents.settings
     `  <DateInput
     v-model="date"
     :locale="'pt-BR'"
+    :range="false"
+    :show-time="false"
+    :disabled="false"
+  />`,
+  ),
+  TimeInput: usage(
+    'TimeInput',
+    `  <TimeInput
+    v-model="time"
+    :locale="'en'"
+    :range="false"
+    :minute-step="1"
+    :second-step="1"
     :disabled="false"
   />`,
   ),

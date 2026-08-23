@@ -13,6 +13,30 @@ export function toIsoDate(date: Date): string {
   return `${year}-${month}-${day}`
 }
 
+export function compareIsoDate(a: string, b: string): number {
+  if (a === b) return 0
+  return a < b ? -1 : 1
+}
+
+export function isIsoInRange(iso: string, from: string, to: string): boolean {
+  if (!ISO_DATE.test(iso)) return false
+  if (from && compareIsoDate(iso, from) < 0) return false
+  if (to && compareIsoDate(iso, to) > 0) return false
+  return Boolean(from || to)
+}
+
+export function normalizeDateRange(from: string, to: string): { from: string; to: string } {
+  if (!from || !to) {
+    return { from, to }
+  }
+
+  if (compareIsoDate(from, to) <= 0) {
+    return { from, to }
+  }
+
+  return { from: to, to: from }
+}
+
 export function resolveIntlLocale(locale?: string): string {
   return locale === 'pt-BR' ? 'pt-BR' : 'en-US'
 }
@@ -27,8 +51,24 @@ export function formatIsoForLocale(iso: string, locale?: string): string {
   }).format(date)
 }
 
+export function formatDateRangeForLocale(
+  from: string,
+  to: string,
+  locale?: string,
+): string {
+  if (!from && !to) return ''
+  if (from && !to) return `${formatIsoForLocale(from, locale)} –`
+  if (!from && to) return `– ${formatIsoForLocale(to, locale)}`
+  return `${formatIsoForLocale(from, locale)} – ${formatIsoForLocale(to, locale)}`
+}
+
 export function dateInputPlaceholder(locale?: string): string {
   return locale === 'pt-BR' ? 'dd/mm/aaaa' : 'mm/dd/yyyy'
+}
+
+export function dateRangeInputPlaceholder(locale?: string): string {
+  const single = dateInputPlaceholder(locale)
+  return `${single} – ${single}`
 }
 
 export function parseLocaleDateInput(value: string, locale?: string): string | null {
@@ -85,12 +125,50 @@ export interface CalendarDayCell {
   inMonth: boolean
   isToday: boolean
   isSelected: boolean
+  isRangeStart: boolean
+  isRangeEnd: boolean
+  isInRange: boolean
+}
+
+export type CalendarSelection =
+  | string
+  | { from?: string; to?: string }
+  | undefined
+  | null
+
+function selectionFlags(
+  iso: string,
+  selection: CalendarSelection,
+): Pick<CalendarDayCell, 'isSelected' | 'isRangeStart' | 'isRangeEnd' | 'isInRange'> {
+  if (!selection || typeof selection === 'string') {
+    const selected = Boolean(selection && iso === selection)
+    return {
+      isSelected: selected,
+      isRangeStart: false,
+      isRangeEnd: false,
+      isInRange: false,
+    }
+  }
+
+  const from = selection.from ?? ''
+  const to = selection.to ?? ''
+  const isRangeStart = Boolean(from && iso === from)
+  const isRangeEnd = Boolean(to && iso === to)
+  const isInRange =
+    Boolean(from && to) && compareIsoDate(iso, from) >= 0 && compareIsoDate(iso, to) <= 0
+
+  return {
+    isSelected: isRangeStart || isRangeEnd,
+    isRangeStart,
+    isRangeEnd,
+    isInRange: isInRange && !isRangeStart && !isRangeEnd,
+  }
 }
 
 export function buildCalendarMonthGrid(
   year: number,
   month: number,
-  selectedIso: string,
+  selection: CalendarSelection = '',
   locale?: string,
 ): CalendarDayCell[] {
   void locale
@@ -100,43 +178,30 @@ export function buildCalendarMonthGrid(
   const daysInPreviousMonth = new Date(year, month, 0).getDate()
   const cells: CalendarDayCell[] = []
 
-  for (let index = firstDay - 1; index >= 0; index -= 1) {
-    const day = daysInPreviousMonth - index
-    const date = new Date(year, month - 1, day)
-    const iso = toIsoDate(date)
-    cells.push({
-      iso,
-      day,
-      inMonth: false,
-      isToday: iso === todayIso,
-      isSelected: iso === selectedIso,
-    })
-  }
-
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    const date = new Date(year, month, day)
-    const iso = toIsoDate(date)
-    cells.push({
-      iso,
-      day,
-      inMonth: true,
-      isToday: iso === todayIso,
-      isSelected: iso === selectedIso,
-    })
-  }
-
-  let nextMonthDay = 1
-  while (cells.length % 7 !== 0 || cells.length < 42) {
-    const date = new Date(year, month + 1, nextMonthDay)
-    nextMonthDay += 1
+  const pushCell = (date: Date, inMonth: boolean) => {
     const iso = toIsoDate(date)
     cells.push({
       iso,
       day: date.getDate(),
-      inMonth: false,
+      inMonth,
       isToday: iso === todayIso,
-      isSelected: iso === selectedIso,
+      ...selectionFlags(iso, selection),
     })
+  }
+
+  for (let index = firstDay - 1; index >= 0; index -= 1) {
+    const day = daysInPreviousMonth - index
+    pushCell(new Date(year, month - 1, day), false)
+  }
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    pushCell(new Date(year, month, day), true)
+  }
+
+  let nextMonthDay = 1
+  while (cells.length % 7 !== 0 || cells.length < 42) {
+    pushCell(new Date(year, month + 1, nextMonthDay), false)
+    nextMonthDay += 1
   }
 
   return cells

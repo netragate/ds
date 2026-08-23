@@ -82,6 +82,7 @@ export const en: PlaygroundMessages = {
       Input: { count: '4 states', category: 'forms' },
       Chip: { count: 'removable tags', category: 'forms' },
       DateInput: { count: 'locale', category: 'forms' },
+      TimeInput: { count: 'range', category: 'forms' },
       Switch: { count: 'on/off', category: 'forms' },
       RadioGroup: { count: 'exclusive', category: 'forms' },
       FormField: { count: 'label · error', category: 'forms' },
@@ -532,7 +533,8 @@ export const en: PlaygroundMessages = {
     descriptions: {
       Button: 'Triggers an event or action. Use :variant to communicate hierarchy.',
       Input: 'Text field with error, success, and disabled states.',
-      DateInput: 'Date picker with locale-aware display and calendar popover.',
+      DateInput: 'Date picker with locale-aware display, optional range, and optional embedded TimeInput.',
+      TimeInput: 'Time picker (HH:mm:ss) with optional from/to range.',
       Switch: 'Compact on/off control for settings and toggles.',
       RadioGroup: 'Exclusive selection from a short list of options.',
       FormField: 'Wraps inputs with label, helper text, and validation messages.',
@@ -698,7 +700,7 @@ export const en: PlaygroundMessages = {
     version: 'Version',
   },
   homeChangelog: {
-    sectionTitle: "What's New",
+    sectionTitle: "Changelog",
     typeAdded: 'Added',
     typeChanged: 'Changed',
     typeFixed: 'Fixed',

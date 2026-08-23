@@ -5,13 +5,14 @@ import { Box, Maximize2 } from 'lucide-vue-next'
 import UsageBlock from '../components/UsageBlock.vue'
 import ComponentApiReference from '../components/ComponentApiReference.vue'
 import {
+  catalogComponentCount,
   catalogGroups,
   getComponentCatalogEntry,
   getComponentUsage,
   hasPlaygroundDemo,
   playgroundDemoName,
 } from '../data/componentCatalog'
-import { designSystemLibraryComponentCount, showcaseDemoComponents } from '../designSystemMeta'
+import { showcaseDemoComponents } from '../designSystemMeta'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import ChatPreviewCard from '../cards/ChatPreviewCard.vue'
 
@@ -149,10 +150,10 @@ onUnmounted(() => {
         </span>
       </div>
       <h2 class="mb-2 text-xl font-bold sm:text-2xl" style="color: var(--pg-text)">
-        {{ t('componentCatalog.title', { count: designSystemLibraryComponentCount }) }}
+        {{ t('componentCatalog.title', { count: catalogComponentCount }) }}
       </h2>
       <p class="pg-text-subtle max-w-2xl text-sm leading-relaxed">
-        {{ t('componentCatalog.subtitle', { count: designSystemLibraryComponentCount }) }}
+        {{ t('componentCatalog.subtitle', { count: catalogComponentCount }) }}
       </p>
     </div>
 

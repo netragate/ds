@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.0] - 2026-08-23
+
+### Added
+
+- **`TimeInput`** — `HH:mm:ss` (24h) with optional `range` (`{ from, to }`), `minuteStep` / `secondStep`, locale-aware labels.
+- **`DateInput` `range`** — calendar start→end selection with range highlight; v-model `{ from, to }` (ISO dates).
+- **`DateInput` `showTime`** — embeds `TimeInput`; when `range` is on, time is also a range. Composite models: `{ date, time }` / `{ from: { date, time }, to: { date, time } }`.
+- Shared types: `DateRangeValue`, `TimeRangeValue`, `DateTimeValue`, `DateTimeRangeValue`.
+
+### Changed
+
+- **`dateUtils`** — range helpers and calendar cell flags (`isRangeStart` / `isRangeEnd` / `isInRange`).
+- **Playground** — DateInput demo toggles for `range` / `showTime`; new TimeInput demo; catalog/README coverage.
+
 ## [0.8.0] - 2026-08-22
 
 ### Added

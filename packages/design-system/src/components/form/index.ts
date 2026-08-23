@@ -1,5 +1,6 @@
 export { default as Input } from './Input.vue'
 export { default as DateInput } from './DateInput.vue'
+export { default as TimeInput } from './TimeInput.vue'
 export { default as Textarea } from './Textarea.vue'
 export { default as Checkbox } from './Checkbox.vue'
 export { default as Radio } from './Radio.vue'
@@ -14,6 +15,7 @@ export { default as Chip } from './Chip.vue'
 export type { InputProps } from './Input.vue'
 export type { ChipProps } from './Chip.vue'
 export type { DateInputProps } from './DateInput.vue'
+export type { TimeInputProps, TimeInputModelValue } from './TimeInput.vue'
 export type { TextareaProps } from './Textarea.vue'
 export type { CheckboxProps } from './Checkbox.vue'
 export type { RadioProps } from './Radio.vue'
@@ -23,3 +25,11 @@ export type { ToggleProps } from './Toggle.vue'
 export type { SelectProps, SelectOption } from './Select.vue'
 export type { LabelProps } from './Label.vue'
 export type { FormFieldProps } from './FormField.vue'
+
+export type {
+  DateRangeValue,
+  TimeRangeValue,
+  DateTimeValue,
+  DateTimeRangeValue,
+  DateInputModelValue,
+} from '@/lib/dateTimeTypes'

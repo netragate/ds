@@ -8,9 +8,9 @@ Monorepo do design system Vue 3 [`@netragate/design-system`](https://www.npmjs.c
 
 ## O que tem aqui
 
-- **58 componentes Vue 3** exportados (forms, feedback, layout, overlay, data display, etc.)
+- **63 componentes Vue 3** exportados (forms, feedback, layout, overlay, data display, etc.)
 - **Playground** com demos interativos, catálogo **Library**, documentação de instalação, snippets **Usage** ao vivo e i18n **EN / pt-BR**
-- **32 playgrounds** no drawer + seção **Showcase** (ex.: AI Chat — caso de uso composto, fora do catálogo da lib)
+- **38 playgrounds** no drawer + seção **Showcase** (ex.: AI Chat — caso de uso composto, fora do catálogo da lib)
 - Design tokens, Tailwind CSS 4, light/dark mode, Vitest
 
 Documentação de uso, API e exemplos: [`packages/design-system/README.md`](./packages/design-system/README.md).

@@ -82,6 +82,7 @@ export const ptBR: PlaygroundMessages = {
       Input: { count: '4 estados', category: 'forms' },
       Chip: { count: 'tags removíveis', category: 'forms' },
       DateInput: { count: 'locale', category: 'forms' },
+      TimeInput: { count: 'range', category: 'forms' },
       Switch: { count: 'on/off', category: 'forms' },
       RadioGroup: { count: 'exclusivo', category: 'forms' },
       FormField: { count: 'label · erro', category: 'forms' },
@@ -532,7 +533,8 @@ export const ptBR: PlaygroundMessages = {
     descriptions: {
       Button: 'Dispara um evento ou ação. Use :variant para comunicar hierarquia.',
       Input: 'Campo de texto com estados de erro, sucesso e desabilitado.',
-      DateInput: 'Seletor de data com exibição por locale e calendário.',
+      DateInput: 'Seletor de data com locale, range opcional e TimeInput embutido.',
+      TimeInput: 'Seletor de hora (HH:mm:ss) com range opcional.',
       Switch: 'Controle compacto liga/desliga para configurações.',
       RadioGroup: 'Seleção exclusiva entre opções curtas.',
       FormField: 'Envolve inputs com label, texto de ajuda e validação.',

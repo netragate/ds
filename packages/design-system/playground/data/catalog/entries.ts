@@ -68,7 +68,11 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.DateInput!,
     props: [
       p('size', "'sm' | 'md' | 'lg'", 'md', 'Input size'),
-      p('locale', 'string', 'en', 'Locale for formatting and calendar labels'),
+      p('locale', 'string', 'en', 'Locale for date display (en → mm/dd/yyyy, pt-BR → dd/mm/yyyy)'),
+      p('range', 'boolean', 'false', 'Select a from/to date range in one calendar'),
+      p('showTime', 'boolean', 'false', 'Embed TimeInput; when range is true, time is also a range'),
+      p('minuteStep', 'number', '1', 'Minute step for embedded TimeInput'),
+      p('secondStep', 'number', '1', 'Second step for embedded TimeInput'),
       p('placeholder', 'string', undefined, 'Input placeholder (defaults by locale when omitted)'),
       p('disabled', 'boolean', 'false', 'Disables the date picker'),
       p('clearLabel', 'string', undefined, 'Label for the clear button (defaults by locale)'),
@@ -77,8 +81,36 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('aria-label', 'string', undefined, 'Accessible label for the input'),
       cls(),
     ],
-    models: [m('modelValue', 'string', "''", 'Selected date as ISO string (YYYY-MM-DD)')],
-    events: [e('update:modelValue', 'string', 'Emitted when the selected date changes')],
+    models: [
+      m(
+        'modelValue',
+        "string | DateRangeValue | DateTimeValue | DateTimeRangeValue",
+        "''",
+        'ISO date, date range, or date+time (HH:mm:ss) depending on range/showTime',
+      ),
+    ],
+    events: [e('update:modelValue', 'DateInputModelValue', 'Emitted when the value changes')],
+  },
+
+  TimeInput: {
+    usage: usageSnippets.TimeInput!,
+    props: [
+      p('size', "'sm' | 'md' | 'lg'", 'md', 'Input size'),
+      p('locale', 'string', 'en', 'Labels locale (time display stays HH:mm:ss)'),
+      p('range', 'boolean', 'false', 'Select a from/to time range'),
+      p('minuteStep', 'number', '1', 'Step for minute options'),
+      p('secondStep', 'number', '1', 'Step for second options'),
+      p('placeholder', 'string', undefined, 'Input placeholder'),
+      p('disabled', 'boolean', 'false', 'Disables the time picker'),
+      p('clearLabel', 'string', undefined, 'Label for the clear button (defaults by locale)'),
+      p('id', 'string', undefined, 'Input element id'),
+      p('aria-label', 'string', undefined, 'Accessible label for the input'),
+      cls(),
+    ],
+    models: [
+      m('modelValue', "string | TimeRangeValue", "''", 'HH:mm:ss or { from, to } when range'),
+    ],
+    events: [e('update:modelValue', 'string | TimeRangeValue', 'Emitted when the time changes')],
   },
 
   Textarea: {
@@ -466,10 +498,10 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('label', 'string', undefined, 'Item label (required)'),
       p('icon', 'Component', undefined, 'Optional Lucide or custom icon component'),
     ],
-    events: {
-      click: { args: 'id: string', description: 'Emitted when the item is clicked, after setActive is called' },
-      select: { args: 'id: string', description: 'Alias for click — emitted when the item is clicked' },
-    },
+    events: [
+      e('click', 'id: string', 'Emitted when the item is clicked, after setActive is called'),
+      e('select', 'id: string', 'Alias for click — emitted when the item is clicked'),
+    ],
   },
 
   SidebarMenuGroup: {

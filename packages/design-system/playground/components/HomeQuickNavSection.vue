@@ -3,7 +3,7 @@ import type { Component } from 'vue'
 import { useRouter } from 'vue-router'
 import { Layers, LayoutGrid, BookOpen, ArrowRight } from 'lucide-vue-next'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { designSystemLibraryComponentCount } from '../designSystemMeta'
+import { catalogComponentCount } from '../data/componentCatalog'
 
 const router = useRouter()
 const { t } = usePlaygroundLocale()
@@ -31,7 +31,7 @@ const cards: QuickNavCard[] = [
     icon: LayoutGrid,
     titleKey: 'homeQuickNav.componentsTitle',
     descKey: 'homeQuickNav.componentsDesc',
-    stat: designSystemLibraryComponentCount,
+    stat: catalogComponentCount,
     path: '/catalog',
   },
   {

@@ -66,9 +66,9 @@ document.documentElement.classList.toggle('dark', isDark)
 O playground local (`npm run dev`) inclui:
 
 - **Home** — cards interativos por categoria (forms, layout, feedback, foundations)
-- **Library** — catálogo dos **62 componentes** com descrição, snippet de uso e botão *Abrir playground* quando houver demo
+- **Library** — catálogo dos **63 componentes** com descrição, snippet de uso e botão *Abrir playground* quando houver demo
 - **Docs** — instalação, toasts, DataTable, dark mode
-- **32 demos no drawer** — Button, IconButton, Link, Input, Textarea, Label, DateInput, FormField, DataTable, Layout, Dialog, etc.; controles atualizam o snippet **Usage** em tempo real
+- **38 demos no drawer** — Button, IconButton, Link, Input, Textarea, Label, DateInput, TimeInput, FormField, DataTable, Layout, Dialog, etc.; controles atualizam o snippet **Usage** em tempo real
 - **Showcase** — demos compostos (ex.: AI Chat), não exportados como componente da lib
 - **i18n** — inglês e português (pt-BR)
 
@@ -112,10 +112,24 @@ import { FormField, Input } from '@netragate/design-system'
 
 ### DateInput
 
-Campo de data com calendário e formato por locale (ex.: `dd/mm/aaaa` em pt-BR):
+Campo de data com calendário. O **display** segue `locale` (`en` → `mm/dd/yyyy`, `pt-BR` → `dd/mm/yyyy`); o valor persistido é ISO `YYYY-MM-DD`.
+
+- `:range="true"` — seleção início→fim no calendário (`{ from, to }`)
+- `:show-time="true"` — embute `TimeInput` (`HH:mm:ss`); com `range`, o time também é range
 
 ```vue
 <DateInput v-model="date" :locale="'pt-BR'" />
+<DateInput v-model="range" :range="true" :locale="'en'" />
+<DateInput v-model="dateTime" :show-time="true" :locale="'pt-BR'" />
+```
+
+### TimeInput
+
+Campo de hora **`HH:mm:ss`** (24h), com `:range` para `{ from, to }`. Labels seguem `locale`; o formato da hora não muda com o idioma.
+
+```vue
+<TimeInput v-model="time" />
+<TimeInput v-model="timeRange" :range="true" />
 ```
 
 ## Card
@@ -470,7 +484,7 @@ Mais de 300 ícones disponíveis via `iconography`, `buttonIcons` e `iconography
 | Categoria | Componentes |
 |-----------|-------------|
 | **Actions** | `Button`, `IconButton`, `Link` |
-| **Forms** | `Input`, `DateInput`, `Textarea`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Toggle`, `Select`, `Label`, `FormField` |
+| **Forms** | `Input`, `DateInput`, `TimeInput`, `Textarea`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Toggle`, `Select`, `Label`, `FormField` |
 | **Feedback** | `Alert`, `Badge`, `Spinner`, `Progress`, `Skeleton`, `Toast`, `ToastHost` |
 | **Navigation** | `Tabs`, `TabList`, `Tab`, `TabPanel`, `Breadcrumb`, `BreadcrumbItem`, `Pagination`, `SidebarMenu*` |
 | **Data display** | `Card`, `Divider`, `Avatar`, `AvatarGroup`, `Lozenge`, `Table*`, `DataTable`, `DataTableColumnFilter*`, `PageSizeSelect`, `List`, `ListItem`, `EmptyState` |

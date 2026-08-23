@@ -8,6 +8,7 @@ import CheckboxDemo from './CheckboxDemo.vue'
 import ChipDemo from './ChipDemo.vue'
 import DataTableDemo from './DataTableDemo.vue'
 import DateInputDemo from './DateInputDemo.vue'
+import TimeInputDemo from './TimeInputDemo.vue'
 import DialogDemo from './DialogDemo.vue'
 import FormFieldDemo from './FormFieldDemo.vue'
 import InputDemo from './InputDemo.vue'
@@ -51,6 +52,7 @@ export const playgroundDemoRegistry: Record<string, Component> = {
   Lozenge: LozengeDemo,
   Checkbox: CheckboxDemo,
   DateInput: DateInputDemo,
+  TimeInput: TimeInputDemo,
   Switch: SwitchDemo,
   Toggle: ToggleDemo,
   RadioGroup: RadioGroupDemo,

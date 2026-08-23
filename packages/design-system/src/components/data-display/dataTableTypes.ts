@@ -1,3 +1,5 @@
+import type { DateRangeValue } from '@/lib/dateTimeTypes'
+
 export type SortDirection = 'asc' | 'desc' | null
 
 export type DataTableFilterType = 'text' | 'date' | 'enum'
@@ -7,10 +9,8 @@ export interface DataTableFilterOption {
   value: string
 }
 
-export interface DataTableDateRangeFilter {
-  from: string
-  to: string
-}
+/** @deprecated Prefer `DateRangeValue` from the design-system package root. */
+export type DataTableDateRangeFilter = DateRangeValue
 
 export type DataTableColumnFilterValue =
   | string

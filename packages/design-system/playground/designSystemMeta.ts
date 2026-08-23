@@ -1,11 +1,12 @@
 import packageJson from '../package.json'
+import { catalogComponentCount } from './data/catalogGroups'
 
 export const designSystemVersion = packageJson.version
 
 export const designSystemVersionBadge = `v${packageJson.version}`
 
-/** Vue components exported from `@netragate/design-system`. */
-export const designSystemLibraryComponentCount = 62
+/** Vue components in the Library catalog — derived from `catalogGroups`. */
+export const designSystemLibraryComponentCount = catalogComponentCount
 
 /** Interactive demos for Library components (drawer). */
 export const playgroundDemoComponents = [
@@ -17,6 +18,7 @@ export const playgroundDemoComponents = [
   'Textarea',
   'Label',
   'DateInput',
+  'TimeInput',
   'Switch',
   'RadioGroup',
   'FormField',
@@ -48,7 +50,7 @@ export const playgroundDemoComponents = [
   'Toast',
 ] as const
 
-/** Composite use-case demos — not part of the 58 Library components. */
+/** Composite use-case demos — not part of the Library component count. */
 export const showcaseDemoComponents = ['AI Chat'] as const
 
 export const allPlaygroundDemos = [...playgroundDemoComponents, ...showcaseDemoComponents] as const
