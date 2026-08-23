@@ -19,7 +19,7 @@ export function sidebarMenuLabelClass(): string {
 }
 
 export function sidebarMenuChevronClass(): string {
-  return 'size-3.5 shrink-0 text-muted-foreground'
+  return 'size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out'
 }
 
 export function sidebarMenuStateClass(active: boolean): string {

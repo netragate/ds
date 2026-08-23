@@ -454,7 +454,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     ],
     models: [
       m('activeId', 'string', "''", 'Active menu item id — auto-selects the first SidebarMenuItem when empty'),
-      m('openKeys', 'string[]', '[]', 'Expanded group keys (v-model:open-keys)'),
+      m('openKeys', 'string[]', '[]', 'Expanded group keys (v-model:open-keys). Changed only by group click (accordion); not auto-synced from activeId'),
     ],
     slots: [s('default', undefined, 'SidebarMenuItem and SidebarMenuGroup children')],
   },

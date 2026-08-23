@@ -13,7 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- **`SidebarMenuGroup`** — respects menu-level `submenuMode`; reuses `openKeys` / `defaultOpen` for inline expand; chevron rotates when inline-open.
+- **`SidebarMenuGroup`** — respects menu-level `submenuMode`; reuses `openKeys` / `defaultOpen` for inline expand; chevron rotates when inline-open; inline open/close animates height and opacity in parallel (~200ms CSS, no leave/enter wait).
+- **`SidebarMenu` `openKeys`** — expanded only via group click (sibling accordion). Selecting a leaf or binding `activeId` (route) does **not** auto-expand groups; apps can seed `openKeys` from the route if they want the active path open on reload. Ids accept `.` or `/` hierarchy for active highlighting.
+- **`AppLayout` menu** — scrollable nav region with design-system scrollbar (`.ds-scrollbar`); settings footer stays pinned to the bottom of the visible menu column.
 
 ## [0.7.13] - 2026-08-22
 

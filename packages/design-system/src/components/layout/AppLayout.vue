@@ -158,7 +158,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    :class="cn('grid min-h-full rounded-lg border border-border bg-background', props.class)"
+    :class="cn('grid h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background', props.class)"
     :style="gridStyle"
   >
     <header
@@ -171,19 +171,19 @@ onUnmounted(() => {
 
     <div
       v-if="showMenu"
-      class="relative grid min-h-0 min-w-0 bg-background"
-      style="grid-area: shell; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(min-content, 1fr)"
+      class="relative grid min-h-0 min-w-0 overflow-hidden bg-background"
+      style="grid-area: shell; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)"
     >
       <aside
         :class="
           cn(
-            'flex min-h-full shrink-0 flex-col overflow-visible border-r border-border bg-card/60 px-0 py-0 transition-[width] duration-300 ease-in-out',
+            'flex h-full min-h-0 shrink-0 flex-col overflow-hidden border-r border-border bg-card/60 px-0 py-0 transition-[width] duration-300 ease-in-out',
           )
         "
         :style="{ width: activeMenuWidth }"
         :data-menu-collapsed="menuCollapsed ? 'true' : 'false'"
       >
-        <div class="flex min-h-full w-full flex-1 flex-col">
+        <div class="flex h-full min-h-0 w-full flex-1 flex-col">
           <AppLayoutSidebarMenu
             v-model:active-id="activeMenuId"
             v-model:open-keys="openMenuKeys"

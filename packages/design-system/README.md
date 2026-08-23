@@ -434,14 +434,15 @@ const pageTitle = ref('Dashboard')
 </template>
 ```
 
-**Submenu:** `:submenu-mode="'flyout'"` (padrão) abre filhos no hover em painel flutuante; `:submenu-mode="'inline'"` expande/colapsa os filhos **abaixo** do grupo no clique. Com menu collapsed (rail) ou grupo de settings pinado no rodapé, o comportamento continua flyout.
+**Submenu:** `:submenu-mode="'flyout'"` (padrão) abre filhos no hover em painel flutuante; `:submenu-mode="'inline'"` expande/colapsa os filhos **abaixo** do grupo **só no clique**. Com menu collapsed (rail) ou grupo de settings pinado no rodapé, o comportamento continua flyout. `active-menu-id` marca a página atual (ids com `.` ou `/`); **não** abre grupos sozinho — use `v-model:open-menu-keys` se quiser pré-abrir o caminho da rota. Abrir um grupo fecha irmãos no mesmo nível (accordion). A lista do menu rola dentro do viewport (classe `ds-scrollbar`); settings permanece fixo no rodapé visível do aside.
 
 **Settings no rodapé:** com `:settings-menu="true"`, declare no `#menu` um `SidebarMenuGroup` **ou** um `SidebarMenuItem` isolado cujo `id` seja **igual** a `settings-menu-id` (padrão `settings`). O id pode ser qualquer string (ex.: `admin.settings`) — o pin compara igualdade exata. Grupo → flyout no hover; item único → link no rodapé. Não declare os dois com o mesmo id ao mesmo tempo.
 
 **IDs do menu lateral**
 
 - Itens de topo **fora** de um grupo não devem compartilhar o prefixo do grupo (evite `todos.all` ao lado do grupo `todos` — prefira `all` ou ids dentro do grupo, ex. `todos.active`).
-- Com `v-model:active-menu-id` vazio, o primeiro `SidebarMenuItem` registrado é selecionado automaticamente.
+- Ligue `v-model:active-menu-id` à rota (ou ao id da página atual) **no setup** para marcar o item ativo no reload. Grupos inline começam **fechados**; abrem só no clique (ou se você popular `v-model:open-menu-keys`, ex. com os ancestrais do id ativo).
+- Com `active-menu-id` vazio, o primeiro `SidebarMenuItem` é selecionado após um tick (dá tempo de a rota preencher o model).
 - Flyouts perto do rodapé abrem para cima — use `:flyout-placement="'up'"` no `SidebarMenuGroup` de settings (`'auto' | 'down' | 'up'`; padrão `'auto'`).
 
 O slot **default** (conteúdo) ocupa 100% da altura disponível — use `class="min-h-svh"` no `AppLayout` (ou `height: 100%` em `html`, `body` e `#app`). Header, panel e footer continuam compostos por você com classes Tailwind.

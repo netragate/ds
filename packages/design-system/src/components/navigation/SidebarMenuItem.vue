@@ -125,7 +125,7 @@ watch(
         type="button"
         :class="classes"
         :aria-current="active ? 'page' : undefined"
-        @click="menu.setActive(id); emit('click', id); emit('select', id)"
+        @click.stop="menu.setActive(id); emit('click', id); emit('select', id)"
       >
         <span ref="iconRef" :class="iconClasses">
           <component :is="icon" v-if="icon" :size="16" class="shrink-0" />
@@ -139,7 +139,7 @@ watch(
       type="button"
       :class="classes"
       :aria-current="active ? 'page' : undefined"
-      @click="menu.setActive(id); emit('click', id); emit('select', id)"
+      @click.stop="menu.setActive(id); emit('click', id); emit('select', id)"
     >
       <span ref="iconRef" :class="iconClasses">
         <component :is="icon" v-if="icon" :size="16" class="shrink-0" />

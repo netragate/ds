@@ -42,7 +42,7 @@ const toggleLeft = computed(() => {
 </script>
 
 <template>
-  <div class="flex min-h-full w-full flex-col px-2 py-2">
+  <div class="flex h-full min-h-0 w-full flex-col px-2 py-2">
     <div
       v-if="showToggle || menuLabel"
       class="relative mb-2 w-full shrink-0"
@@ -71,7 +71,7 @@ const toggleLeft = computed(() => {
     </div>
 
     <div
-      class="flex w-full flex-1 flex-col transition-transform duration-300 ease-in-out"
+      class="flex h-full min-h-0 w-full flex-1 flex-col transition-transform duration-300 ease-in-out"
       :style="{
         width: contentWidth,
         minWidth: contentWidth,

@@ -29,12 +29,35 @@ import {
 
 const { messages, t } = usePlaygroundLocale()
 
+const STORAGE_KEY = 'ds-layout-demo-nav'
+
+function readStoredNav(): { activeId: string; submenuMode: 'flyout' | 'inline' } {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) {
+      return { activeId: 'dashboard', submenuMode: 'flyout' }
+    }
+
+    const parsed = JSON.parse(raw) as { activeId?: string; submenuMode?: string }
+    const submenuMode = parsed.submenuMode === 'inline' ? 'inline' : 'flyout'
+
+    return {
+      activeId: typeof parsed.activeId === 'string' && parsed.activeId ? parsed.activeId : 'dashboard',
+      submenuMode,
+    }
+  } catch {
+    return { activeId: 'dashboard', submenuMode: 'flyout' }
+  }
+}
+
+const storedNav = readStoredNav()
+
 const showHeader = ref(true)
 const showMenu = ref(true)
 const showFooter = ref(true)
 const showPanel = ref(true)
 const settingsMenu = ref(true)
-const submenuMode = ref<'flyout' | 'inline'>('flyout')
+const submenuMode = ref<'flyout' | 'inline'>(storedNav.submenuMode)
 const settingsAsGroup = ref(true)
 const settingsMenuId = ref('settings')
 const settingsFlyoutPlacement = ref<'auto' | 'down' | 'up'>('up')
@@ -54,7 +77,7 @@ const panelMinWidth = computed(() => `${panelMinWidthRem.value}rem`)
 const panelMaxWidth = ref('75%')
 const panelResizable = ref(true)
 const panelBackdrop = ref(true)
-const activeNav = ref('dashboard')
+const activeNav = ref(storedNav.activeId)
 const openKeys = ref<string[]>([])
 
 const navLabels = computed(() => messages.value.layoutPlayground.navLabels)
@@ -71,9 +94,17 @@ watch(showPanel, (enabled) => {
   }
 })
 
-watch(submenuMode, () => {
-  openKeys.value = []
-})
+watch(
+  [activeNav, submenuMode],
+  ([activeId, mode]) => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ activeId, submenuMode: mode }))
+    } catch {
+      // ignore quota / private mode
+    }
+  },
+  { immediate: true },
+)
 
 const previewKey = computed(
   () =>
@@ -298,7 +329,7 @@ const code = computed(() => {
         :settings-menu-id="settingsMenuId"
         :submenu-mode="submenuMode"
         :footer-width="footerWidth"
-        class="min-h-[26rem] border-[#00E5B0]/20"
+        class="min-h-[26rem] h-[26rem] border-[#00E5B0]/20"
       >
         <template #header>
           <div

@@ -83,7 +83,7 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
 
 <template>
   <SidebarMenuShell
-    class="min-h-full"
+    class="h-full min-h-0"
     :collapsed="collapsed"
     :menu-label="menuLabel"
     :menu-width="menuWidth"
@@ -99,10 +99,10 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
       v-model:open-keys="openKeys"
       :collapsed="collapsed"
       :submenu-mode="submenuMode"
-      class="flex min-h-0 w-full flex-1 flex-col"
+      class="flex h-full min-h-0 w-full flex-1 flex-col"
     >
-      <div class="flex w-full flex-1 flex-col">
-        <div class="flex w-full flex-col gap-0.5">
+      <div class="flex h-full min-h-0 w-full flex-1 flex-col">
+        <div class="ds-scrollbar flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
           <slot />
         </div>
 

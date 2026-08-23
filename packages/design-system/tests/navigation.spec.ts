@@ -118,10 +118,15 @@ describe('SidebarMenu', () => {
   })
 
   it('selects the first menu item when activeId is empty', async () => {
+    let activeId = ''
     const wrapper = mount(SidebarMenu, {
       props: {
-        activeId: '',
+        activeId,
         openKeys: [],
+        'onUpdate:activeId': (value: string) => {
+          activeId = value
+          void wrapper.setProps({ activeId: value })
+        },
       },
       slots: {
         default: `
@@ -135,10 +140,43 @@ describe('SidebarMenu', () => {
     })
 
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.emitted('update:activeId')?.[0]).toEqual(['dashboard'])
-    expect(wrapper.find('[aria-current="page"]')?.text()).toBe('Dashboard')
+    expect(activeId).toBe('dashboard')
+    expect(wrapper.find('[aria-current="page"]').text()).toBe('Dashboard')
     expect(wrapper.findAll('[aria-current="page"]')).toHaveLength(1)
+
+    wrapper.unmount()
+  })
+
+  it('keeps a delayed activeId from the route instead of the first item', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: '',
+        openKeys: [],
+        submenuMode: 'inline',
+      },
+      slots: {
+        default: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuGroup id="components" label="Components">
+            <SidebarMenuItem id="components.overview" label="Overview" />
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    await wrapper.setProps({ activeId: 'components/overview' })
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:activeId')?.some((payload) => payload[0] === 'dashboard')).toBeFalsy()
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('false')
 
     wrapper.unmount()
   })
@@ -528,13 +566,14 @@ describe('SidebarMenu', () => {
   it('expands and collapses children inline when submenuMode is inline', async () => {
     const wrapper = mount(SidebarMenu, {
       props: {
-        activeId: 'todos.active',
+        activeId: 'dashboard',
         openKeys: [],
         submenuMode: 'inline',
       },
       attachTo: document.body,
       slots: {
         default: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
           <SidebarMenuGroup id="todos" label="Todos">
             <SidebarMenuItem id="todos.active" label="Active" />
           </SidebarMenuGroup>
@@ -545,29 +584,173 @@ describe('SidebarMenu', () => {
       },
     })
 
-    const trigger = wrapper.find('button[aria-expanded]')
-    expect(trigger.attributes('aria-expanded')).toBe('false')
-    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    const trigger = wrapper.findAll('button[aria-expanded]').find((btn) =>
+      btn.text()?.includes('Todos'),
+    )
+    expect(trigger).toBeTruthy()
+    expect(trigger!.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('false')
 
-    await trigger.trigger('click')
+    await trigger!.trigger('click')
     await wrapper.vm.$nextTick()
 
-    expect(trigger.attributes('aria-expanded')).toBe('true')
-    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(true)
+    expect(trigger!.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('true')
     expect(wrapper.find('[data-sidebar-inline-submenu]').text()).toContain('Active')
     expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
     expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual(['todos'])
 
-    await trigger.trigger('click')
+    await trigger!.trigger('click')
     await wrapper.vm.$nextTick()
 
-    expect(trigger.attributes('aria-expanded')).toBe('false')
-    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    expect(trigger!.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('false')
     expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual([])
 
-    await trigger.trigger('mouseenter')
+    await trigger!.trigger('mouseenter')
     await wrapper.vm.$nextTick()
     expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+
+    wrapper.unmount()
+  })
+
+  it('keeps expanded groups open when selecting a leaf item', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'dashboard',
+        openKeys: [],
+        submenuMode: 'inline',
+        'onUpdate:openKeys': (value: string[]) => {
+          void wrapper.setProps({ openKeys: value })
+        },
+        'onUpdate:activeId': (value: string) => {
+          void wrapper.setProps({ activeId: value })
+        },
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuGroup id="components" label="Components">
+            <SidebarMenuItem id="components.overview" label="Overview" />
+            <SidebarMenuGroup id="components.forms" label="Forms">
+              <SidebarMenuItem id="components.forms.input" label="Input" />
+            </SidebarMenuGroup>
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    const componentsTrigger = wrapper.findAll('button[aria-expanded]').find((btn) =>
+      btn.text()?.includes('Components'),
+    )
+    await componentsTrigger!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const formsTrigger = wrapper.findAll('button[aria-expanded]').find((btn) =>
+      btn.text()?.includes('Forms'),
+    )
+    await formsTrigger!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(componentsTrigger!.attributes('aria-expanded')).toBe('true')
+    expect(formsTrigger!.attributes('aria-expanded')).toBe('true')
+
+    const overview = wrapper.findAll('button').find((btn) => btn.text()?.includes('Overview'))
+    await overview!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.props('activeId')).toBe('components.overview')
+    expect(componentsTrigger!.attributes('aria-expanded')).toBe('true')
+    expect(formsTrigger!.attributes('aria-expanded')).toBe('true')
+
+    wrapper.unmount()
+  })
+
+  it('does not auto-expand groups from activeId — only from openKeys / click', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'components.forms.input',
+        openKeys: [],
+        submenuMode: 'inline',
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuGroup id="components" label="Components">
+            <SidebarMenuGroup id="components.forms" label="Forms">
+              <SidebarMenuItem id="components.forms.input" label="Input" />
+            </SidebarMenuGroup>
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:openKeys')).toBeUndefined()
+    expect(
+      wrapper.findAll('[data-sidebar-inline-submenu]').every((node) => node.attributes('data-open') === 'false'),
+    ).toBe(true)
+
+    await wrapper.setProps({ activeId: 'components.overview' })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:openKeys')).toBeUndefined()
+    expect(
+      wrapper.findAll('[data-sidebar-inline-submenu]').every((node) => node.attributes('data-open') === 'false'),
+    ).toBe(true)
+
+    wrapper.unmount()
+  })
+
+  it('closes sibling inline groups when opening another top-level group', async () => {
+    const wrapper = mount(SidebarMenu, {
+      props: {
+        activeId: 'dashboard',
+        openKeys: [],
+        submenuMode: 'inline',
+      },
+      attachTo: document.body,
+      slots: {
+        default: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuGroup id="components" label="Components">
+            <SidebarMenuItem id="components.overview" label="Overview" />
+          </SidebarMenuGroup>
+          <SidebarMenuGroup id="foundations" label="Foundations">
+            <SidebarMenuItem id="foundations.colors" label="Colors" />
+          </SidebarMenuGroup>
+        `,
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    const componentsTrigger = wrapper.findAll('button[aria-expanded]').find((btn) =>
+      btn.text()?.includes('Components'),
+    )
+    const foundationsTrigger = wrapper.findAll('button[aria-expanded]').find((btn) =>
+      btn.text()?.includes('Foundations'),
+    )
+
+    await componentsTrigger!.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(componentsTrigger!.attributes('aria-expanded')).toBe('true')
+
+    await foundationsTrigger!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(componentsTrigger!.attributes('aria-expanded')).toBe('false')
+    expect(foundationsTrigger!.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual(['foundations'])
 
     wrapper.unmount()
   })
@@ -598,10 +781,12 @@ describe('SidebarMenu', () => {
 
     const componentsTrigger = wrapper.findAll('button').find((btn) => btn.text()?.includes('Components'))
     expect(componentsTrigger).toBeTruthy()
-    expect(wrapper.find('[data-sidebar-inline-submenu]').exists()).toBe(false)
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('false')
 
     await componentsTrigger!.trigger('click')
     await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-sidebar-inline-submenu]').attributes('data-open')).toBe('true')
 
     const overview = wrapper.findAll('button').find((btn) => btn.text()?.includes('Overview'))
     expect(overview).toBeTruthy()
@@ -612,6 +797,7 @@ describe('SidebarMenu', () => {
     expect(overview!.attributes('aria-current')).toBe('page')
     expect(overview!.classes().join(' ')).toContain('text-primary')
     expect(componentsTrigger!.classes().join(' ')).toContain('text-primary')
+    expect(wrapper.emitted('update:openKeys')?.at(-1)?.[0]).toEqual(['components'])
 
     const dashboard = wrapper.findAll('button').find((btn) => btn.text()?.includes('Dashboard'))
     expect(dashboard!.attributes('aria-current')).toBeUndefined()

@@ -429,15 +429,26 @@ watch(
         <ChevronRight :class="chevronClasses" />
       </button>
 
-      <!-- Inline expand: children in the sidebar flow -->
+      <!-- Inline expand: keep mounted so open/close animate in parallel (accordion). -->
       <div
-        v-if="useInlineSubmenu && inlineOpen"
-        class="ml-3 flex flex-col gap-0.5 border-l border-border/60 py-0.5 pl-2"
+        v-if="useInlineSubmenu"
+        class="grid transition-[grid-template-rows,opacity] duration-200 ease-out"
+        :class="
+          inlineOpen
+            ? 'grid-rows-[1fr] opacity-100'
+            : 'pointer-events-none grid-rows-[0fr] opacity-0'
+        "
         data-sidebar-inline-submenu
+        :data-open="inlineOpen ? 'true' : 'false'"
+        :aria-hidden="!inlineOpen"
       >
-        <SidebarMenuFlyout :parent-group-id="id" inline>
-          <slot />
-        </SidebarMenuFlyout>
+        <div class="min-h-0 overflow-hidden">
+          <div class="ml-3 flex flex-col gap-0.5 border-l border-border/60 py-0.5 pl-2">
+            <SidebarMenuFlyout :parent-group-id="id" inline>
+              <slot />
+            </SidebarMenuFlyout>
+          </div>
+        </div>
       </div>
 
       <!-- Flyout panel (default / collapsed / settings) -->

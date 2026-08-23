@@ -36,6 +36,8 @@
     0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent),
     0 0 20px 4px color-mix(in srgb, var(--foreground) 26%, transparent);
   --ds-button-secondary-shadow-pressed: inset 0 2px 4px 0 color-mix(in srgb, var(--foreground) 18%, transparent);
+  --ds-scrollbar-thumb: color-mix(in srgb, var(--muted-foreground) 35%, transparent);
+  --ds-scrollbar-thumb-hover: color-mix(in srgb, var(--primary) 45%, transparent);
 }
 
 .dark {
@@ -62,6 +64,8 @@
   --ring: #00d4ff;
   --success: #00e5b0;
   --warning: #ff8b00;
+  --ds-scrollbar-thumb: color-mix(in srgb, var(--primary) 15%, transparent);
+  --ds-scrollbar-thumb-hover: color-mix(in srgb, var(--primary) 35%, transparent);
 }
 
 @theme inline {
@@ -244,4 +248,33 @@
 }
 .ds-button-shadow.ds-button-secondary-surface:active {
   box-shadow: var(--ds-button-secondary-shadow-pressed);
+}
+
+.ds-scrollbar {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-scrollbar-thumb) transparent;
+}
+
+.ds-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ds-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ds-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--ds-scrollbar-thumb);
+  border-radius: 999px;
+}
+
+.ds-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-scrollbar-thumb-hover);
+}
+
+.ds-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
 }

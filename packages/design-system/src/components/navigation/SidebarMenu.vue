@@ -2,6 +2,11 @@
 import { computed, nextTick, provide } from 'vue'
 import { cn } from '@/lib/utils'
 import {
+  accordionOpenKeys,
+  menuIdsEqual,
+  normalizeMenuId,
+} from './sidebarMenuOpenKeys'
+import {
   SIDEBAR_MENU_INJECTION_KEY,
   type SidebarMenuContext,
   type SidebarSubmenuMode,
@@ -38,16 +43,13 @@ const topLevelItemIds = new Set<string>()
 let firstRegisteredItemId: string | null = null
 
 function toggleOpen(key: string): void {
-  if (openKeys.value.includes(key)) {
-    openKeys.value = openKeys.value.filter((item) => item !== key)
-    return
-  }
-
-  openKeys.value = [...openKeys.value, key]
+  openKeys.value = accordionOpenKeys(openKeys.value, key)
 }
 
 function isOpen(key: string): boolean {
-  return openKeys.value.includes(key)
+  const normalized = normalizeMenuId(key)
+
+  return openKeys.value.some((item) => menuIdsEqual(item, normalized))
 }
 
 function isActive(id: string): boolean {
@@ -55,7 +57,7 @@ function isActive(id: string): boolean {
     return false
   }
 
-  return activeId.value === id
+  return menuIdsEqual(activeId.value, id)
 }
 
 function isGroupActive(id: string): boolean {
@@ -63,27 +65,44 @@ function isGroupActive(id: string): boolean {
     return false
   }
 
-  if (activeId.value === id) {
+  const normalizedId = normalizeMenuId(id)
+  const normalizedActive = normalizeMenuId(activeId.value)
+
+  if (normalizedActive === normalizedId) {
     return true
   }
 
-  const directMembers = groupItemIds.get(id)
-  if (directMembers?.has(activeId.value)) {
-    return true
+  const directMembers = groupItemIds.get(id) ?? groupItemIds.get(normalizedId)
+  if (directMembers) {
+    for (const member of directMembers) {
+      if (menuIdsEqual(member, activeId.value)) {
+        return true
+      }
+    }
   }
 
   for (const [groupId, members] of groupItemIds) {
-    if (groupId === id || !groupId.startsWith(`${id}.`)) {
+    const normalizedGroupId = normalizeMenuId(groupId)
+
+    if (
+      normalizedGroupId === normalizedId
+      || !normalizedGroupId.startsWith(`${normalizedId}.`)
+    ) {
       continue
     }
 
-    if (members.has(activeId.value)) {
-      return true
+    for (const member of members) {
+      if (menuIdsEqual(member, activeId.value)) {
+        return true
+      }
     }
   }
 
-  const prefix = `${id}.`
-  if (activeId.value.startsWith(prefix) && !topLevelItemIds.has(activeId.value)) {
+  const prefix = `${normalizedId}.`
+  if (
+    normalizedActive.startsWith(prefix)
+    && ![...topLevelItemIds].some((item) => menuIdsEqual(item, activeId.value))
+  ) {
     return true
   }
 
@@ -100,10 +119,14 @@ function registerMenuItem(id: string, isTopLevel = true): void {
   }
 
   if (firstRegisteredItemId === id) {
+    // Double nextTick: give the parent a chance to bind activeId from the route
+    // before falling back to the first registered item.
     nextTick(() => {
-      if (!activeId.value) {
-        activeId.value = id
-      }
+      nextTick(() => {
+        if (!activeId.value) {
+          activeId.value = id
+        }
+      })
     })
   }
 }
