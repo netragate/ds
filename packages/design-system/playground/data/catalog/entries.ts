@@ -654,6 +654,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('loading', 'boolean', 'false', 'Loading overlay state'),
       p('total', 'number', undefined, 'Total records (server-side mode)'),
       p('serverSide', 'boolean', 'false', 'Emit request events instead of client filtering/sorting'),
+      p('columnFilterApply', 'boolean | null', 'null (follows serverSide)', 'Require Apply before column filters trigger requests'),
       p('striped', 'boolean', 'true', 'Striped table rows'),
       p('emptyTitle', 'string', 'No results', 'Empty state title'),
       p('emptyDescription', 'string', 'Try adjusting your search or filters.', 'Empty state description'),
@@ -685,14 +686,18 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('labels', 'Required<DataTableLabels>', undefined, 'Localized filter labels (required)'),
       p('locale', 'string', 'en', 'Locale for date inputs'),
       p('layout', "'inline' | 'popover'", 'inline', 'Filter control layout'),
+      p('inlineActions', 'boolean', 'false', 'Show icon-only apply action beside the filter control'),
+      p('canApply', 'boolean', 'false', 'Enables the apply action button'),
     ],
     models: [m('modelValue', 'DataTableColumnFilters', undefined, 'All column filters (v-model, required)')],
+    events: [e('apply', undefined, 'Emitted when the apply action is triggered')],
   },
 
   DataTableColumnFilterMenu: {
     usage: usageSnippets.DataTableColumnFilterMenu!,
     props: [
       p('column', 'DataTableColumn', undefined, 'Column to filter (required)'),
+      p('applyMode', 'boolean', 'false', 'Edit filter draft locally; commit on Apply instead of every keystroke'),
       p('disabled', 'boolean', undefined, 'Disables the filter trigger'),
       p('labels', 'Required<DataTableLabels>', undefined, 'Localized filter labels (required)'),
       p('locale', 'string', undefined, 'Locale for date inputs'),

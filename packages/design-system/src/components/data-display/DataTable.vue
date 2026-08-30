@@ -44,6 +44,8 @@ export interface DataTableProps {
   loading?: boolean
   total?: number
   serverSide?: boolean
+  /** When null (default), follows `serverSide`. Set false for instant column filters in API mode. */
+  columnFilterApply?: boolean | null
   striped?: boolean
   emptyTitle?: string
   emptyDescription?: string
@@ -65,6 +67,7 @@ const defaultLabels: Required<DataTableLabels> = {
   filterPlaceholder: 'Filter {column}…',
   filterAriaLabel: 'Filter {column}',
   filterClear: 'Clear',
+  filterApply: 'Apply',
   filterDateFrom: 'From',
   filterDateTo: 'To',
   filterDateFromAriaLabel: 'Filter from date',
@@ -80,6 +83,7 @@ const props = withDefaults(defineProps<DataTableProps>(), {
   searchPlaceholder: 'Search…',
   loading: false,
   serverSide: false,
+  columnFilterApply: null,
   striped: true,
   emptyTitle: 'No results',
   emptyDescription: 'Try adjusting your search or filters.',
@@ -90,6 +94,10 @@ const resolvedLabels = computed(() => ({
   ...defaultLabels,
   ...props.labels,
 }))
+
+const resolvedColumnFilterApply = computed(
+  () => props.columnFilterApply ?? props.serverSide,
+)
 
 const search = defineModel<string>('search', { default: '' })
 const currentPage = defineModel<number>('currentPage', { default: 1 })
@@ -345,7 +353,8 @@ watch(
                   v-if="column.filter"
                   v-model="columnFilters"
                   :column="column"
-                  :disabled="loading"
+                  :apply-mode="resolvedColumnFilterApply"
+                  :disabled="loading && openFilterColumnKey !== column.key"
                   :labels="resolvedLabels"
                   :locale="locale"
                   :open="openFilterColumnKey === column.key"

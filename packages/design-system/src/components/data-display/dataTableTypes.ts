@@ -65,6 +65,7 @@ export interface DataTableLabels {
   filterPlaceholder?: string
   filterAriaLabel?: string
   filterClear?: string
+  filterApply?: string
   filterDateFrom?: string
   filterDateTo?: string
   filterDateFromAriaLabel?: string

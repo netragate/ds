@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { DOMWrapper, flushPromises, mount } from '@vue/test-utils'
 import Card from '@/components/data-display/Card.vue'
 import ProgressTracker from '@/components/data-display/ProgressTracker.vue'
 import Divider from '@/components/data-display/Divider.vue'
@@ -11,12 +11,15 @@ import TableRow from '@/components/data-display/TableRow.vue'
 import TableCell from '@/components/data-display/TableCell.vue'
 import EmptyState from '@/components/data-display/EmptyState.vue'
 import DataTable from '@/components/data-display/DataTable.vue'
+import DataTableColumnFilterMenu from '@/components/data-display/DataTableColumnFilterMenu.vue'
+import Input from '@/components/form/Input.vue'
 import type { DataTableColumn } from '@/components/data-display/dataTableTypes'
 import {
   applyColumnFilters,
   filterDataTableRows,
   formatCellValue,
   paginateDataTableRows,
+  patchColumnFilter,
   sortDataTableRows,
   sortDataTableRowsMulti,
 } from '@/components/data-display/dataTableUtils'
@@ -284,6 +287,12 @@ describe('dataTableUtils', () => {
     expect(formatCellValue('2026-06-15', { locale: 'en', column })).toBe('06/15/2026')
     expect(formatCellValue('2026-06-15', { locale: 'pt-BR', column })).toBe('15/06/2026')
   })
+
+  it('patches and clears column filter values', () => {
+    expect(patchColumnFilter({}, 'name', 'Ana')).toEqual({ name: 'Ana' })
+    expect(patchColumnFilter({ name: 'Ana' }, 'name', '')).toEqual({})
+    expect(patchColumnFilter({ name: 'Ana' }, 'name', undefined)).toEqual({})
+  })
 })
 
 describe('DataTable', () => {
@@ -400,6 +409,151 @@ describe('DataTable', () => {
 
     await filterButtons[0]!.trigger('click')
     expect(document.body.textContent).toContain('Filter Name')
+  })
+
+  it('does not show Apply button for client-side column filters', async () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows,
+        searchable: false,
+      },
+    })
+
+    const nameFilterButton = wrapper.find('button[aria-label="Filter Name"]')
+    await nameFilterButton.trigger('click')
+    await flushPromises()
+
+    const applyButtons = document.body.querySelectorAll('button[aria-label="Apply"]')
+    expect(applyButtons).toHaveLength(0)
+  })
+
+  it('requires Apply before emitting request for server-side column filters', async () => {
+    const wrapper = mount(DataTable, {
+      attachTo: document.body,
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        serverSide: true,
+        total: 6,
+        pageSize: 10,
+        searchable: false,
+      },
+    })
+
+    try {
+      const requestCountBeforeFilter = wrapper.emitted('request')!.length
+
+      const nameFilterButton = wrapper.find('button[aria-label="Filter Name"]')
+      await nameFilterButton.trigger('click')
+      await flushPromises()
+
+      const filterMenu = wrapper.findComponent(DataTableColumnFilterMenu)
+      expect(wrapper.props('serverSide')).toBe(true)
+      expect(wrapper.props('columnFilterApply')).toBeNull()
+      expect(filterMenu.props('applyMode')).toBe(true)
+
+      expect(document.body.querySelector('button[aria-label="Apply"]')).toBeTruthy()
+
+      const filterInput = wrapper
+        .findAllComponents(Input)
+        .find((input) => input.props('placeholder') === 'Filter name…')
+      expect(filterInput).toBeTruthy()
+
+      const applyButton = document.body.querySelector(
+        'button[aria-label="Apply"]',
+      ) as HTMLButtonElement
+      expect(applyButton.disabled).toBe(true)
+
+      await filterInput!.setValue('Ana')
+      await flushPromises()
+      expect(wrapper.emitted('request')!.length).toBe(requestCountBeforeFilter)
+      expect(applyButton.disabled).toBe(false)
+
+      await new DOMWrapper(applyButton).trigger('click')
+      await flushPromises()
+
+      expect(wrapper.emitted('request')!.length).toBeGreaterThan(requestCountBeforeFilter)
+
+      const lastRequest = wrapper.emitted('request')!.at(-1)![0] as {
+        columnFilters: Record<string, string>
+      }
+      expect(lastRequest.columnFilters.name).toBe('Ana')
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('clears the draft, commits empty filter, and closes on clear in apply mode', async () => {
+    const wrapper = mount(DataTable, {
+      attachTo: document.body,
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        serverSide: true,
+        total: 6,
+        pageSize: 10,
+        searchable: false,
+        columnFilters: { name: 'Ana' },
+      },
+    })
+
+    try {
+      const nameFilterButton = wrapper.find('button[aria-label="Filter Name"]')
+      await nameFilterButton.trigger('click')
+      await flushPromises()
+
+      const clearButton = Array.from(document.body.querySelectorAll('button')).find(
+        (button) => button.textContent?.trim() === 'Clear',
+      )
+      expect(clearButton).toBeTruthy()
+
+      await new DOMWrapper(clearButton!).trigger('click')
+      await flushPromises()
+
+      expect(document.body.querySelector('button[aria-label="Apply"]')).toBeNull()
+      expect(wrapper.emitted('update:columnFilters')?.at(-1)?.[0]).toEqual({})
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('emits request immediately when columnFilterApply is false', async () => {
+    const wrapper = mount(DataTable, {
+      attachTo: document.body,
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        serverSide: true,
+        columnFilterApply: false,
+        total: 6,
+        pageSize: 10,
+        searchable: false,
+      },
+    })
+
+    try {
+      const requestCountBeforeFilter = wrapper.emitted('request')!.length
+
+      const nameFilterButton = wrapper.find('button[aria-label="Filter Name"]')
+      await nameFilterButton.trigger('click')
+      await flushPromises()
+
+      const filterMenu = wrapper.findComponent(DataTableColumnFilterMenu)
+      expect(filterMenu.props('applyMode')).toBe(false)
+
+      const filterInput = wrapper
+        .findAllComponents(Input)
+        .find((input) => input.props('placeholder') === 'Filter name…')
+      expect(filterInput).toBeTruthy()
+
+      await filterInput!.setValue('Ana')
+      await flushPromises()
+
+      expect(wrapper.emitted('request')!.length).toBeGreaterThan(requestCountBeforeFilter)
+    } finally {
+      wrapper.unmount()
+    }
   })
 })
 

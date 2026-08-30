@@ -3,11 +3,17 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { ListFilter } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import DataTableColumnFilter from './DataTableColumnFilter.vue'
-import type { DataTableColumn, DataTableColumnFilters, DataTableLabels } from './dataTableTypes'
-import { formatDataTableLabel, isColumnFilterActive } from './dataTableUtils'
+import type {
+  DataTableColumn,
+  DataTableColumnFilterValue,
+  DataTableColumnFilters,
+  DataTableLabels,
+} from './dataTableTypes'
+import { formatDataTableLabel, isColumnFilterActive, patchColumnFilter } from './dataTableUtils'
 
 const props = defineProps<{
   column: DataTableColumn
+  applyMode?: boolean
   disabled?: boolean
   labels: Required<DataTableLabels>
   locale?: string
@@ -23,10 +29,19 @@ const filters = defineModel<DataTableColumnFilters>({ required: true })
 const triggerRef = ref<HTMLButtonElement | null>(null)
 const panelRef = ref<HTMLElement | null>(null)
 const panelStyle = ref({ top: '0px', left: '0px', minWidth: '12rem' })
+const draftFilters = ref<DataTableColumnFilters>({})
 
 const VIEWPORT_PADDING = 8
 
 const isActive = computed(() => isColumnFilterActive(props.column, filters.value[props.column.key]))
+
+const draftHasValue = computed(() =>
+  isColumnFilterActive(props.column, draftFilters.value[props.column.key]),
+)
+
+const canApply = computed(() => draftHasValue.value)
+
+const canClear = computed(() => draftHasValue.value || isActive.value)
 
 const filterTitle = computed(() =>
   formatDataTableLabel(props.labels.filterTitle, props.column.label),
@@ -35,6 +50,28 @@ const filterTitle = computed(() =>
 const filterAriaLabel = computed(() =>
   formatDataTableLabel(props.labels.filterAriaLabel, props.column.label),
 )
+
+function cloneColumnFilterValue(
+  value: DataTableColumnFilterValue | undefined,
+): DataTableColumnFilterValue | undefined {
+  if (value == null) return undefined
+  if (Array.isArray(value)) return [...value]
+  if (typeof value === 'object') return { ...value }
+  return value
+}
+
+function syncDraftFromApplied(): void {
+  const applied = filters.value[props.column.key]
+  const next = { ...draftFilters.value }
+
+  if (applied == null) {
+    delete next[props.column.key]
+  } else {
+    next[props.column.key] = cloneColumnFilterValue(applied)!
+  }
+
+  draftFilters.value = next
+}
 
 async function updatePanelPosition(): Promise<void> {
   if (!triggerRef.value) return
@@ -87,9 +124,24 @@ function close(): void {
 }
 
 function clearFilter(): void {
-  const next = { ...filters.value }
-  delete next[props.column.key]
-  filters.value = next
+  filters.value = patchColumnFilter(filters.value, props.column.key, undefined)
+
+  if (props.applyMode) {
+    draftFilters.value = patchColumnFilter(draftFilters.value, props.column.key, undefined)
+  }
+
+  close()
+}
+
+function applyFilter(): void {
+  if (!canApply.value) return
+
+  filters.value = patchColumnFilter(
+    filters.value,
+    props.column.key,
+    draftFilters.value[props.column.key],
+  )
+  close()
 }
 
 function onDocumentClick(event: MouseEvent): void {
@@ -106,7 +158,10 @@ function onKeydown(event: KeyboardEvent): void {
 watch(
   () => props.open,
   async (isOpen) => {
-    if (isOpen) await updatePanelPosition()
+    if (isOpen) {
+      if (props.applyMode) syncDraftFromApplied()
+      await updatePanelPosition()
+    }
   },
 )
 
@@ -160,9 +215,10 @@ onUnmounted(() => {
           {{ filterTitle }}
         </p>
         <button
-          v-if="isActive"
+          v-if="canClear"
           type="button"
-          class="text-xs font-medium text-primary transition-opacity hover:opacity-80"
+          class="text-xs font-medium text-primary transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="disabled"
           @click="clearFilter"
         >
           {{ labels.filterClear }}
@@ -170,6 +226,19 @@ onUnmounted(() => {
       </div>
 
       <DataTableColumnFilter
+        v-if="applyMode"
+        v-model="draftFilters"
+        :column="column"
+        :can-apply="canApply"
+        :disabled="disabled"
+        inline-actions
+        :labels="labels"
+        :locale="locale"
+        layout="popover"
+        @apply="applyFilter"
+      />
+      <DataTableColumnFilter
+        v-else
         v-model="filters"
         :column="column"
         :disabled="disabled"

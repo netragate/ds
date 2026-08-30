@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.5] - 2026-08-29
+
+### Added
+
+- **`DataTable` column filter Apply** — when `serverSide` is true (default), column filters use a draft + **Apply** button instead of reloading on every keystroke. Override with `columnFilterApply`.
+- **`DataTableLabels.filterApply`** — localized Apply button label (`Apply` / `Aplicar`).
+
+### Changed
+
+- **`DataTableColumnFilterMenu`** — `applyMode` prop with local draft state; Clear still removes applied filters immediately.
+
 ## [0.9.1] - 2026-08-23
 
 ### Added

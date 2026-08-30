@@ -1,6 +1,6 @@
 {
   "name": "@netragate/design-system",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Vue 3 design system with tokens, Tailwind CSS 4, light/dark mode, and 60+ components.",
   "type": "module",
   "main": "./dist/design-system.js",

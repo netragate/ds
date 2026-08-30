@@ -1,5 +1,6 @@
 import type {
   DataTableColumn,
+  DataTableColumnFilterValue,
   DataTableColumnFilters,
   DataTableDateRangeFilter,
   DataTableSortEntry,
@@ -48,6 +49,30 @@ export function formatCellValue(value: unknown, options?: FormatCellValueOptions
 
 function isDateRangeFilter(value: unknown): value is DataTableDateRangeFilter {
   return typeof value === 'object' && value != null && ('from' in value || 'to' in value)
+}
+
+export function patchColumnFilter(
+  filters: DataTableColumnFilters,
+  columnKey: string,
+  value: DataTableColumnFilterValue | undefined,
+): DataTableColumnFilters {
+  const next = { ...filters }
+
+  if (
+    value == null ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0) ||
+    (typeof value === 'object' &&
+      !Array.isArray(value) &&
+      !(value as DataTableDateRangeFilter).from &&
+      !(value as DataTableDateRangeFilter).to)
+  ) {
+    delete next[columnKey]
+  } else {
+    next[columnKey] = value
+  }
+
+  return next
 }
 
 export function isColumnFilterActive(

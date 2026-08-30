@@ -239,6 +239,8 @@ const columnFilters = ref<DataTableColumnFilters>({})
 
 O evento `@request` envia `DataTableRequestParams` (`page`, `pageSize`, `search`, `sortStack`, `columnFilters`).
 
+Com `server-side` ativo, filtros de coluna usam botão **Apply** por padrão (`columnFilterApply` segue o valor de `serverSide`). Digite o valor no popover e clique Apply para disparar o `@request` — evita recarregar a cada tecla e perder o foco do campo. Para filtro instantâneo na API, passe `:column-filter-apply="false"`.
+
 ## Toasts
 
 Monte o `ToastHost` uma vez no layout raiz e dispare toasts pelo composable:
