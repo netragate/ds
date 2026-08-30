@@ -4,7 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import type { type DateInputModelValue, type DateRangeValue, type DateTimeRangeValue, type DateTimeValue } from '@/lib/dateTimeTypes'
+import type { DateInputModelValue, DateRangeValue, DateTimeRangeValue, DateTimeValue } from '@/lib/dateTimeTypes'
 import DateInput from '@/components/form/DateInput.vue'
 import Switch from '@/components/form/Switch.vue'
 const { locale: appLocale, t } = usePlaygroundLocale()

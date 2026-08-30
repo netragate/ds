@@ -6,7 +6,7 @@ import { playgroundSnippetAttr, propTemplateBinding } from '../utils/propTemplat
 import { playgroundOptionStyle } from './playgroundOptionStyle'
 import Button from '@/components/button/Button.vue'
 import Tooltip from '@/components/overlay/Tooltip.vue'
-import type { type TooltipAppearance } from '@/components/overlay/overlayAppearance'
+import type { TooltipAppearance } from '@/components/overlay/overlayAppearance'
 const { t, messages } = usePlaygroundLocale()
 
 const placement = ref<'top' | 'bottom' | 'left' | 'right'>('top')
