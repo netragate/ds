@@ -488,8 +488,10 @@ import { Button } from '@netragate/design-system'
 
 ~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from the **`lucide-vue-next` peer** and load on demand:
 
-1. **`Button` / `Badge` `:icon` prop** — lazy load by catalog name (e.g. `:icon="'settings'"`).
+1. **`Button` / `Badge` `:icon` prop** — lazy load by catalog name (e.g. `:icon="'settings'"`). Only icons rendered on screen are fetched.
 2. **`resolveIcon(name)` / `loadIcon(name)`** — async Vue component or Promise for custom usage.
+
+Avoid importing `iconographyComponents` / `buttonIcons` unless you render icons by name — that API pulls the loader registry on first use. Prefer `:icon="'name'"` on `Button`/`Badge`, or import icons directly from `lucide-vue-next` in slots.
 3. **Direct Lucide import** — `import { Settings } from 'lucide-vue-next'` (recommended when you already use Lucide).
 
 ```vue
@@ -508,7 +510,7 @@ const SettingsIcon = resolveIcon('settings')
 
 Legacy exports `iconographyComponents` / `buttonIcons` still work — they return async components compatible with `<component :is="..." />`.
 
-Regenerate loader map after editing `iconography.meta.ts`: `npm run generate:icons`.
+Regenerate per-icon loaders after editing `iconography.meta.ts`: `npm run generate:icons`.
 
 ## Exported components
 

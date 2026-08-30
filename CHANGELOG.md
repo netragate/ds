@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.10.1] - 2026-08-29
+
+### Fixed
+
+- **Icon lazy loading** — per-icon loader files plus a deferred `iconLoaderRegistry` chunk. Importing `Button`/`Badge` no longer pulls ~780 Lucide chunks on page load; only icons actually rendered are fetched.
+- **`iconographySelectOptions`** — metadata-only export (`iconography.catalog`) does not load the icon registry.
+
+### Changed
+
+- **`npm run generate:icons`** — generates `src/icons/loaders/*.ts` (replaces monolithic `iconography.loaders.ts`).
+
 ## [0.10.0] - 2026-08-29
 
 ### Changed

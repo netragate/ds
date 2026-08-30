@@ -9,15 +9,13 @@ export { buttonVariants, type ButtonVariants } from './components/button/buttonV
 export {
   iconography,
   iconographyNames,
-  iconographyComponents,
   iconographySelectOptions,
   buttonIconNames,
-  buttonIcons,
-  resolveIcon,
-  loadIcon,
   type IconographyName,
   type ButtonIconName,
-} from './icons/iconography'
+} from './icons/iconography.catalog'
+export { iconographyComponents, buttonIcons } from './icons/iconography.icons'
+export { resolveIcon, loadIcon } from './icons/resolveIcon'
 
 export { default as Link } from './components/link/Link.vue'
 

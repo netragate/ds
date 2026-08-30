@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import { resolveIcon, type IconographyName } from '@/icons/iconography'
+import { resolveIcon, type IconographyName } from '@/icons/resolveIcon'
 import {
   badgeAppearanceStyles,
   badgeVariantToAppearance,

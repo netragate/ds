@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants, type ButtonVariants } from './buttonVariants'
-import { resolveIcon, type ButtonIconName } from '@/icons/iconography'
+import { resolveIcon, type ButtonIconName } from '@/icons/resolveIcon'
 import Tooltip from '@/components/overlay/Tooltip.vue'
 
 export interface ButtonProps extends /* @vue-ignore */ ButtonVariants {
