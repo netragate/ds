@@ -15,6 +15,21 @@ Monorepo for the Vue 3 design system [`@netragate/design-system`](https://www.np
 
 Usage, API, and examples: [`packages/design-system/README.md`](./packages/design-system/README.md).
 
+## Using the package
+
+Peer dependencies (install with the library):
+
+- `vue` ^3.5.0
+- `lucide-vue-next` ^1.0.0
+- `tailwind-merge` ^3.2.0
+- `clsx` ^2.1.1
+
+```bash
+npm install @netragate/design-system vue lucide-vue-next tailwind-merge clsx
+```
+
+Import styles in your app: `@netragate/design-system/styles.css`. See the [package README](./packages/design-system/README.md) for setup, icons (`resolveIcon`), and API.
+
 ## Structure
 
 ```
@@ -35,8 +50,10 @@ npm run test     # Vitest
 ```bash
 cd packages/design-system
 npm run dev              # playground
-npm run build:lib        # library only (dist/)
+npm run build:lib        # modular library (dist/)
 npm run build:playground # playground only (GitHub Pages)
+npm run analyze          # bundle stats → dist/bundle-stats.json
+npm run generate:icons   # regenerate icon loaders from iconography.meta.ts
 ```
 
 ## License

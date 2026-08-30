@@ -6,6 +6,7 @@ import ColorPalettePicker from '../components/ColorPalettePicker.vue'
 import { useCopy } from '../composables/useCopy'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { iconography } from '@/icons/iconography'
+import LazyIcon from '../components/LazyIcon.vue'
 
 const { t } = usePlaygroundLocale()
 
@@ -29,7 +30,7 @@ const PACKAGE = '@netragate/design-system'
 
 async function copyIcon(name: string, label: string): Promise<void> {
   await copy.copy(
-    `import { iconographyComponents } from '${PACKAGE}'\n\nconst ${label}Icon = iconographyComponents['${name}']`,
+    `import { resolveIcon } from '${PACKAGE}'\n\nconst ${label}Icon = resolveIcon('${name}')`,
   )
 }
 </script>
@@ -70,7 +71,7 @@ async function copyIcon(name: string, label: string): Promise<void> {
           class="flex flex-col items-center gap-1 rounded-lg p-1.5 transition-colors hover:bg-primary/10"
           @click="copyIcon(item.name, item.label.replace(/\s+/g, ''))"
         >
-          <component :is="item.component" :size="iconSize" :style="{ color: iconColor }" />
+          <LazyIcon :name="item.name" :size="iconSize" :color="iconColor" />
           <span class="max-w-full truncate text-[7px] text-[#4D6A87]">{{ item.label }}</span>
         </button>
       </div>

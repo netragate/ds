@@ -13,6 +13,8 @@ export {
   iconographySelectOptions,
   buttonIconNames,
   buttonIcons,
+  resolveIcon,
+  loadIcon,
   type IconographyName,
   type ButtonIconName,
 } from './icons/iconography'

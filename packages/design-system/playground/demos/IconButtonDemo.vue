@@ -26,9 +26,9 @@ const PACKAGE = '@netragate/design-system'
 const code = computed(() => {
   const lines = [
     `<script setup lang="ts">`,
-    `import { IconButton, iconographyComponents } from '${PACKAGE}'`,
+    `import { IconButton, resolveIcon } from '${PACKAGE}'`,
     ``,
-    `const SettingsIcon = iconographyComponents.settings`,
+    `const SettingsIcon = resolveIcon('settings')`,
     `<\/script>`,
     ``,
     `<template>`,

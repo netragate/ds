@@ -52,6 +52,18 @@ function mountWithLocale(component: Parameters<typeof mount>[0], props?: Record<
   })
 }
 
+async function openIconographyTab(wrapper: ReturnType<typeof mountWithLocale>) {
+  localStorage.setItem('ds-playground-locale', 'en')
+  const tabButtons = wrapper.findAll('button[role="tab"]')
+  const iconographyTab = tabButtons.find((btn) => {
+    const text = btn.text().toLowerCase()
+    return text.includes('iconography') || text.includes('iconografia')
+  })
+  expect(iconographyTab, 'Iconography tab button should exist').toBeDefined()
+  await iconographyTab!.trigger('click')
+  await nextTick()
+}
+
 // ─── Cleanup ──────────────────────────────────────────────────────────────────
 
 afterEach(() => {
@@ -146,16 +158,7 @@ describe('Property 2 — All icons rendered in Iconography tab', () => {
    */
   it('renders a button for every icon item in the iconography list', async () => {
     const wrapper = mountWithLocale(FoundationsPage)
-    await nextTick()
-
-    // Navigate to the Iconography tab
-    const tabButtons = wrapper.findAll('button[role="tab"]')
-    const iconographyTab = tabButtons.find((btn) =>
-      btn.text().toLowerCase().includes('iconography'),
-    )
-    expect(iconographyTab, 'Iconography tab button should exist').toBeDefined()
-    await iconographyTab!.trigger('click')
-    await nextTick()
+    await openIconographyTab(wrapper)
 
     // Find all icon buttons in the grid
     const allButtons = wrapper.findAll('button[type="button"]')
@@ -177,15 +180,7 @@ describe('Property 2 — All icons rendered in Iconography tab', () => {
 
   it('fc.constantFrom(iconography) — each icon item has a button in iconography tab', async () => {
     const wrapper = mountWithLocale(FoundationsPage)
-    await nextTick()
-
-    // Navigate to Iconography tab
-    const tabButtons = wrapper.findAll('button[role="tab"]')
-    const iconographyTab = tabButtons.find((btn) =>
-      btn.text().toLowerCase().includes('iconography'),
-    )
-    await iconographyTab!.trigger('click')
-    await nextTick()
+    await openIconographyTab(wrapper)
 
     const iconButtons = wrapper.findAll('button[type="button"]').filter((btn) =>
       btn.find('span.truncate').exists(),
@@ -229,15 +224,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
 
   it('clicking any icon button copies the correct JSX snippet to clipboard', async () => {
     const wrapper = mountWithLocale(FoundationsPage)
-    await nextTick()
-
-    // Navigate to Iconography tab
-    const tabButtons = wrapper.findAll('button[role="tab"]')
-    const iconographyTab = tabButtons.find((btn) =>
-      btn.text().toLowerCase().includes('iconography'),
-    )
-    await iconographyTab!.trigger('click')
-    await nextTick()
+    await openIconographyTab(wrapper)
 
     await fc.assert(
       fc.asyncProperty(
@@ -264,7 +251,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
             await nextTick()
 
             const componentName = iconItem.label.replace(/\s+/g, '')
-            const expected = `import { iconographyComponents } from '@netragate/design-system'\n\nconst ${componentName}Icon = iconographyComponents['${iconItem.name}']`
+            const expected = `import { resolveIcon } from '@netragate/design-system'\n\nconst ${componentName}Icon = resolveIcon('${iconItem.name}')`
             expect(writeText).toHaveBeenCalledWith(expected)
           }
         },
@@ -284,15 +271,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     })
 
     const wrapper = mountWithLocale(FoundationsPage)
-    await nextTick()
-
-    // Navigate to Iconography tab
-    const tabButtons = wrapper.findAll('button[role="tab"]')
-    const iconographyTab = tabButtons.find((btn) =>
-      btn.text().toLowerCase().includes('iconography'),
-    )
-    await iconographyTab!.trigger('click')
-    await nextTick()
+    await openIconographyTab(wrapper)
 
     const iconButtons = wrapper.findAll('button[type="button"]').filter((btn) =>
       btn.find('span.truncate').exists(),
@@ -307,7 +286,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     await nextTick()
 
     expect(writeText).toHaveBeenCalledWith(
-      `import { iconographyComponents } from '@netragate/design-system'\n\nconst AccessibilityIcon = iconographyComponents['accessibility']`,
+      `import { resolveIcon } from '@netragate/design-system'\n\nconst AccessibilityIcon = resolveIcon('accessibility')`,
     )
     wrapper.unmount()
   })
@@ -321,14 +300,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     })
 
     const wrapper = mountWithLocale(FoundationsPage)
-    await nextTick()
-
-    const tabButtons = wrapper.findAll('button[role="tab"]')
-    const iconographyTab = tabButtons.find((btn) =>
-      btn.text().toLowerCase().includes('iconography'),
-    )
-    await iconographyTab!.trigger('click')
-    await nextTick()
+    await openIconographyTab(wrapper)
 
     const iconButtons = wrapper.findAll('button[type="button"]').filter((btn) =>
       btn.find('span.truncate').exists(),
@@ -343,7 +315,7 @@ describe('Property 3 — Clicking icon copies correct snippet', () => {
     await nextTick()
 
     expect(writeText).toHaveBeenCalledWith(
-      `import { iconographyComponents } from '@netragate/design-system'\n\nconst AirVentIcon = iconographyComponents['air-vent']`,
+      `import { resolveIcon } from '@netragate/design-system'\n\nconst AirVentIcon = resolveIcon('air-vent')`,
     )
     wrapper.unmount()
   })

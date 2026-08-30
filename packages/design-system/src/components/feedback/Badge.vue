@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import {
-  iconographyComponents,
-  type IconographyName,
-} from '@/icons/iconography'
+import { resolveIcon, type IconographyName } from '@/icons/iconography'
 import {
   badgeAppearanceStyles,
   badgeVariantToAppearance,
@@ -51,7 +48,7 @@ const displayText = computed(() => {
 
 const IconComponent = computed(() => {
   if (!props.icon) return null
-  return iconographyComponents[props.icon] ?? null
+  return resolveIcon(props.icon)
 })
 
 const hasIcon = computed(() => IconComponent.value != null)

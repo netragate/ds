@@ -9,12 +9,15 @@
 ## Requirements
 
 - **Vue** `^3.5.0` (peer dependency)
+- **lucide-vue-next** `^1.0.0` (peer — icons load on demand)
+- **tailwind-merge** `^3.2.0` (peer — used by `cn()`)
+- **clsx** `^2.1.1` (peer — used by `cn()`)
 - **Node.js** 18+
 
 ## Installation
 
 ```bash
-npm install @netragate/design-system vue
+npm install @netragate/design-system vue lucide-vue-next tailwind-merge clsx
 ```
 
 ## Quick setup
@@ -481,7 +484,31 @@ import { Button } from '@netragate/design-system'
 </template>
 ```
 
-300+ icons available via `iconography`, `buttonIcons`, and `iconographySelectOptions`.
+## Icons
+
+~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from the **`lucide-vue-next` peer** and load on demand:
+
+1. **`Button` / `Badge` `:icon` prop** — lazy load by catalog name (e.g. `:icon="'settings'"`).
+2. **`resolveIcon(name)` / `loadIcon(name)`** — async Vue component or Promise for custom usage.
+3. **Direct Lucide import** — `import { Settings } from 'lucide-vue-next'` (recommended when you already use Lucide).
+
+```vue
+<script setup lang="ts">
+import { IconButton, resolveIcon } from '@netragate/design-system'
+
+const SettingsIcon = resolveIcon('settings')
+</script>
+
+<template>
+  <IconButton :aria-label="'Settings'" :variant="'outline'" :size="'icon'">
+    <SettingsIcon :size="16" />
+  </IconButton>
+</template>
+```
+
+Legacy exports `iconographyComponents` / `buttonIcons` still work — they return async components compatible with `<component :is="..." />`.
+
+Regenerate loader map after editing `iconography.meta.ts`: `npm run generate:icons`.
 
 ## Exported components
 
@@ -494,7 +521,7 @@ import { Button } from '@netragate/design-system'
 | **Data display** | `Card`, `Divider`, `Avatar`, `AvatarGroup`, `Lozenge`, `Table*`, `DataTable`, `DataTableColumnFilter*`, `PageSizeSelect`, `List`, `ListItem`, `EmptyState` |
 | **Overlay** | `Modal`, `Dialog`, `Tooltip`, `Popover`, `Drawer` |
 | **Layout** | `Container`, `Stack`, `Grid`, `AppLayout` |
-| **Utils** | `cn`, `useToast`, `buttonVariants`, `iconography` |
+| **Utils** | `cn`, `useToast`, `buttonVariants`, `iconography`, `resolveIcon`, `loadIcon` |
 
 `Pagination` includes first/last page buttons (`«` `»`).
 

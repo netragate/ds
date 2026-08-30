@@ -1,6 +1,19 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, Suspense } from 'vue'
 import { mount } from '@vue/test-utils'
 import Button from '@/components/button/Button.vue'
+
+const ButtonWithSuspense = defineComponent({
+  components: { Button },
+  props: {
+    icon: { type: String, default: undefined },
+  },
+  template: `
+    <Suspense>
+      <Button :icon="icon"><slot /></Button>
+    </Suspense>
+  `,
+})
 
 describe('Button', () => {
   it('renders label', () => {
@@ -39,12 +52,17 @@ describe('Button', () => {
     expect(lg.classes().join(' ')).toMatch(/h-10/)
   })
 
-  it('renders icon from icon prop', () => {
-    const wrapper = mount(Button, {
+  it('renders icon from icon prop', async () => {
+    const wrapper = mount(ButtonWithSuspense, {
       props: { icon: 'zap' },
       slots: { default: 'Action' },
     })
-    expect(wrapper.find('svg').exists()).toBe(true)
+    await vi.waitFor(
+      () => {
+        expect(wrapper.find('svg').exists()).toBe(true)
+      },
+      { timeout: 3000 },
+    )
     expect(wrapper.text()).toBe('Action')
   })
 

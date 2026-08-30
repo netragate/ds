@@ -260,6 +260,7 @@ export interface PlaygroundMessages {
   }
   iconsPlayground: {
     searchPlaceholder: string
+    loading: string
     footerHint: string
   }
   colorPlayground: {

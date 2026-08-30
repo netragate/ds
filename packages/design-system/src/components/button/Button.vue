@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants, type ButtonVariants } from './buttonVariants'
-import { buttonIcons, type ButtonIconName } from '@/icons/iconography'
+import { resolveIcon, type ButtonIconName } from '@/icons/iconography'
 import Tooltip from '@/components/overlay/Tooltip.vue'
 
 export interface ButtonProps extends /* @vue-ignore */ ButtonVariants {
@@ -52,7 +52,7 @@ const iconSize = computed(() => {
   return 12
 })
 
-const iconComponent = computed(() => (props.icon ? buttonIcons[props.icon] : undefined))
+const iconComponent = computed(() => (props.icon ? resolveIcon(props.icon) : undefined))
 
 const classes = computed(() =>
   cn(

@@ -298,6 +298,7 @@ export const en: PlaygroundMessages = {
   },
   iconsPlayground: {
     searchPlaceholder: 'Search icons...',
+    loading: 'Loading icons…',
     footerHint: 'Click any icon to copy import · sourced from Lucide',
   },
   colorPlayground: {

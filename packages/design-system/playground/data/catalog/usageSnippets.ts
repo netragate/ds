@@ -34,9 +34,9 @@ export const usageSnippets: Record<string, string> = {
   </Button>`,
   ),
   IconButton: `<script setup lang="ts">
-import { IconButton, iconographyComponents } from '${PACKAGE}'
+import { IconButton, resolveIcon } from '${PACKAGE}'
 
-const SettingsIcon = iconographyComponents.settings
+const SettingsIcon = resolveIcon('settings')
 <\/script>
 
 <template>

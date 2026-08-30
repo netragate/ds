@@ -8,6 +8,7 @@ import RadiusPreview from '../../src/stories/foundations/RadiusPreview.vue'
 import MotionDemo from '../../src/stories/foundations/MotionDemo.vue'
 import { iconography } from '@/icons/iconography'
 import ColorPalettePicker from '../components/ColorPalettePicker.vue'
+import LazyIcon from '../components/LazyIcon.vue'
 import { useCopy } from '../composables/useCopy'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
@@ -58,7 +59,7 @@ const filteredIcons = computed(() =>
 
 async function copyIcon(label: string, name: string): Promise<void> {
   await copy.copy(
-    `import { iconographyComponents } from '${PACKAGE}'\n\nconst ${label.replace(/\s+/g, '')}Icon = iconographyComponents['${name}']`,
+    `import { resolveIcon } from '${PACKAGE}'\n\nconst ${label.replace(/\s+/g, '')}Icon = resolveIcon('${name}')`,
   )
 }
 
@@ -566,7 +567,7 @@ const borderWidthTokens: { token: string; px: string }[] = [
             class="flex flex-col items-center gap-1 rounded-lg p-1.5 transition-colors hover:bg-primary/10"
             @click="copyIcon(item.label, item.name)"
           >
-            <component :is="item.component" :size="iconSize" :style="{ color: iconColor }" />
+            <LazyIcon :name="item.name" :size="iconSize" :color="iconColor" />
             <span class="max-w-full truncate text-[7px] text-[#4D6A87]">{{ item.label }}</span>
           </button>
         </div>

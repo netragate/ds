@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.10.0] - 2026-08-29
+
+### Changed
+
+- **Bundle size** — library JS reduced from ~734 KB to ~342 KB raw (~113 KB gzip) by externalizing Lucide, `tailwind-merge`, and `clsx` as peers, lazy icon loading, and modular ESM build (`preserveModules`).
+- **Build output** — `dist/index.js` + per-module files (replaces single `design-system.js`); CSS remains `@netragate/design-system/styles.css`.
+- **`iconographyComponents` / `buttonIcons`** — now lazy async components (still work with `<component :is="..." />`).
+
+### Added
+
+- **`resolveIcon(name)`** and **`loadIcon(name)`** — on-demand Lucide icons from the catalog.
+- **`npm run generate:icons`** — regenerate `iconography.loaders.ts` from `iconography.meta.ts`.
+- **`npm run analyze`** — bundle stats via `rollup-plugin-visualizer`.
+
+### Breaking
+
+- **Peer dependencies:** `lucide-vue-next`, `tailwind-merge`, `clsx` (install alongside the package).
+- **Entry file:** `"module"` / `"import"` now `./dist/index.js` (was `./dist/design-system.js`).
+
 ## [0.9.5] - 2026-08-29
 
 ### Added

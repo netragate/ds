@@ -298,6 +298,7 @@ export const ptBR: PlaygroundMessages = {
   },
   iconsPlayground: {
     searchPlaceholder: 'Buscar ícones...',
+    loading: 'Carregando ícones…',
     footerHint: 'Clique em um ícone para copiar o import · fonte: Lucide',
   },
   colorPlayground: {
