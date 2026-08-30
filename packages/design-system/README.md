@@ -1,27 +1,27 @@
 # @netragate/design-system
 
-Biblioteca de componentes **Vue 3** com design tokens, Tailwind CSS 4 e suporte a **light/dark mode**.
+**Vue 3** component library with design tokens, Tailwind CSS 4, and **light/dark mode** support.
 
 - **npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system)
-- **Repositório:** [github.com/netragate/ds](https://github.com/netragate/ds)
+- **Repository:** [github.com/netragate/ds](https://github.com/netragate/ds)
 - **Playground:** [netragate.github.io/ds](https://netragate.github.io/ds/)
 
-## Requisitos
+## Requirements
 
 - **Vue** `^3.5.0` (peer dependency)
 - **Node.js** 18+
 
-## Instalação
+## Installation
 
 ```bash
 npm install @netragate/design-system vue
 ```
 
-## Configuração rápida
+## Quick setup
 
-### 1. Importe os estilos
+### 1. Import styles
 
-No entry point da aplicação (ex.: `main.ts`):
+In your app entry point (e.g. `main.ts`):
 
 ```ts
 import { createApp } from 'vue'
@@ -31,7 +31,7 @@ import '@netragate/design-system/styles.css'
 createApp(App).mount('#app')
 ```
 
-### 2. Use os componentes
+### 2. Use components
 
 ```vue
 <script setup lang="ts">
@@ -43,19 +43,19 @@ import { Button, Input, FormField } from '@netragate/design-system'
     <Input v-model="email" :placeholder="'you@company.com'" />
   </FormField>
 
-  <Button :variant="'primary'">Salvar</Button>
+  <Button :variant="'primary'">Save</Button>
 </template>
 ```
 
-### 3. Dark mode (opcional)
+### 3. Dark mode (optional)
 
-Adicione a classe `dark` no `<html>` para usar os tokens escuros:
+Add the `dark` class on `<html>` to use dark tokens:
 
 ```html
-<html lang="pt-BR" class="dark">
+<html lang="en" class="dark">
 ```
 
-Ou alterne em runtime:
+Or toggle at runtime:
 
 ```ts
 document.documentElement.classList.toggle('dark', isDark)
@@ -63,22 +63,22 @@ document.documentElement.classList.toggle('dark', isDark)
 
 ## Playground
 
-O playground local (`npm run dev`) inclui:
+The local playground (`npm run dev`) includes:
 
-- **Home** — cards interativos por categoria (forms, layout, feedback, foundations)
-- **Library** — catálogo dos **63 componentes** com descrição, snippet de uso e botão *Abrir playground* quando houver demo
-- **Docs** — instalação, toasts, DataTable, dark mode
-- **38 demos no drawer** — Button, IconButton, Link, Input, Textarea, Label, DateInput, TimeInput, FormField, DataTable, Layout, Dialog, etc.; controles atualizam o snippet **Usage** em tempo real
-- **Showcase** — demos compostos (ex.: AI Chat), não exportados como componente da lib
-- **i18n** — inglês e português (pt-BR)
+- **Home** — interactive cards by category (forms, layout, feedback, foundations)
+- **Library** — catalog of **63 components** with description, usage snippet, and *Open playground* when a demo exists
+- **Docs** — installation, toasts, DataTable, dark mode
+- **38 drawer demos** — Button, IconButton, Link, Input, Textarea, Label, DateInput, TimeInput, FormField, DataTable, Layout, Dialog, etc.; controls update the **Usage** snippet in real time
+- **Showcase** — composed demos (e.g. AI Chat), not exported as library components
+- **i18n** — English and Portuguese (pt-BR)
 
-Subcomponentes da Library (ex.: `TabPanel`, `AppLayout`, `PageSizeSelect`) abrem o demo do componente pai via mapeamento interno.
+Library subcomponents (e.g. `TabPanel`, `AppLayout`, `PageSizeSelect`) open the parent component demo via an internal alias map.
 
-## Formulários
+## Forms
 
-### Input com ícone (composição)
+### Input with icon (composition)
 
-`Input` e `FormField` **não** têm prop `icon`. Ícones entram no slot do `FormField` com um wrapper `relative`:
+`Input` and `FormField` do **not** have an `icon` prop. Add icons via the `FormField` slot with a `relative` wrapper:
 
 ```vue
 <script setup lang="ts">
@@ -103,31 +103,31 @@ import { FormField, Input } from '@netragate/design-system'
 
 ### Switch vs Toggle
 
-| Componente | Uso |
-|------------|-----|
-| **`Switch`** | Controle pill on/off (`role="switch"`), tamanho `sm` / `md` |
-| **`Toggle`** | Linha de preferência: label + `Switch` (setting row com borda) |
+| Component | Use |
+|-----------|-----|
+| **`Switch`** | Pill on/off control (`role="switch"`), sizes `sm` / `md` |
+| **`Toggle`** | Preference row: label + `Switch` (bordered setting row) |
 
-`Input`, `Textarea`, `DateInput` e `Badge` aceitam `:size` (`sm` / `md` / `lg` em inputs; `Badge` só `sm` | `md`).
+`Input`, `Textarea`, `DateInput`, and `Badge` accept `:size` (`sm` / `md` / `lg` on inputs; `Badge` only `sm` | `md`).
 
 ### DateInput
 
-Campo de data com calendário. O **display** segue `locale` (`en` → `mm/dd/yyyy`, `pt-BR` → `dd/mm/yyyy`); o valor persistido é ISO `YYYY-MM-DD`.
+Date field with calendar. **Display** follows `locale` (`en` → `mm/dd/yyyy`, `pt-BR` → `dd/mm/yyyy`); persisted value is ISO `YYYY-MM-DD`.
 
-- `:range="true"` — seleção início→fim no calendário (`{ from, to }`); abre **dois meses** lado a lado
-- `:show-time="true"` — embute `TimeInput` (`HH:mm:ss`); com `range`, o time também é range
-- `:max-range-days="7"` — limite **inclusivo** de dias no range (omitido / `≤0` = sem limite); dias fora do limite ficam desabilitados após o 1º clique
-- Em `range`, o rodapé usa **Confirm** / **Confirmar** (prop `confirmLabel`); o calendário só fecha ao confirmar e o `v-model` só é atualizado nesse momento (seleção e horário ficam pendentes até Confirm)
+- `:range="true"` — start→end selection in the calendar (`{ from, to }`); opens **two months** side by side
+- `:show-time="true"` — embeds `TimeInput` (`HH:mm:ss`); with `range`, time is also a range
+- `:max-range-days="7"` — **inclusive** max day span for range (omit / `≤0` = no limit); out-of-range days are disabled after the first click
+- In `range` mode, the footer uses **Confirm** (prop `confirmLabel`); the calendar closes only on confirm and `v-model` updates at that moment (selection and time stay pending until Confirm)
 
 ```vue
-<DateInput v-model="date" :locale="'pt-BR'" />
+<DateInput v-model="date" :locale="'en'" />
 <DateInput v-model="range" :range="true" :max-range-days="7" :locale="'en'" />
 <DateInput v-model="dateTime" :show-time="true" :locale="'pt-BR'" />
 ```
 
 ### TimeInput
 
-Campo de hora **`HH:mm:ss`** (24h), com `:range` para `{ from, to }`. Labels seguem `locale`; o formato da hora não muda com o idioma.
+**`HH:mm:ss`** (24h) time field, with optional `:range` for `{ from, to }`. Labels follow `locale`; time format does not change by language.
 
 ```vue
 <TimeInput v-model="time" />
@@ -136,52 +136,52 @@ Campo de hora **`HH:mm:ss`** (24h), com `:range` para `{ from, to }`. Labels seg
 
 ## Card
 
-Um único componente `Card` com slots — não há `CardHeader` / `CardContent` / `CardFooter` separados:
+Single `Card` component with slots — there are no separate `CardHeader` / `CardContent` / `CardFooter` components:
 
 ```vue
 <Card :variant="'outlined'">
   <template #header>
-    <h3 class="font-semibold">Título</h3>
+    <h3 class="font-semibold">Title</h3>
   </template>
 
-  Conteúdo principal.
+  Main content.
 
   <template #footer>
-    <Button :variant="'primary'">Salvar</Button>
+    <Button :variant="'primary'">Save</Button>
   </template>
 </Card>
 ```
 
-Variantes: `elevated` | `outlined` | `flat`.
+Variants: `elevated` | `outlined` | `flat`.
 
 ## DataTable
 
-Tabela completa com busca global, **multi-sort** (Ctrl+click / ⌘+click), filtros por coluna, paginação e seletor de linhas por página.
+Full table with global search, **multi-sort** (Ctrl+click / ⌘+click), column filters, pagination, and rows-per-page selector.
 
-### Colunas
+### Columns
 
 ```ts
 import type { DataTableColumn } from '@netragate/design-system'
 
 const columns: DataTableColumn[] = [
-  { key: 'name', label: 'Nome', sortable: true, filter: 'text' },
+  { key: 'name', label: 'Name', sortable: true, filter: 'text' },
   {
     key: 'status',
     label: 'Status',
     sortable: true,
     filter: 'enum',
     filterOptions: [
-      { label: 'Ativo', value: 'active' },
-      { label: 'Inativo', value: 'inactive' },
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' },
     ],
   },
-  { key: 'createdAt', label: 'Criado em', sortable: true, filter: 'date' },
+  { key: 'createdAt', label: 'Created', sortable: true, filter: 'date' },
 ]
 ```
 
-Tipos de filtro: `'text'` | `'date'` (de/até) | `'enum'` (multi-select). O ícone de filtro no header abre um popover por coluna.
+Filter types: `'text'` | `'date'` (from/to) | `'enum'` (multi-select). The filter icon in the header opens a popover per column.
 
-### Uso client-side
+### Client-side usage
 
 ```vue
 <script setup lang="ts">
@@ -214,11 +214,11 @@ const columnFilters = ref<DataTableColumnFilters>({})
 </template>
 ```
 
-- **Clique** no header: ordena uma coluna (`asc` → `desc` → limpa)
-- **Ctrl+click** (⌘+click no Mac): adiciona coluna ao multi-sort (sem limite)
-- **Filtro:** botão ao lado do sort em colunas com `filter` definido
+- **Click** header: sort one column (`asc` → `desc` → clear)
+- **Ctrl+click** (⌘+click on Mac): add column to multi-sort (no limit)
+- **Filter:** button beside sort on columns with `filter` defined
 
-### Uso server-side
+### Server-side usage
 
 ```vue
 <DataTable
@@ -237,13 +237,13 @@ const columnFilters = ref<DataTableColumnFilters>({})
 />
 ```
 
-O evento `@request` envia `DataTableRequestParams` (`page`, `pageSize`, `search`, `sortStack`, `columnFilters`).
+The `@request` event sends `DataTableRequestParams` (`page`, `pageSize`, `search`, `sortStack`, `columnFilters`).
 
-Com `server-side` ativo, filtros de coluna usam botão **Apply** por padrão (`columnFilterApply` segue o valor de `serverSide`). Digite o valor no popover e clique Apply para disparar o `@request` — evita recarregar a cada tecla e perder o foco do campo. Para filtro instantâneo na API, passe `:column-filter-apply="false"`.
+With `server-side` enabled, column filters use an **Apply** button by default (`columnFilterApply` follows `serverSide`). Type in the popover and click Apply to fire `@request` — avoids reloading on every keystroke and losing input focus. For instant API filtering, pass `:column-filter-apply="false"`.
 
 ## Toasts
 
-Monte o `ToastHost` uma vez no layout raiz e dispare toasts pelo composable:
+Mount `ToastHost` once in the root layout and trigger toasts via the composable:
 
 ```vue
 <script setup lang="ts">
@@ -252,39 +252,39 @@ import { ToastHost, useToast } from '@netragate/design-system'
 const toast = useToast()
 
 function onSave() {
-  toast.success('Alterações salvas.')
+  toast.success('Changes saved.')
 }
 </script>
 
 <template>
   <ToastHost />
-  <Button :variant="'primary'" @click="onSave">Salvar</Button>
+  <Button :variant="'primary'" @click="onSave">Save</Button>
 </template>
 ```
 
-Posições disponíveis: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`.
+Available positions: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`.
 
 ```ts
-toast.error('Falha ao salvar.', {
+toast.error('Failed to save.', {
   position: 'bottom-center',
   dismissible: true,
 })
 ```
 
-Variantes: `success` | `error` | `info` | `warning` — fundo semântico opaco com borda na mesma cor.
+Variants: `success` | `error` | `info` | `warning` — opaque semantic background with matching border.
 
 ## Overlay
 
-### Popover e Tooltip
+### Popover and Tooltip
 
-Ambos usam `:variant` (não `appearance`):
+Both use `:variant` (not `appearance`):
 
-| Variant | Visual |
-|---------|--------|
-| `outline` | Fundo sólido (`bg-popover`) com borda neutra — **padrão** |
-| `primary` | Fundo sólido neutro, sem borda |
-| `ghost` | Fundo translúcido com `backdrop-blur` |
-| `danger` | Tinta destructive translúcida, texto claro |
+| Variant | Look |
+|---------|------|
+| `outline` | Solid background (`bg-popover`) with neutral border — **default** |
+| `primary` | Solid neutral background, no border |
+| `ghost` | Translucent background with `backdrop-blur` |
+| `danger` | Translucent destructive tint, light text |
 
 ```vue
 <script setup lang="ts">
@@ -294,15 +294,15 @@ import { Button, Popover, Tooltip } from '@netragate/design-system'
 <template>
   <Popover :variant="'outline'">
     <template #trigger>
-      <Button :variant="'outline'">Abrir</Button>
+      <Button :variant="'outline'">Open</Button>
     </template>
     <template #content>
-      <p class="mb-2 text-sm font-medium">Ações rápidas</p>
-      <p class="text-xs opacity-80">Conteúdo ancorado ao trigger.</p>
+      <p class="mb-2 text-sm font-medium">Quick actions</p>
+      <p class="text-xs opacity-80">Content anchored to the trigger.</p>
     </template>
   </Popover>
 
-  <Tooltip :content="'Dica útil'" :variant="'ghost'" :placement="'top'">
+  <Tooltip :content="'Helpful tip'" :variant="'ghost'" :placement="'top'">
     <Button :variant="'outline'">Hover</Button>
   </Tooltip>
 </template>
@@ -310,11 +310,11 @@ import { Button, Popover, Tooltip } from '@netragate/design-system'
 
 ### Drawer
 
-Painel deslizante com `:placement="'left' | 'right' | 'top' | 'bottom'"` e `:close-on-overlay="false"` opcional.
+Sliding panel with `:placement="'left' | 'right' | 'top' | 'bottom'"` and optional `:close-on-overlay="false"`.
 
-## Exemplos por categoria
+## Examples by category
 
-### Formulários
+### Forms
 
 ```vue
 <script setup lang="ts">
@@ -337,18 +337,18 @@ const notifications = ref(true)
 </script>
 
 <template>
-  <FormField :label="'Nome'" :required="true">
+  <FormField :label="'Name'" :required="true">
     <Input v-model="name" />
   </FormField>
 
-  <FormField :label="'Data'">
-    <DateInput v-model="date" :locale="'pt-BR'" />
+  <FormField :label="'Date'">
+    <DateInput v-model="date" :locale="'en'" />
   </FormField>
 
-  <FormField :label="'Função'">
+  <FormField :label="'Role'">
     <Select
       v-model="role"
-      :placeholder="'Selecione...'"
+      :placeholder="'Select...'"
       :options="[
         { label: 'Designer', value: 'design' },
         { label: 'Engineer', value: 'eng' },
@@ -356,8 +356,8 @@ const notifications = ref(true)
     />
   </FormField>
 
-  <Checkbox v-model="terms">Aceito os termos</Checkbox>
-  <Toggle v-model="notifications">Notificações</Toggle>
+  <Checkbox v-model="terms">I accept the terms</Checkbox>
+  <Toggle v-model="notifications">Notifications</Toggle>
   <Switch v-model="notifications" :size="'sm'" />
 </template>
 ```
@@ -370,20 +370,20 @@ import { Alert, Badge, Progress, Skeleton, Spinner } from '@netragate/design-sys
 </script>
 
 <template>
-  <Alert :variant="'success'">Deploy concluído.</Alert>
-  <Alert :variant="'error'" :dismissible="true">Falha na build.</Alert>
+  <Alert :variant="'success'">Deploy complete.</Alert>
+  <Alert :variant="'error'" :dismissible="true">Build failed.</Alert>
   <Badge :value="12" :variant="'primary'" :size="'md'" />
-  <Lozenge :variant="'success'">Ativo</Lozenge>
+  <Lozenge :variant="'success'">Active</Lozenge>
   <Progress :value="72" />
   <Skeleton class="h-8 w-full" />
-  <Spinner :aria-label="'Carregando'" />
-  <!-- Sem glow: <Spinner :glow="false" :aria-label="'Carregando'" /> -->
+  <Spinner :aria-label="'Loading'" />
+  <!-- No glow: <Spinner :glow="false" :aria-label="'Loading'" /> -->
 </template>
 ```
 
 ### Layout
 
-`AppLayout` organiza as regiões da página (grid + painel lateral), mas **não estiliza** header, menu, conteúdo, panel ou footer. Use o slot `#menu` com `SidebarMenuItem` / `SidebarMenuGroup` — o shell e **toggle com chevron** já vêm montados. Com `:settings-menu="true"`, fixe no rodapé do menu o nó cujo `id` corresponde a `:settings-menu-id` (padrão `settings`) — pode ser um `SidebarMenuGroup` (flyout) ou um `SidebarMenuItem` isolado (link). Use `:submenu-mode` para escolher flyout vs expand inline nos grupos do menu. Veja o demo **Layout** no playground.
+`AppLayout` organizes page regions (grid + side panel) but does **not** style header, menu, content, panel, or footer. Use the `#menu` slot with `SidebarMenuItem` / `SidebarMenuGroup` — the shell and **chevron toggle** are built in. With `:settings-menu="true"`, pin the node whose `id` matches `:settings-menu-id` (default `settings`) at the menu footer — either a `SidebarMenuGroup` (flyout) or a standalone `SidebarMenuItem` (link). Use `:submenu-mode` to choose flyout vs inline expand for menu groups. See the **Layout** demo in the playground.
 
 ```vue
 <script setup lang="ts">
@@ -452,24 +452,24 @@ const pageTitle = ref('Dashboard')
 </template>
 ```
 
-**Submenu:** `:submenu-mode="'flyout'"` (padrão) abre filhos no hover em painel flutuante; `:submenu-mode="'inline'"` expande/colapsa os filhos **abaixo** do grupo **só no clique**. Com menu collapsed (rail) ou grupo de settings pinado no rodapé, o comportamento continua flyout. `active-menu-id` marca a página atual (ids com `.` ou `/`); **não** abre grupos sozinho — use `v-model:open-menu-keys` se quiser pré-abrir o caminho da rota. Abrir um grupo fecha irmãos no mesmo nível (accordion). A lista do menu rola dentro do viewport (classe `ds-scrollbar`); settings permanece fixo no rodapé visível do aside.
+**Submenu:** `:submenu-mode="'flyout'"` (default) opens children on hover in a floating panel; `:submenu-mode="'inline'"` expands/collapses children **below** the group **on click only**. With a collapsed menu (rail) or settings group pinned at the footer, behavior stays flyout. `active-menu-id` marks the current page (ids with `.` or `/`); it does **not** open groups by itself — use `v-model:open-menu-keys` to pre-open the route path. Opening a group closes siblings at the same level (accordion). The menu list scrolls inside the viewport (`ds-scrollbar` class); settings stays fixed at the visible footer of the aside.
 
-**Settings no rodapé:** com `:settings-menu="true"`, declare no `#menu` um `SidebarMenuGroup` **ou** um `SidebarMenuItem` isolado cujo `id` seja **igual** a `settings-menu-id` (padrão `settings`). O id pode ser qualquer string (ex.: `admin.settings`) — o pin compara igualdade exata. Grupo → flyout no hover; item único → link no rodapé. Não declare os dois com o mesmo id ao mesmo tempo.
+**Settings footer:** with `:settings-menu="true"`, declare in `#menu` a `SidebarMenuGroup` **or** a standalone `SidebarMenuItem` whose `id` **equals** `settings-menu-id` (default `settings`). The id can be any string (e.g. `admin.settings`) — pin matches exact equality. Group → flyout on hover; single item → link in the footer. Do not declare both with the same id at once.
 
-**IDs do menu lateral**
+**Sidebar menu IDs**
 
-- Itens de topo **fora** de um grupo não devem compartilhar o prefixo do grupo (evite `todos.all` ao lado do grupo `todos` — prefira `all` ou ids dentro do grupo, ex. `todos.active`).
-- Ligue `v-model:active-menu-id` à rota (ou ao id da página atual) **no setup** para marcar o item ativo no reload. Grupos inline começam **fechados**; abrem só no clique (ou se você popular `v-model:open-menu-keys`, ex. com os ancestrais do id ativo).
-- Com `active-menu-id` vazio, o primeiro `SidebarMenuItem` é selecionado após um tick (dá tempo de a rota preencher o model).
-- Flyouts perto do rodapé abrem para cima — use `:flyout-placement="'up'"` no `SidebarMenuGroup` de settings (`'auto' | 'down' | 'up'`; padrão `'auto'`).
+- Top-level items **outside** a group should not share the group's prefix (avoid `todos.all` next to group `todos` — prefer `all` or ids inside the group, e.g. `todos.active`).
+- Bind `v-model:active-menu-id` to the route (or current page id) **on setup** so the active item is marked on reload. Inline groups start **closed**; they open only on click (or if you populate `v-model:open-menu-keys`, e.g. with the active id's ancestors).
+- With an empty `active-menu-id`, the first `SidebarMenuItem` is selected after one tick (gives the route time to fill the model).
+- Flyouts near the footer open upward — use `:flyout-placement="'up'"` on the settings `SidebarMenuGroup` (`'auto' | 'down' | 'up'`; default `'auto'`).
 
-O slot **default** (conteúdo) ocupa 100% da altura disponível — use `class="min-h-svh"` no `AppLayout` (ou `height: 100%` em `html`, `body` e `#app`). Header, panel e footer continuam compostos por você com classes Tailwind.
+The default slot (content) fills 100% of available height — use `class="min-h-svh"` on `AppLayout` (or `height: 100%` on `html`, `body`, and `#app`). Header, panel, and footer are still composed by you with Tailwind classes.
 
-### Ícones no Button
+### Button icons
 
-Variantes: `default` | `primary` | `secondary` | `outline` | `ghost` | `destructive` | `clean` | `link` · tamanhos: `default` | `sm` | `md` | `lg` | `icon`.
+Variants: `default` | `primary` | `secondary` | `outline` | `ghost` | `destructive` | `clean` | `link` · sizes: `default` | `sm` | `md` | `lg` | `icon`.
 
-`appearance` ainda funciona em runtime como alias legado (`danger` → `destructive`, `primary` → `primary`, etc.), mas prefira `:variant`.
+`appearance` still works at runtime as a legacy alias (`danger` → `destructive`, `primary` → `primary`, etc.), but prefer `:variant`.
 
 ```vue
 <script setup lang="ts">
@@ -481,12 +481,12 @@ import { Button } from '@netragate/design-system'
 </template>
 ```
 
-Mais de 300 ícones disponíveis via `iconography`, `buttonIcons` e `iconographySelectOptions`.
+300+ icons available via `iconography`, `buttonIcons`, and `iconographySelectOptions`.
 
-## Componentes exportados
+## Exported components
 
-| Categoria | Componentes |
-|-----------|-------------|
+| Category | Components |
+|----------|-------------|
 | **Actions** | `Button`, `IconButton`, `Link` |
 | **Forms** | `Input`, `DateInput`, `TimeInput`, `Textarea`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Toggle`, `Select`, `Label`, `FormField` |
 | **Feedback** | `Alert`, `Badge`, `Spinner`, `Progress`, `Skeleton`, `Toast`, `ToastHost` |
@@ -496,11 +496,11 @@ Mais de 300 ícones disponíveis via `iconography`, `buttonIcons` e `iconography
 | **Layout** | `Container`, `Stack`, `Grid`, `AppLayout` |
 | **Utils** | `cn`, `useToast`, `buttonVariants`, `iconography` |
 
-`Pagination` inclui botões de primeira/última página (`«` `»`).
+`Pagination` includes first/last page buttons (`«` `»`).
 
 ## TypeScript
 
-Tipos incluídos no pacote — não é necessário `@types` separado.
+Types are included in the package — no separate `@types` needed.
 
 ```ts
 import type {
@@ -515,21 +515,21 @@ import type {
 } from '@netragate/design-system'
 ```
 
-## Desenvolvimento local
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Playground em [http://localhost:5173](http://localhost:5173).
+Playground at [http://localhost:5173](http://localhost:5173).
 
 ```bash
-npm run build:lib        # biblioteca → dist/
-npm run build:playground # playground estático (GitHub Pages)
+npm run build:lib        # library → dist/
+npm run build:playground # static playground (GitHub Pages)
 npm run test             # Vitest
 ```
 
-## Licença
+## License
 
 MIT
