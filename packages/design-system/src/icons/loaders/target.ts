@@ -4,4 +4,4 @@ import type { Component } from 'vue'
 type LucideIconModule = { default: Component }
 
 export default (): Promise<LucideIconModule> =>
-  import('lucide-vue-next/dist/esm/icons/target.js')
+  import('@lucide/vue/dist/esm/icons/target.mjs')

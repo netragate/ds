@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Copy } from 'lucide-vue-next'
+import { Copy } from '@lucide/vue'
 import { useCopy } from '../composables/useCopy'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { highlightUsage } from '../utils/highlightUsage'

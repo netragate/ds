@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { ListFilter } from 'lucide-vue-next'
+import { ListFilter } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 import DataTableColumnFilter from './DataTableColumnFilter.vue'
 import type {

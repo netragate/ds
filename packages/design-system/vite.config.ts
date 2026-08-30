@@ -10,10 +10,10 @@ const analyze = process.env.ANALYZE === 'true'
 const libExternal = [
   'vue',
   '@vueuse/core',
-  'lucide-vue-next',
+  '@lucide/vue',
   'tailwind-merge',
   'clsx',
-  /^lucide-vue-next\//,
+  /^@lucide\/vue\//,
 ]
 
 export default defineConfig({

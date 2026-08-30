@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Zap } from 'lucide-vue-next'
+import { Zap } from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { propTemplateBinding } from '../utils/propTemplateName'

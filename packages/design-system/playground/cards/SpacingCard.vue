@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Layers } from 'lucide-vue-next'
+import { Layers } from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 

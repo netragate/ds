@@ -1,4 +1,4 @@
-/** Icon set curated from lucide-vue-next (https://lucide.dev). */
+/** Icon set curated from @lucide/vue (https://lucide.dev). */
 export type { IconographyName, ButtonIconName } from './iconography.catalog'
 export {
   iconography,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Github, Moon, Sun } from 'lucide-vue-next'
+import { Moon, Sun } from '@lucide/vue'
+import GithubIcon from './components/GithubIcon.vue'
 import GlowDot from './components/GlowDot.vue'
 import ComponentDrawer from './components/ComponentDrawer.vue'
 import PlaygroundLocaleSelect from './components/PlaygroundLocaleSelect.vue'
@@ -68,7 +69,7 @@ provide('openDrawer', openDrawer)
             rel="noopener noreferrer"
             class="pg-github-link pg-text-muted shrink-0 transition-colors"
           >
-            <Github :size="16" />
+            <GithubIcon :size="16" />
           </a>
         </div>
       </div>

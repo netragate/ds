@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Tag } from 'lucide-vue-next'
+import { Tag } from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { Badge, Lozenge } from '@/index'

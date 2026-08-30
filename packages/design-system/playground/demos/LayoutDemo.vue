@@ -12,7 +12,7 @@ import {
   Target,
   Type,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { PACKAGE } from '../data/componentCatalogConstants'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'

@@ -6,7 +6,7 @@ import {
   Gem,
   Target,
   Zap,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import UsageBlock from './UsageBlock.vue'
 import {
   Alert,

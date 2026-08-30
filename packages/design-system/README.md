@@ -9,7 +9,7 @@
 ## Requirements
 
 - **Vue** `^3.5.0` (peer dependency)
-- **lucide-vue-next** `^1.0.0` (peer — icons load on demand)
+- **@lucide/vue** `^1.0.0` (peer — icons load on demand)
 - **tailwind-merge** `^3.2.0` (peer — used by `cn()`)
 - **clsx** `^2.1.1` (peer — used by `cn()`)
 - **Node.js** 18+
@@ -17,7 +17,7 @@
 ## Installation
 
 ```bash
-npm install @netragate/design-system vue lucide-vue-next tailwind-merge clsx
+npm install @netragate/design-system vue @lucide/vue tailwind-merge clsx
 ```
 
 ## Quick setup
@@ -85,7 +85,7 @@ Library subcomponents (e.g. `TabPanel`, `AppLayout`, `PageSizeSelect`) open the 
 
 ```vue
 <script setup lang="ts">
-import { Mail } from 'lucide-vue-next'
+import { Mail } from '@lucide/vue'
 import { FormField, Input } from '@netragate/design-system'
 </script>
 
@@ -486,13 +486,13 @@ import { Button } from '@netragate/design-system'
 
 ## Icons
 
-~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from the **`lucide-vue-next` peer** and load on demand:
+~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from the **`@lucide/vue` peer** and load on demand:
 
 1. **`Button` / `Badge` `:icon` prop** — lazy load by catalog name (e.g. `:icon="'settings'"`). Only icons rendered on screen are fetched.
 2. **`resolveIcon(name)` / `loadIcon(name)`** — async Vue component or Promise for custom usage.
 
-Avoid importing `iconographyComponents` / `buttonIcons` unless you render icons by name — that API pulls the loader registry on first use. Prefer `:icon="'name'"` on `Button`/`Badge`, or import icons directly from `lucide-vue-next` in slots.
-3. **Direct Lucide import** — `import { Settings } from 'lucide-vue-next'` (recommended when you already use Lucide).
+Avoid importing `iconographyComponents` / `buttonIcons` unless you render icons by name — that API pulls the loader registry on first use. Prefer `:icon="'name'"` on `Button`/`Badge`, or import icons directly from `@lucide/vue` in slots.
+3. **Direct Lucide import** — `import { Settings } from '@lucide/vue'` (recommended when you already use Lucide).
 
 ```vue
 <script setup lang="ts">

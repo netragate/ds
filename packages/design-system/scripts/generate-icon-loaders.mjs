@@ -12,13 +12,13 @@ const legacyLoadersPath = path.join(pkgRoot, 'src/icons/iconography.loaders.ts')
 
 function resolveLucideMain() {
   const candidates = [
-    path.join(pkgRoot, 'node_modules/lucide-vue-next/dist/esm/lucide-vue-next.js'),
-    path.resolve(pkgRoot, '../../node_modules/lucide-vue-next/dist/esm/lucide-vue-next.js'),
+    path.join(pkgRoot, 'node_modules/@lucide/vue/dist/esm/lucide-vue.mjs'),
+    path.resolve(pkgRoot, '../../node_modules/@lucide/vue/dist/esm/lucide-vue.mjs'),
   ]
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return candidate
   }
-  throw new Error('lucide-vue-next not found. Run npm install first.')
+  throw new Error('@lucide/vue not found. Run npm install first.')
 }
 
 function parseMeta(source) {
@@ -43,7 +43,7 @@ function parseLegacyWithComponents(source) {
 }
 
 function parseLucideExportMap(lucideMainSource) {
-  const lineRe = /export\s*\{([^}]+)\}\s*from\s*'\.\/icons\/([^']+)\.js'/g
+  const lineRe = /export\s*\{([^}]+)\}\s*from\s*'\.\/icons\/([^']+)\.(?:js|mjs)'/g
   const nameToFile = new Map()
   const fileToNames = new Map()
   let match
@@ -136,7 +136,7 @@ import type { Component } from 'vue'
 type LucideIconModule = { default: Component }
 
 export default (): Promise<LucideIconModule> =>
-  import('lucide-vue-next/dist/esm/icons/${item.file}.js')
+  import('@lucide/vue/dist/esm/icons/${item.file}.mjs')
 `,
     )
   }

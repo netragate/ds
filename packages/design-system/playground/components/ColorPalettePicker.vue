@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Pipette } from 'lucide-vue-next'
+import { Pipette } from '@lucide/vue'
 import { colorPresets } from '../data/colorPresets'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 

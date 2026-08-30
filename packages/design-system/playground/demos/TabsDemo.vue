@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { AlertCircle, BarChart2, Info, Settings } from 'lucide-vue-next'
+import { AlertCircle, BarChart2, Info, Settings } from '@lucide/vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateStringAttr } from '../utils/propTemplateName'

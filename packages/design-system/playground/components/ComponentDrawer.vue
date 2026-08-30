@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue'
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import GlowDot from './GlowDot.vue'
 import DrawerPlayground from './DrawerPlayground.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'

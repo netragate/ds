@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { ArrowDown, ArrowUp, ArrowUpDown, Search } from 'lucide-vue-next'
+import { ArrowDown, ArrowUp, ArrowUpDown, Search } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 import Input from '@/components/form/Input.vue'
 import Pagination from '@/components/navigation/Pagination.vue'

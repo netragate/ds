@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Check, ChevronDown, Search, X } from 'lucide-vue-next'
+import { Check, ChevronDown, Search, X } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 
 export interface SelectOption {

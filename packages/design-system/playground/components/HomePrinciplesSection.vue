@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Component } from 'vue'
-import { Eye, AlignCenter, Zap, Layers } from 'lucide-vue-next'
+import { Eye, AlignCenter, Zap, Layers } from '@lucide/vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
 const { t } = usePlaygroundLocale()

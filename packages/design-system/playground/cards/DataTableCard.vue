@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Table2 } from 'lucide-vue-next'
+import { Table2 } from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import DataTablePlaygroundHints from '../components/DataTablePlaygroundHints.vue'
 import { useDataTableLabels, useStatusLabel, useUserTableColumns } from '../composables/useUserTableColumns'

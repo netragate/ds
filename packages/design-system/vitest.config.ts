@@ -10,6 +10,9 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  optimizeDeps: {
+    exclude: ['@lucide/vue'],
+  },
   server: {
     fs: {
       // Allow reading files from the monorepo root (needed for CHANGELOG.md?raw)

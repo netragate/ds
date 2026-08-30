@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BookOpen, ExternalLink, Package } from 'lucide-vue-next'
+import { BookOpen, ExternalLink, Package } from '@lucide/vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import packageJson from '../../package.json'

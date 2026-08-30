@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
-import { Zap, Layers, TrendingUp } from 'lucide-vue-next'
+import { Zap, Layers, TrendingUp } from '@lucide/vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
 const { t } = usePlaygroundLocale()

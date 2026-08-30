@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Terminal, Copy, Check, BookOpen } from 'lucide-vue-next'
+import { Terminal, Copy, Check, BookOpen } from '@lucide/vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
 const emit = defineEmits<{

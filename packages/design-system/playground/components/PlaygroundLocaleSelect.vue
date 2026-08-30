@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Languages } from 'lucide-vue-next'
+import { Languages } from '@lucide/vue'
 import { Select } from '@/index'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import type { PlaygroundLocale } from '../i18n/types'

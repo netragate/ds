@@ -148,7 +148,7 @@ const SettingsIcon = resolveIcon('settings')
   ),
   Label: usage('Label', '  <Label :for="\'email\'">Email</Label>'),
   FormField: `<script setup lang="ts">
-import { Mail } from 'lucide-vue-next'
+import { Mail } from '@lucide/vue'
 import { FormField, Input } from '${PACKAGE}'
 <\/script>
 

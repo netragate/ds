@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Clock } from 'lucide-vue-next'
+import { Clock } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 import type { TimeRangeValue } from '@/lib/dateTimeTypes'
 import {

@@ -20,4 +20,8 @@ export default defineConfig({
       '@design-system/components': resolve(__dirname, 'src/index.ts'),
     },
   },
+  optimizeDeps: {
+    // Lucide icons load lazily via per-icon loaders — skip pre-bundling the full set in dev.
+    exclude: ['@lucide/vue'],
+  },
 })

@@ -10,7 +10,7 @@ import {
   Mail,
   Phone,
   User,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { FormField, Input } from '@/index'

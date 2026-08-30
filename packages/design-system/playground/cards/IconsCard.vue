@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Search } from 'lucide-vue-next'
+import { Search } from '@lucide/vue'
 import PlayCard from '../components/PlayCard.vue'
 import ColorPalettePicker from '../components/ColorPalettePicker.vue'
 import { useCopy } from '../composables/useCopy'

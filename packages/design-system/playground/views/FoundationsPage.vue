@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Layers } from 'lucide-vue-next'
+import { Layers } from '@lucide/vue'
 import ColorSwatch from '../../src/stories/foundations/ColorSwatch.vue'
 import GradientSwatch from '../../src/stories/foundations/GradientSwatch.vue'
 import ShadowCard from '../../src/stories/foundations/ShadowCard.vue'

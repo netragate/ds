@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { useRouter } from 'vue-router'
-import { Layers, LayoutGrid, BookOpen, ArrowRight } from 'lucide-vue-next'
+import { Layers, LayoutGrid, BookOpen, ArrowRight } from '@lucide/vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { catalogComponentCount } from '../data/componentCatalog'
 

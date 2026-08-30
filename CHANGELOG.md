@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.11.0] - 2026-08-29
+
+### Changed
+
+- **Peer dependency:** `lucide-vue-next` replaced by **`@lucide/vue`** (Lucide v1 official Vue package). Install `@lucide/vue` instead of `lucide-vue-next`.
+- Icon loader paths updated to `@lucide/vue/dist/esm/icons/*.mjs`.
+
+### Breaking
+
+- **Peer dependencies:** use `@lucide/vue` ^1.0.0 — remove `lucide-vue-next` from your app.
+- **Brand icons** (e.g. `Github`) were removed from Lucide v1; use custom SVGs or alternatives in your app.
+
 ## [0.10.1] - 2026-08-29
 
 ### Fixed
