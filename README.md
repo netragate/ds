@@ -1,44 +1,44 @@
 # ds
 
-Monorepo do design system Vue 3 [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system).
+Monorepo for the Vue 3 design system [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system).
 
-- **Repositório:** [github.com/netragate/ds](https://github.com/netragate/ds)
+- **Repository:** [github.com/netragate/ds](https://github.com/netragate/ds)
 - **Playground (GitHub Pages):** [netragate.github.io/ds](https://netragate.github.io/ds/)
-- **Pacote npm:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system) 
+- **npm package:** [`@netragate/design-system`](https://www.npmjs.com/package/@netragate/design-system)
 
-## O que tem aqui
+## What's in this repo
 
-- **63 componentes Vue 3** exportados (forms, feedback, layout, overlay, data display, etc.)
-- **Playground** com demos interativos, catálogo **Library**, documentação de instalação, snippets **Usage** ao vivo e i18n **EN / pt-BR**
-- **38 playgrounds** no drawer + seção **Showcase** (ex.: AI Chat — caso de uso composto, fora do catálogo da lib)
+- **63 exported Vue 3 components** (forms, feedback, layout, overlay, data display, etc.)
+- **Playground** with interactive demos, **Library** catalog, installation docs, live **Usage** snippets, and **EN / pt-BR** i18n
+- **38 drawer playgrounds** plus a **Showcase** section (e.g. AI Chat — composed use case, not part of the library catalog)
 - Design tokens, Tailwind CSS 4, light/dark mode, Vitest
 
-Documentação de uso, API e exemplos: [`packages/design-system/README.md`](./packages/design-system/README.md).
+Usage, API, and examples: [`packages/design-system/README.md`](./packages/design-system/README.md).
 
-## Estrutura
+## Structure
 
 ```
-packages/design-system/   Biblioteca + playground + testes
+packages/design-system/   Library + playground + tests
 ```
 
-## Scripts (raiz)
+## Scripts (root)
 
 ```bash
 npm install
-npm run dev      # playground local → http://localhost:5173
+npm run dev      # local playground → http://localhost:5173
 npm run build    # lib + playground
 npm run test     # Vitest
 ```
 
-## Desenvolvimento
+## Development
 
 ```bash
 cd packages/design-system
 npm run dev              # playground
-npm run build:lib        # apenas a biblioteca (dist/)
-npm run build:playground # apenas o playground (GitHub Pages)
+npm run build:lib        # library only (dist/)
+npm run build:playground # playground only (GitHub Pages)
 ```
 
-## Licença
+## License
 
 MIT
