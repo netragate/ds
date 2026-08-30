@@ -130,6 +130,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
     'loading',
     'total',
     'serverSide',
+    'columnFilterApply',
     'striped',
     'emptyTitle',
     'emptyDescription',

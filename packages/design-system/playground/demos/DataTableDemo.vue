@@ -39,6 +39,7 @@ const forceLoading = ref(false)
 const showToolbar = ref(false)
 const forceEmpty = ref(false)
 const pageSizePreset = ref<'default' | 'compact'>('default')
+const columnFilterApplyMode = ref<'auto' | 'apply' | 'instant'>('auto')
 const searchPlaceholder = ref('')
 const emptyTitle = ref('')
 const emptyDescription = ref('')
@@ -58,6 +59,12 @@ const resolvedEmptyTitle = computed(
 const resolvedEmptyDescription = computed(
   () => emptyDescription.value || dataTableLabels.value.emptyDescription,
 )
+
+const resolvedColumnFilterApply = computed<boolean | null>(() => {
+  if (columnFilterApplyMode.value === 'auto') return null
+  if (columnFilterApplyMode.value === 'apply') return true
+  return false
+})
 
 const tableColumns = computed<DataTableColumn[]>(() =>
   userTableColumns.value.map((column) => ({
@@ -119,6 +126,7 @@ function setMode(next: 'client' | 'api'): void {
   page.value = 1
   sortStack.value = []
   columnFilters.value = {}
+  columnFilterApplyMode.value = 'auto'
 }
 
 function columnSnippet(key: string, label: string, extras: string[]): string {
@@ -169,6 +177,11 @@ const code = computed(() => {
       '  :loading="loading"',
       '  @request="fetchRows"',
     )
+    if (columnFilterApplyMode.value === 'apply') {
+      props.push(`  ${templateBooleanAttr('columnFilterApply', true)}`)
+    } else if (columnFilterApplyMode.value === 'instant') {
+      props.push(`  ${templateBooleanAttr('columnFilterApply', false)}`)
+    }
   }
 
   const lines = [
@@ -247,6 +260,7 @@ const code = computed(() => {
         :columns="tableColumns"
         :rows="tableRows"
         :server-side="mode === 'api'"
+        :column-filter-apply="resolvedColumnFilterApply"
         :total="mode === 'api' ? total : undefined"
         :loading="forceLoading || (mode === 'api' && loading)"
         :searchable="showSearch"
@@ -288,6 +302,7 @@ const code = computed(() => {
         v-model:show-toolbar="showToolbar"
         v-model:force-empty="forceEmpty"
         v-model:page-size-preset="pageSizePreset"
+        v-model:column-filter-apply-mode="columnFilterApplyMode"
         v-model:search-placeholder="searchPlaceholder"
         v-model:empty-title="emptyTitle"
         v-model:empty-description="emptyDescription"

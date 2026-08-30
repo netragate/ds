@@ -17,6 +17,7 @@ defineProps<{
   emptyTitle: string
   emptyDescription: string
   pageSizePreset: 'default' | 'compact'
+  columnFilterApplyMode: 'auto' | 'apply' | 'instant'
 }>()
 
 defineEmits<{
@@ -33,6 +34,7 @@ defineEmits<{
   'update:emptyTitle': [value: string]
   'update:emptyDescription': [value: string]
   'update:pageSizePreset': [value: 'default' | 'compact']
+  'update:columnFilterApplyMode': [value: 'auto' | 'apply' | 'instant']
 }>()
 
 const { t } = usePlaygroundLocale()
@@ -118,6 +120,38 @@ function optionStyle(active: boolean) {
           @click="$emit('update:pageSizePreset', 'compact')"
         >
           [3, 5, 10]
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
+        {{ propTemplateBinding('columnFilterApply') }}
+      </p>
+      <div class="flex flex-wrap gap-1">
+        <button
+          type="button"
+          class="rounded px-2 py-1 font-mono text-xs"
+          :style="optionStyle(columnFilterApplyMode === 'auto')"
+          @click="$emit('update:columnFilterApplyMode', 'auto')"
+        >
+          auto
+        </button>
+        <button
+          type="button"
+          class="rounded px-2 py-1 font-mono text-xs"
+          :style="optionStyle(columnFilterApplyMode === 'apply')"
+          @click="$emit('update:columnFilterApplyMode', 'apply')"
+        >
+          apply
+        </button>
+        <button
+          type="button"
+          class="rounded px-2 py-1 font-mono text-xs"
+          :style="optionStyle(columnFilterApplyMode === 'instant')"
+          @click="$emit('update:columnFilterApplyMode', 'instant')"
+        >
+          instant
         </button>
       </div>
     </div>
