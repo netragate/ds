@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Check, Mail } from '@lucide/vue'
+import Check from '@lucide/vue/dist/esm/icons/check.mjs'
+import Mail from '@lucide/vue/dist/esm/icons/mail.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { FormField, Input, Switch } from '@/index'
-
+import FormField from '@/components/form/FormField.vue'
+import Input from '@/components/form/Input.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const stateOptions = ['default', 'helper', 'error', 'success'] as const

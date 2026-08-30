@@ -3,8 +3,9 @@ import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
-import { Radio, RadioGroup, Switch } from '@/index'
-
+import Radio from '@/components/form/Radio.vue'
+import RadioGroup from '@/components/form/RadioGroup.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const plan = ref('pro')

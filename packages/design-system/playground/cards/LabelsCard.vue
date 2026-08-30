@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Tag } from '@lucide/vue'
+import Tag from '@lucide/vue/dist/esm/icons/tag.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Badge, Lozenge } from '@/index'
-
+import Badge from '@/components/feedback/Badge.vue'
+import Lozenge from '@/components/data-display/Lozenge.vue'
 const { t } = usePlaygroundLocale()
 </script>
 

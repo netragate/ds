@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
-import { Zap, Layers, TrendingUp } from '@lucide/vue'
+import Zap from '@lucide/vue/dist/esm/icons/zap.mjs'
+import Layers from '@lucide/vue/dist/esm/icons/layers.mjs'
+import TrendingUp from '@lucide/vue/dist/esm/icons/trending-up.mjs'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
 const { t } = usePlaygroundLocale()

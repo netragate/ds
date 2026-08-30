@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Bell } from '@lucide/vue'
+import Bell from '@lucide/vue/dist/esm/icons/bell.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Alert } from '@/index'
-
+import Alert from '@/components/feedback/Alert.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const msgs = computed(() => {

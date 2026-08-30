@@ -21,7 +21,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    // Lucide icons load lazily via per-icon loaders — skip pre-bundling the full set in dev.
-    exclude: ['@lucide/vue'],
+    include: [resolve(__dirname, 'src/icons/iconRegistry.bundle.js')],
   },
 })

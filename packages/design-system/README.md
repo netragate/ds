@@ -9,15 +9,14 @@
 ## Requirements
 
 - **Vue** `^3.5.0` (peer dependency)
-- **@lucide/vue** `^1.0.0` (peer — icons load on demand)
-- **tailwind-merge** `^3.2.0` (peer — used by `cn()`)
-- **clsx** `^2.1.1` (peer — used by `cn()`)
 - **Node.js** 18+
+
+`@lucide/vue`, `clsx`, and `tailwind-merge` are bundled as **dependencies** of this package — you do not need to install them separately.
 
 ## Installation
 
 ```bash
-npm install @netragate/design-system vue @lucide/vue tailwind-merge clsx
+npm install @netragate/design-system vue
 ```
 
 ## Quick setup
@@ -85,7 +84,7 @@ Library subcomponents (e.g. `TabPanel`, `AppLayout`, `PageSizeSelect`) open the 
 
 ```vue
 <script setup lang="ts">
-import { Mail } from '@lucide/vue'
+import Mail from '@lucide/vue/dist/esm/icons/mail.mjs'
 import { FormField, Input } from '@netragate/design-system'
 </script>
 
@@ -486,13 +485,13 @@ import { Button } from '@netragate/design-system'
 
 ## Icons
 
-~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from the **`@lucide/vue` peer** and load on demand:
+~780 curated icon names via `iconography` / `iconographyNames` (metadata only). SVG components come from **`@lucide/vue`** (bundled dependency):
 
-1. **`Button` / `Badge` `:icon` prop** — lazy load by catalog name (e.g. `:icon="'settings'"`). Only icons rendered on screen are fetched.
-2. **`resolveIcon(name)` / `loadIcon(name)`** — async Vue component or Promise for custom usage.
+1. **`Button` / `Badge` `:icon` prop** — resolve by catalog name (e.g. `:icon="'settings'"`). Icons render instantly after the icon registry module loads.
+2. **`resolveIcon(name)`** — synchronous Vue component lookup for custom usage. `loadIcon(name)` is deprecated (returns `Promise.resolve(resolveIcon(name))`).
 
-Avoid importing `iconographyComponents` / `buttonIcons` unless you render icons by name — that API pulls the loader registry on first use. Prefer `:icon="'name'"` on `Button`/`Badge`, or import icons directly from `@lucide/vue` in slots.
-3. **Direct Lucide import** — `import { Settings } from '@lucide/vue'` (recommended when you already use Lucide).
+Prefer `:icon="'name'"` on `Button`/`Badge`, or import individual icons from `@lucide/vue/dist/esm/icons/<name>.mjs` when you only need a few icons outside the catalog (never `from '@lucide/vue'` — that barrel loads every icon in dev).
+3. **Direct Lucide import** — `import Settings from '@lucide/vue/dist/esm/icons/settings.mjs'` (or run `npm run fix:lucide-imports` in this repo after adding icons).
 
 ```vue
 <script setup lang="ts">
@@ -508,9 +507,9 @@ const SettingsIcon = resolveIcon('settings')
 </template>
 ```
 
-Legacy exports `iconographyComponents` / `buttonIcons` still work — they return async components compatible with `<component :is="..." />`.
+Legacy exports `iconographyComponents` / `buttonIcons` re-export the same eager registry.
 
-Regenerate per-icon loaders after editing `iconography.meta.ts`: `npm run generate:icons`.
+Regenerate `iconRegistry.bundle.js` and `iconFiles.ts` after editing `iconography.meta.ts`: `npm run generate:icons` (also runs automatically before `dev` / `build`).
 
 ## Exported components
 

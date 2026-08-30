@@ -4,7 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Avatar, AvatarGroup } from '@/index'
+import Avatar from '@/components/data-display/Avatar.vue'
+import AvatarGroup from '@/components/data-display/AvatarGroup.vue'
 import type { AvatarSize } from '@/components/data-display/Avatar.vue'
 
 const { t } = usePlaygroundLocale()

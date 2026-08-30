@@ -11,8 +11,6 @@ const libExternal = [
   'vue',
   '@vueuse/core',
   '@lucide/vue',
-  'tailwind-merge',
-  'clsx',
   /^@lucide\/vue\//,
 ]
 

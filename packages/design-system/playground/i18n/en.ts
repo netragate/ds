@@ -529,6 +529,7 @@ export const en: PlaygroundMessages = {
   drawer: {
     component: 'Component',
     livePlayground: 'Live Playground',
+    loadingDemo: 'Loading demo…',
     previewFallback: '{name} preview',
     playgroundPlaceholders: {
       Chip: 'Type and press Enter...',

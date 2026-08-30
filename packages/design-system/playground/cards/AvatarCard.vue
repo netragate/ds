@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Users } from '@lucide/vue'
+import Users from '@lucide/vue/dist/esm/icons/users.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Avatar } from '@/index'
-
+import Avatar from '@/components/data-display/Avatar.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const people = computed(() => {

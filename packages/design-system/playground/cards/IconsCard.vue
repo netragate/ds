@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Search } from '@lucide/vue'
+import Search from '@lucide/vue/dist/esm/icons/search.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import ColorPalettePicker from '../components/ColorPalettePicker.vue'
 import { useCopy } from '../composables/useCopy'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { iconography } from '@/icons/iconography'
+import { iconography } from '@/icons/iconography.catalog'
 import LazyIcon from '../components/LazyIcon.vue'
 
 const { t } = usePlaygroundLocale()

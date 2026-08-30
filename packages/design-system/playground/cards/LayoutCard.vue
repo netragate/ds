@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { LayoutTemplate } from '@lucide/vue'
+import LayoutTemplate from '@lucide/vue/dist/esm/icons/layout-template.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { AppLayout, Button } from '@/index'
-
+import AppLayout from '@/components/layout/AppLayout.vue'
+import Button from '@/components/button/Button.vue'
 const { messages, t } = usePlaygroundLocale()
 
 const panelOpen = ref(false)

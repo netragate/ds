@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Switch } from '@/index'
+import Switch from '@/components/form/Switch.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { propTemplateBinding } from '../utils/propTemplateName'
 

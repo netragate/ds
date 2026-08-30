@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Check, ChevronDown, Search, X } from '@lucide/vue'
+import Check from '@lucide/vue/dist/esm/icons/check.mjs'
+import ChevronDown from '@lucide/vue/dist/esm/icons/chevron-down.mjs'
+import Search from '@lucide/vue/dist/esm/icons/search.mjs'
+import X from '@lucide/vue/dist/esm/icons/x.mjs'
 import { cn } from '@/lib/utils'
 
 export interface SelectOption {

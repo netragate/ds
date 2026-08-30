@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { ArrowDown, ArrowUp, ArrowUpDown, Search } from '@lucide/vue'
+import ArrowDown from '@lucide/vue/dist/esm/icons/arrow-down.mjs'
+import ArrowUp from '@lucide/vue/dist/esm/icons/arrow-up.mjs'
+import ArrowUpDown from '@lucide/vue/dist/esm/icons/arrow-up-down.mjs'
+import Search from '@lucide/vue/dist/esm/icons/search.mjs'
 import { cn } from '@/lib/utils'
 import Input from '@/components/form/Input.vue'
 import Pagination from '@/components/navigation/Pagination.vue'

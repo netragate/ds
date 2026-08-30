@@ -1,30 +1,19 @@
-import { defineAsyncComponent, type Component } from 'vue'
+import type { Component } from 'vue'
 import type { IconographyName } from './iconography.meta'
+import { iconRegistry } from './iconRegistry.bundle.js'
 
 export type { IconographyName, IconographyName as ButtonIconName }
 
-type LucideIconModule = { default: Component }
-type IconLoaderModule = { default: () => Promise<LucideIconModule> }
-
-/**
- * Loads a single Lucide icon by catalog name.
- * The loader registry and Lucide chunk load only when this runs.
- */
-export async function loadIcon(name: IconographyName): Promise<Component> {
-  const { default: loaderModules } = (await import(
-    './iconLoaderRegistry.js'
-  )) as { default: Record<string, () => Promise<IconLoaderModule>> }
-  const key = `./loaders/${name}.ts`
-  const load = loaderModules[key]
-  if (!load) {
+/** Returns the Lucide Vue component for a catalog icon name. */
+export function resolveIcon(name: IconographyName): Component {
+  const icon = iconRegistry[name]
+  if (!icon) {
     throw new Error(`Unknown icon: ${name}`)
   }
-  const mod = await load()
-  const loaded = await mod.default()
-  return loaded.default
+  return icon
 }
 
-/** Async Vue component for `<component :is="resolveIcon('settings')" />`. */
-export function resolveIcon(name: IconographyName): Component {
-  return defineAsyncComponent(() => loadIcon(name))
+/** @deprecated Use `resolveIcon` — kept for backwards compatibility. */
+export function loadIcon(name: IconographyName): Promise<Component> {
+  return Promise.resolve(resolveIcon(name))
 }

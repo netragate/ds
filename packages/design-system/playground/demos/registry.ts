@@ -1,74 +1,47 @@
 import type { Component } from 'vue'
-import AvatarDemo from './AvatarDemo.vue'
-import BadgeDemo from './BadgeDemo.vue'
-import FlagDemo from './FlagDemo.vue'
-import FlagGroupDemo from './FlagGroupDemo.vue'
-import CardDemo from './CardDemo.vue'
-import CheckboxDemo from './CheckboxDemo.vue'
-import ChipDemo from './ChipDemo.vue'
-import DataTableDemo from './DataTableDemo.vue'
-import DateInputDemo from './DateInputDemo.vue'
-import TimeInputDemo from './TimeInputDemo.vue'
-import DialogDemo from './DialogDemo.vue'
-import FormFieldDemo from './FormFieldDemo.vue'
-import InputDemo from './InputDemo.vue'
-import IconButtonDemo from './IconButtonDemo.vue'
-import LabelDemo from './LabelDemo.vue'
-import LinkDemo from './LinkDemo.vue'
-import TextareaDemo from './TextareaDemo.vue'
-import LayoutDemo from './LayoutDemo.vue'
-import LayoutPrimitivesDemo from './LayoutPrimitivesDemo.vue'
-import LozengeDemo from './LozengeDemo.vue'
-import ModalDemo from './ModalDemo.vue'
-import OverlayDrawerDemo from './OverlayDrawerDemo.vue'
-import PaginationDemo from './PaginationDemo.vue'
-import PopoverDemo from './PopoverDemo.vue'
-import ProgressDemo from './ProgressDemo.vue'
-import RadioGroupDemo from './RadioGroupDemo.vue'
-import SkeletonDemo from './SkeletonDemo.vue'
-import SpinnerDemo from './SpinnerDemo.vue'
-import SectionMessageDemo from './SectionMessageDemo.vue'
-import SwitchDemo from './SwitchDemo.vue'
-import TabsDemo from './TabsDemo.vue'
-import ToggleDemo from './ToggleDemo.vue'
-import TooltipDemo from './TooltipDemo.vue'
 
-export const playgroundDemoRegistry: Record<string, Component> = {
-  IconButton: IconButtonDemo,
-  Link: LinkDemo,
-  Input: InputDemo,
-  Chip: ChipDemo,
-  Textarea: TextareaDemo,
-  Label: LabelDemo,
-  Badge: BadgeDemo,
-  Flag: FlagDemo,
-  FlagGroup: FlagGroupDemo,
-  Avatar: AvatarDemo,
-  Card: CardDemo,
-  Tabs: TabsDemo,
-  Pagination: PaginationDemo,
-  DataTable: DataTableDemo,
-  Layout: LayoutDemo,
-  Lozenge: LozengeDemo,
-  Checkbox: CheckboxDemo,
-  DateInput: DateInputDemo,
-  TimeInput: TimeInputDemo,
-  Switch: SwitchDemo,
-  Toggle: ToggleDemo,
-  RadioGroup: RadioGroupDemo,
-  FormField: FormFieldDemo,
-  Dialog: DialogDemo,
-  Modal: ModalDemo,
-  Drawer: OverlayDrawerDemo,
-  Tooltip: TooltipDemo,
-  Popover: PopoverDemo,
-  Progress: ProgressDemo,
-  Skeleton: SkeletonDemo,
-  SectionMessage: SectionMessageDemo,
-  Spinner: SpinnerDemo,
-  'Layout Primitives': LayoutPrimitivesDemo,
+type DemoModule = { default: Component }
+
+/** Lazy demo loaders — demos load only when the drawer opens that component. */
+export const playgroundDemoLoaders: Record<string, () => Promise<DemoModule>> = {
+  IconButton: () => import('./IconButtonDemo.vue'),
+  Link: () => import('./LinkDemo.vue'),
+  Input: () => import('./InputDemo.vue'),
+  Chip: () => import('./ChipDemo.vue'),
+  Textarea: () => import('./TextareaDemo.vue'),
+  Label: () => import('./LabelDemo.vue'),
+  Badge: () => import('./BadgeDemo.vue'),
+  Flag: () => import('./FlagDemo.vue'),
+  FlagGroup: () => import('./FlagGroupDemo.vue'),
+  Avatar: () => import('./AvatarDemo.vue'),
+  Card: () => import('./CardDemo.vue'),
+  Tabs: () => import('./TabsDemo.vue'),
+  Pagination: () => import('./PaginationDemo.vue'),
+  DataTable: () => import('./DataTableDemo.vue'),
+  Layout: () => import('./LayoutDemo.vue'),
+  Lozenge: () => import('./LozengeDemo.vue'),
+  Checkbox: () => import('./CheckboxDemo.vue'),
+  DateInput: () => import('./DateInputDemo.vue'),
+  TimeInput: () => import('./TimeInputDemo.vue'),
+  Switch: () => import('./SwitchDemo.vue'),
+  Toggle: () => import('./ToggleDemo.vue'),
+  RadioGroup: () => import('./RadioGroupDemo.vue'),
+  FormField: () => import('./FormFieldDemo.vue'),
+  Dialog: () => import('./DialogDemo.vue'),
+  Modal: () => import('./ModalDemo.vue'),
+  Drawer: () => import('./OverlayDrawerDemo.vue'),
+  Tooltip: () => import('./TooltipDemo.vue'),
+  Popover: () => import('./PopoverDemo.vue'),
+  Progress: () => import('./ProgressDemo.vue'),
+  Skeleton: () => import('./SkeletonDemo.vue'),
+  SectionMessage: () => import('./SectionMessageDemo.vue'),
+  Spinner: () => import('./SpinnerDemo.vue'),
+  'Layout Primitives': () => import('./LayoutPrimitivesDemo.vue'),
 }
 
-export function getPlaygroundDemoComponent(name: string): Component | undefined {
-  return playgroundDemoRegistry[name]
+export async function loadPlaygroundDemoComponent(name: string): Promise<Component | undefined> {
+  const loader = playgroundDemoLoaders[name]
+  if (!loader) return undefined
+  const mod = await loader()
+  return mod.default
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ToggleLeft } from '@lucide/vue'
+import ToggleLeft from '@lucide/vue/dist/esm/icons/toggle-left.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Checkbox, Toggle } from '@/index'
-
+import Checkbox from '@/components/form/Checkbox.vue'
+import Toggle from '@/components/form/Toggle.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const tab = ref<'toggle' | 'checkbox'>('toggle')

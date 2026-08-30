@@ -4,8 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Switch } from '@/index'
-
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const sizeOptions = ['sm', 'md'] as const

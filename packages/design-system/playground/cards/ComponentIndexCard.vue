@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Maximize2, Box, Sparkles } from '@lucide/vue'
+import Maximize2 from '@lucide/vue/dist/esm/icons/maximize-2.mjs'
+import Box from '@lucide/vue/dist/esm/icons/box.mjs'
+import Sparkles from '@lucide/vue/dist/esm/icons/sparkles.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundDemoComponents, showcaseDemoComponents } from '../designSystemMeta'

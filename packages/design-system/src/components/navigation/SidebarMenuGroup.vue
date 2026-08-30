@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight } from '@lucide/vue'
+import ChevronRight from '@lucide/vue/dist/esm/icons/chevron-right.mjs'
 import {
   computed,
   inject,

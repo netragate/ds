@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { BarChart2, Loader2 } from '@lucide/vue'
+import BarChart2 from '@lucide/vue/dist/esm/icons/chart-no-axes-column.mjs'
+import Loader2 from '@lucide/vue/dist/esm/icons/loader-circle.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 

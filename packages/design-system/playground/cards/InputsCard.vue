@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import {
-  AlertCircle,
-  Check,
-  Eye,
-  EyeOff,
-  Globe,
-  Lock,
-  Mail,
-  Phone,
-  User,
-} from '@lucide/vue'
+import AlertCircle from '@lucide/vue/dist/esm/icons/circle-alert.mjs'
+import Check from '@lucide/vue/dist/esm/icons/check.mjs'
+import Eye from '@lucide/vue/dist/esm/icons/eye.mjs'
+import EyeOff from '@lucide/vue/dist/esm/icons/eye-off.mjs'
+import Globe from '@lucide/vue/dist/esm/icons/globe.mjs'
+import Lock from '@lucide/vue/dist/esm/icons/lock.mjs'
+import Mail from '@lucide/vue/dist/esm/icons/mail.mjs'
+import Phone from '@lucide/vue/dist/esm/icons/phone.mjs'
+import User from '@lucide/vue/dist/esm/icons/user.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { FormField, Input } from '@/index'
-
+import FormField from '@/components/form/FormField.vue'
+import Input from '@/components/form/Input.vue'
 const { t } = usePlaygroundLocale()
 
 const showPassword = ref(false)

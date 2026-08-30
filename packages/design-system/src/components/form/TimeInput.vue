@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Clock } from '@lucide/vue'
+import Clock from '@lucide/vue/dist/esm/icons/clock.mjs'
 import { cn } from '@/lib/utils'
 import type { TimeRangeValue } from '@/lib/dateTimeTypes'
 import {

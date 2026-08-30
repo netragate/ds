@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Pipette } from '@lucide/vue'
+import Pipette from '@lucide/vue/dist/esm/icons/pipette.mjs'
 import { colorPresets } from '../data/colorPresets'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 

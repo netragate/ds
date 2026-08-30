@@ -3,8 +3,8 @@ import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr } from '../utils/propTemplateName'
-import { Input, Label } from '@/index'
-
+import Input from '@/components/form/Input.vue'
+import Label from '@/components/form/Label.vue'
 const { t } = usePlaygroundLocale()
 
 const fieldId = ref('email')

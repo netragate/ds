@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Skeleton } from '@/index'
-
+import Skeleton from '@/components/feedback/Skeleton.vue'
 const { t } = usePlaygroundLocale()
 
 const code = `<Skeleton class="h-8 w-full" />

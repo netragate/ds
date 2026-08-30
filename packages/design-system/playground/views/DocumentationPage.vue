@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BookOpen, ExternalLink, Package } from '@lucide/vue'
+import BookOpen from '@lucide/vue/dist/esm/icons/book-open.mjs'
+import ExternalLink from '@lucide/vue/dist/esm/icons/external-link.mjs'
+import Package from '@lucide/vue/dist/esm/icons/package.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import packageJson from '../../package.json'

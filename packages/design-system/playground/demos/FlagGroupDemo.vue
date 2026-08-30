@@ -2,8 +2,9 @@
 import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { Flag, FlagGroup, Switch } from '@/index'
-
+import Flag from '@/components/feedback/Flag.vue'
+import FlagGroup from '@/components/feedback/FlagGroup.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const isDismissible = ref(false)

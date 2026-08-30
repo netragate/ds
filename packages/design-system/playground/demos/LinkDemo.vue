@@ -4,8 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Link } from '@/index'
-
+import Link from '@/components/link/Link.vue'
 const { t } = usePlaygroundLocale()
 
 const modeOptions = ['internal', 'external', 'router'] as const

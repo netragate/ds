@@ -4,7 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Flag, Switch } from '@/index'
+import Flag from '@/components/feedback/Flag.vue'
+import Switch from '@/components/form/Switch.vue'
 import type { FlagVariant } from '@/components/feedback/Flag.vue'
 
 const { t } = usePlaygroundLocale()

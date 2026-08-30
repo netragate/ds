@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { getPlaygroundDemoComponent } from '../playground/demos/registry'
+import { describe, expect, it, vi } from 'vitest'
+import { playgroundDemoLoaders, loadPlaygroundDemoComponent } from '../playground/demos/registry'
 import { hasPlaygroundDemo, playgroundDemoName } from '../playground/data/componentCatalog'
 import {
   DrawerPlayground,
@@ -23,7 +23,7 @@ describe('playground demos after Pagination', () => {
       'Tooltip',
       'Popover',
     ]) {
-      expect(getPlaygroundDemoComponent(name), name).toBeDefined()
+      expect(playgroundDemoLoaders[name], name).toBeDefined()
     }
   })
 
@@ -42,11 +42,13 @@ describe('playground demos after Pagination', () => {
     }
   })
 
-  it('DrawerPlayground renders external demos below Pagination', () => {
+  it('DrawerPlayground renders external demos below Pagination', async () => {
     for (const name of ['Pagination', 'DataTable', 'Layout', 'Layout Primitives', 'Modal']) {
       const wrapper = mountDemo(DrawerPlayground, { name })
+      await vi.waitFor(() => {
+        expect(wrapper.find('.pg-playground-panel').exists()).toBe(true)
+      })
       expect(wrapper.text()).not.toContain('previewFallback')
-      expect(wrapper.find('.pg-playground-panel').exists()).toBe(true)
       wrapper.unmount()
     }
   })

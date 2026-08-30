@@ -409,7 +409,7 @@ export interface PlaygroundMessages {
     openPlayground: string
     modeClient: string
     modeApi: string
-    hints: [string, string, string]
+    hints: [string, string, string, string]
     sortLabel: string
     filtersLabel: string
     activeFilters: string
@@ -448,6 +448,7 @@ export interface PlaygroundMessages {
   drawer: {
     component: string
     livePlayground: string
+    loadingDemo: string
     previewFallback: string
     descriptions: Record<string, string>
     playgroundPlaceholders: Record<string, string>

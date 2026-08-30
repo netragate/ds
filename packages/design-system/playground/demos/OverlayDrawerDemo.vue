@@ -4,8 +4,9 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Button, Drawer, Switch } from '@/index'
-
+import Button from '@/components/button/Button.vue'
+import Drawer from '@/components/overlay/Drawer.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const open = ref(false)

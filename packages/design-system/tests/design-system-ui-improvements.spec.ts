@@ -28,7 +28,7 @@ import FoundationsPage from '../playground/views/FoundationsPage.vue'
 import ComponentsCatalogPage from '../playground/views/ComponentsCatalogPage.vue'
 import ChatPreviewCard from '../playground/cards/ChatPreviewCard.vue'
 import ComponentApiReference from '../playground/components/ComponentApiReference.vue'
-import { iconography } from '../src/icons/iconography'
+import { iconography } from '../src/icons/iconography.catalog'
 import { showcaseDemoComponents } from '../playground/designSystemMeta'
 import { en, ptBR } from '../playground/i18n'
 import {

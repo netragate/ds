@@ -4,8 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Chip } from '@/index'
-
+import Chip from '@/components/form/Chip.vue'
 const { t } = usePlaygroundLocale()
 
 const sizeOptions = ['sm', 'md', 'lg'] as const

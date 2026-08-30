@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Component } from 'vue'
-import { Eye, AlignCenter, Zap, Layers } from '@lucide/vue'
+import Eye from '@lucide/vue/dist/esm/icons/eye.mjs'
+import AlignCenter from '@lucide/vue/dist/esm/icons/text-align-center.mjs'
+import Zap from '@lucide/vue/dist/esm/icons/zap.mjs'
+import Layers from '@lucide/vue/dist/esm/icons/layers.mjs'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 
 const { t } = usePlaygroundLocale()

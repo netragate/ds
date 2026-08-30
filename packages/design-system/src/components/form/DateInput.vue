@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { Calendar, ChevronLeft, ChevronRight } from '@lucide/vue'
+import Calendar from '@lucide/vue/dist/esm/icons/calendar.mjs'
+import ChevronLeft from '@lucide/vue/dist/esm/icons/chevron-left.mjs'
+import ChevronRight from '@lucide/vue/dist/esm/icons/chevron-right.mjs'
 import { cn } from '@/lib/utils'
 import type {
   DateInputModelValue,

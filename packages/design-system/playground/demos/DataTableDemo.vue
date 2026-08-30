@@ -11,7 +11,10 @@ import {
 import { useDataTableLabels, useStatusLabel, useUserTableColumns } from '../composables/useUserTableColumns'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr, templateBoundAttr, templateStringAttr } from '../utils/propTemplateName'
-import { Badge, Button, DataTable, Lozenge } from '@/index'
+import Badge from '@/components/feedback/Badge.vue'
+import Button from '@/components/button/Button.vue'
+import DataTable from '@/components/data-display/DataTable.vue'
+import Lozenge from '@/components/data-display/Lozenge.vue'
 import type { DataTableColumn, DataTableColumnFilters, DataTableSortEntry } from '@/components/data-display/dataTableTypes'
 
 const { locale, t } = usePlaygroundLocale()

@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { AlertCircle, BarChart2, Info, Settings } from '@lucide/vue'
+import AlertCircle from '@lucide/vue/dist/esm/icons/circle-alert.mjs'
+import BarChart2 from '@lucide/vue/dist/esm/icons/chart-no-axes-column.mjs'
+import Info from '@lucide/vue/dist/esm/icons/info.mjs'
+import Settings from '@lucide/vue/dist/esm/icons/settings.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateStringAttr } from '../utils/propTemplateName'
-import { Tab, TabList, TabPanel, Tabs } from '@/index'
-
+import Tab from '@/components/navigation/Tab.vue'
+import TabList from '@/components/navigation/TabList.vue'
+import TabPanel from '@/components/navigation/TabPanel.vue'
+import Tabs from '@/components/navigation/Tabs.vue'
 const { messages, t } = usePlaygroundLocale()
 
 const tabKeys = ['overview', 'issues', 'reports', 'settings'] as const

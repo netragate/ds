@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Languages } from '@lucide/vue'
-import { Select } from '@/index'
+import Languages from '@lucide/vue/dist/esm/icons/languages.mjs'
+import Select from '@/components/form/Select.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import type { PlaygroundLocale } from '../i18n/types'
 

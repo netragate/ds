@@ -17,15 +17,14 @@ Usage, API, and examples: [`packages/design-system/README.md`](./packages/design
 
 ## Using the package
 
-Peer dependencies (install with the library):
+Peer dependency:
 
 - `vue` ^3.5.0
-- `@lucide/vue` ^1.0.0
-- `tailwind-merge` ^3.2.0
-- `clsx` ^2.1.1
+
+`@lucide/vue`, `clsx`, and `tailwind-merge` ship with the package — no extra installs.
 
 ```bash
-npm install @netragate/design-system vue @lucide/vue tailwind-merge clsx
+npm install @netragate/design-system vue
 ```
 
 Import styles in your app: `@netragate/design-system/styles.css`. See the [package README](./packages/design-system/README.md) for setup, icons (`resolveIcon`), and API.

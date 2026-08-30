@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Moon, Sun } from '@lucide/vue'
+import Moon from '@lucide/vue/dist/esm/icons/moon.mjs'
+import Sun from '@lucide/vue/dist/esm/icons/sun.mjs'
 import GithubIcon from './components/GithubIcon.vue'
 import GlowDot from './components/GlowDot.vue'
 import ComponentDrawer from './components/ComponentDrawer.vue'

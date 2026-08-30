@@ -529,6 +529,7 @@ export const ptBR: PlaygroundMessages = {
   drawer: {
     component: 'Componente',
     livePlayground: 'Playground ao vivo',
+    loadingDemo: 'Carregando demo…',
     previewFallback: 'Preview de {name}',
     playgroundPlaceholders: {
       Chip: 'Digite e pressione Enter...',

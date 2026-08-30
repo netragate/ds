@@ -3,8 +3,9 @@ import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
-import { Button, Dialog, Switch } from '@/index'
-
+import Button from '@/components/button/Button.vue'
+import Dialog from '@/components/overlay/Dialog.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const open = ref(false)

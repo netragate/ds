@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Settings } from '@lucide/vue'
+import Settings from '@lucide/vue/dist/esm/icons/settings.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { IconButton, Switch } from '@/index'
-
+import IconButton from '@/components/button/IconButton.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const variantOptions = ['default', 'primary', 'secondary', 'outline', 'ghost', 'destructive'] as const

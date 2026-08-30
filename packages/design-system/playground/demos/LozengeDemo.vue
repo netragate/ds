@@ -4,7 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Lozenge, Switch } from '@/index'
+import Lozenge from '@/components/data-display/Lozenge.vue'
+import Switch from '@/components/form/Switch.vue'
 import type { LozengeAppearance } from '@/components/data-display/Lozenge.vue'
 
 const { messages, t } = usePlaygroundLocale()

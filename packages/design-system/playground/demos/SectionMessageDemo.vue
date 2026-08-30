@@ -4,7 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { SectionMessage } from '@/index'
+import SectionMessage from '@/components/feedback/SectionMessage.vue'
 import type { SectionMessageVariant } from '@/components/feedback/SectionMessage.vue'
 
 const { t } = usePlaygroundLocale()

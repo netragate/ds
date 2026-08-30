@@ -5,8 +5,8 @@ import PageSizeSelect from '@/components/data-display/PageSizeSelect.vue'
 import { useDataTableLabels } from '../composables/useUserTableColumns'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateStringAttr } from '../utils/propTemplateName'
-import { Pagination, Switch } from '@/index'
-
+import Pagination from '@/components/navigation/Pagination.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 const dataTableLabels = useDataTableLabels()
 

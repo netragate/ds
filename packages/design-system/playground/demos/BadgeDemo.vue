@@ -4,8 +4,7 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { propTemplateBinding, playgroundSnippetAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Badge } from '@/index'
-
+import Badge from '@/components/feedback/Badge.vue'
 const { t } = usePlaygroundLocale()
 
 const variantOptions = ['default', 'primary', 'important', 'added', 'removed'] as const

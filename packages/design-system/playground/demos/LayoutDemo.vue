@@ -1,32 +1,27 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import {
-  AlertCircle,
-  BarChart2,
-  Box,
-  Gem,
-  Info,
-  Layers,
-  Palette,
-  Settings,
-  Target,
-  Type,
-  Users,
-} from '@lucide/vue'
+import AlertCircle from '@lucide/vue/dist/esm/icons/circle-alert.mjs'
+import BarChart2 from '@lucide/vue/dist/esm/icons/chart-no-axes-column.mjs'
+import Box from '@lucide/vue/dist/esm/icons/box.mjs'
+import Gem from '@lucide/vue/dist/esm/icons/gem.mjs'
+import Info from '@lucide/vue/dist/esm/icons/info.mjs'
+import Layers from '@lucide/vue/dist/esm/icons/layers.mjs'
+import Palette from '@lucide/vue/dist/esm/icons/palette.mjs'
+import Settings from '@lucide/vue/dist/esm/icons/settings.mjs'
+import Target from '@lucide/vue/dist/esm/icons/target.mjs'
+import Type from '@lucide/vue/dist/esm/icons/type.mjs'
+import Users from '@lucide/vue/dist/esm/icons/users.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { PACKAGE } from '../data/componentCatalogConstants'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding, templateStringAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import {
-  AppLayout,
-  Button,
-  Lozenge,
-  SidebarMenuGroup,
-  SidebarMenuItem,
-  Switch,
-} from '@/index'
-
+import AppLayout from '@/components/layout/AppLayout.vue'
+import Button from '@/components/button/Button.vue'
+import Lozenge from '@/components/data-display/Lozenge.vue'
+import SidebarMenuGroup from '@/components/navigation/SidebarMenuGroup.vue'
+import SidebarMenuItem from '@/components/navigation/SidebarMenuItem.vue'
+import Switch from '@/components/form/Switch.vue'
 const { messages, t } = usePlaygroundLocale()
 
 const STORAGE_KEY = 'ds-layout-demo-nav'

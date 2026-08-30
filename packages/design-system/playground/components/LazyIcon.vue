@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import { iconographyComponents } from '@/icons/iconography'
+import { computed } from 'vue'
+import { resolveIcon } from '@/icons/resolveIcon'
 import type { IconographyName } from '@/icons/iconography.meta'
 
-defineProps<{
+const props = defineProps<{
   name: IconographyName
   size: number
   color: string
 }>()
+
+const icon = computed(() => resolveIcon(props.name))
 </script>
 
 <template>
-  <Suspense>
-    <component
-      :is="iconographyComponents[name]"
-      :size="size"
-      :style="{ color }"
-    />
-    <template #fallback>
-      <span
-        class="inline-block shrink-0 rounded-sm bg-border/30"
-        :style="{ width: `${size}px`, height: `${size}px` }"
-        aria-hidden="true"
-      />
-    </template>
-  </Suspense>
+  <component
+    :is="icon"
+    :size="size"
+    :style="{ color }"
+  />
 </template>

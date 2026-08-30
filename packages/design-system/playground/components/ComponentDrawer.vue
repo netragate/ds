@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
-import { X } from '@lucide/vue'
+import { computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
+import X from '@lucide/vue/dist/esm/icons/x.mjs'
 import GlowDot from './GlowDot.vue'
-import DrawerPlayground from './DrawerPlayground.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
+
+const DrawerPlayground = defineAsyncComponent(() => import('./DrawerPlayground.vue'))
 
 const props = defineProps<{ name: string | null }>()
 const open = defineModel<boolean>('open', { default: false })
@@ -61,7 +62,12 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
           </button>
         </div>
         <div class="playground-scroll flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 sm:px-6 sm:py-6">
-          <DrawerPlayground :name="name" />
+          <Suspense v-if="open && name">
+            <DrawerPlayground :name="name" />
+            <template #fallback>
+              <p class="pg-text-subtle text-sm">{{ t('drawer.loadingDemo') }}</p>
+            </template>
+          </Suspense>
         </div>
       </aside>
     </div>

@@ -4,7 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Card, Switch } from '@/index'
+import Card from '@/components/data-display/Card.vue'
+import Switch from '@/components/form/Switch.vue'
 import type { CardVariant } from '@/components/data-display/Card.vue'
 
 const { t } = usePlaygroundLocale()

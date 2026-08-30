@@ -4,8 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Switch, Toggle } from '@/index'
-
+import Switch from '@/components/form/Switch.vue'
+import Toggle from '@/components/form/Toggle.vue'
 const { messages, t } = usePlaygroundLocale()
 
 const labelOptions = ['notifications', 'darkMode', 'autoSave', 'analytics', 'beta'] as const

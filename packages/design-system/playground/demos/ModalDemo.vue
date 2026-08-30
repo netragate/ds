@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ArrowUpRight } from '@lucide/vue'
+import ArrowUpRight from '@lucide/vue/dist/esm/icons/arrow-up-right.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
-import { Alert, Button, Input, Label, Modal, Switch, Textarea } from '@/index'
-
+import Alert from '@/components/feedback/Alert.vue'
+import Button from '@/components/button/Button.vue'
+import Input from '@/components/form/Input.vue'
+import Label from '@/components/form/Label.vue'
+import Modal from '@/components/overlay/Modal.vue'
+import Switch from '@/components/form/Switch.vue'
+import Textarea from '@/components/form/Textarea.vue'
 type ModalVariant = 'confirm' | 'form' | 'danger'
 
 const { t, messages } = usePlaygroundLocale()

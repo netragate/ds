@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Zap } from '@lucide/vue'
+import Zap from '@lucide/vue/dist/esm/icons/zap.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { propTemplateBinding } from '../utils/propTemplateName'
-import {
-  Button,
-  Select,
-  Switch,
-  iconographySelectOptions,
-  type ButtonIconName,
-} from '@/index'
-
+import Button from '@/components/button/Button.vue'
+import Select from '@/components/form/Select.vue'
+import Switch from '@/components/form/Switch.vue'
+import { iconographySelectOptions, type ButtonIconName } from '@/icons/iconography.catalog'
 const { t } = usePlaygroundLocale()
 
 const sizes = ['sm', 'md', 'lg'] as const

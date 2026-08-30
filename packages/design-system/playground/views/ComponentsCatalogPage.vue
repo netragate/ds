@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Box, Maximize2 } from '@lucide/vue'
+import Box from '@lucide/vue/dist/esm/icons/box.mjs'
+import Maximize2 from '@lucide/vue/dist/esm/icons/maximize-2.mjs'
 import UsageBlock from '../components/UsageBlock.vue'
 import ComponentApiReference from '../components/ComponentApiReference.vue'
 import {

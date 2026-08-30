@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.12.0] - 2026-08-29
+
+### Changed
+
+- **Dependencies:** `@lucide/vue`, `clsx`, and `tailwind-merge` are now **dependencies** of the package (not peer dependencies). Install with `npm install @netragate/design-system vue` only.
+- **`cn()` utils** — `clsx` and `tailwind-merge` are bundled into `dist/lib/utils.js` (no separate install required).
+
+### Fixed
+
+- **Icon rendering** — `resolveIcon` / `loadIcon` use Vite-compatible `./shims/*.ts` modules (fixes Iconography tab and `:icon` in dev); removed broken `@lucide/vue/dist/.../${file}` dynamic import.
+- **Lazy icon loading** — per-icon ESM paths preserved; avoid `import { … } from '@lucide/vue'` (barrel loads all icons in dev).
+
+### Breaking
+
+- **Peer dependencies:** only `vue` ^3.5.0 remains. Remove `@lucide/vue`, `clsx`, and `tailwind-merge` from your app’s `package.json` if they were only there for the design system.
+
 ## [0.11.0] - 2026-08-29
 
 ### Changed

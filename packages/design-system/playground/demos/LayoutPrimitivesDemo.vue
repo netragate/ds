@@ -4,18 +4,12 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateStringAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import {
-  Button,
-  Container,
-  Grid,
-  Stack,
-  type ContainerMaxWidth,
-  type StackAlign,
-  type StackDirection,
-  type StackGap,
-  type StackJustify,
-} from '@/index'
-
+import Button from '@/components/button/Button.vue'
+import Container from '@/components/layout/Container.vue'
+import type { ContainerMaxWidth } from '@/components/layout/Container.vue'
+import Grid from '@/components/layout/Grid.vue'
+import Stack from '@/components/layout/Stack.vue'
+import type { StackAlign, StackDirection, StackGap, StackJustify } from '@/components/layout/Stack.vue'
 const { t, messages } = usePlaygroundLocale()
 
 const tab = ref<'container' | 'stack' | 'grid'>('container')

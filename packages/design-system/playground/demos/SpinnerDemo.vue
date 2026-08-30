@@ -5,8 +5,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Spinner, Switch } from '@/index'
-
+import Spinner from '@/components/feedback/Spinner.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const sizeOptions = ['xs', 'sm', 'md', 'lg'] as const

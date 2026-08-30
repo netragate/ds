@@ -3,8 +3,8 @@ import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
-import { Progress, Switch } from '@/index'
-
+import Progress from '@/components/feedback/Progress.vue'
+import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
 const value = ref(72)

@@ -3,9 +3,9 @@ import { computed, ref } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr } from '../utils/propTemplateName'
-import type { TimeRangeValue } from '@/index'
-import { Switch, TimeInput } from '@/index'
-
+import type { type TimeRangeValue } from '@/lib/dateTimeTypes'
+import Switch from '@/components/form/Switch.vue'
+import TimeInput from '@/components/form/TimeInput.vue'
 const { locale: appLocale, t } = usePlaygroundLocale()
 
 const range = ref(false)

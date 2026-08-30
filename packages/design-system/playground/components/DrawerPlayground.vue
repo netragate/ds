@@ -1,27 +1,23 @@
 <script setup lang="ts">
-import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Gem,
-  Target,
-  Zap,
-} from '@lucide/vue'
+import { computed, nextTick, onUnmounted, ref, shallowRef, watch } from 'vue'
+import type { Component } from 'vue'
+import ArrowRight from '@lucide/vue/dist/esm/icons/arrow-right.mjs'
+import ArrowUpRight from '@lucide/vue/dist/esm/icons/arrow-up-right.mjs'
+import Gem from '@lucide/vue/dist/esm/icons/gem.mjs'
+import Target from '@lucide/vue/dist/esm/icons/target.mjs'
+import Zap from '@lucide/vue/dist/esm/icons/zap.mjs'
 import UsageBlock from './UsageBlock.vue'
-import {
-  Alert,
-  Breadcrumb,
-  BreadcrumbItem,
-  Button,
-  Input,
-  Select,
-  Switch,
-  Toast,
-  iconographySelectOptions,
-  useToast,
-  type ButtonIconName,
-  type ToastPosition,
-} from '@/index'
+import Alert from '@/components/feedback/Alert.vue'
+import Breadcrumb from '@/components/navigation/Breadcrumb.vue'
+import BreadcrumbItem from '@/components/navigation/BreadcrumbItem.vue'
+import Button from '@/components/button/Button.vue'
+import Input from '@/components/form/Input.vue'
+import Select from '@/components/form/Select.vue'
+import Switch from '@/components/form/Switch.vue'
+import Toast from '@/components/feedback/Toast.vue'
+import { useToast, type ToastPosition } from '@/composables/useToast'
+import { iconographySelectOptions } from '@/icons/iconography.catalog'
+import type { ButtonIconName } from '@/icons/resolveIcon'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import {
   templateBooleanAttr,
@@ -29,10 +25,19 @@ import {
   playgroundSnippetAttr,
 } from '../utils/propTemplateName'
 import { resolveChatReply } from '../utils/chatPlayground'
-import { getPlaygroundDemoComponent } from '../demos/registry'
+import { loadPlaygroundDemoComponent } from '../demos/registry'
 
 const props = defineProps<{ name: string }>()
-const externalDemo = computed(() => getPlaygroundDemoComponent(props.name))
+const externalDemo = shallowRef<Component | null>(null)
+
+watch(
+  () => props.name,
+  async (name) => {
+    externalDemo.value = null
+    externalDemo.value = (await loadPlaygroundDemoComponent(name)) ?? null
+  },
+  { immediate: true },
+)
 const { t, messages, locale } = usePlaygroundLocale()
 
 const selectMultiple = ref(false)
@@ -794,7 +799,12 @@ function optionStyle(active: boolean) {
     </template>
 
     <!-- External registry demos -->
-    <component :is="externalDemo" v-else-if="externalDemo" />
+    <Suspense v-else-if="externalDemo">
+      <component :is="externalDemo" />
+      <template #fallback>
+        <p class="pg-text-subtle text-sm">{{ t('drawer.loadingDemo') }}</p>
+      </template>
+    </Suspense>
 
     <!-- Fallback -->
     <template v-else>

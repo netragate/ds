@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Layers } from '@lucide/vue'
+import Layers from '@lucide/vue/dist/esm/icons/layers.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { propTemplateBinding } from '../utils/propTemplateName'
-import { Card, Switch } from '@/index'
+import Card from '@/components/data-display/Card.vue'
+import Switch from '@/components/form/Switch.vue'
 import type { CardVariant } from '@/components/data-display/Card.vue'
 
 const { t } = usePlaygroundLocale()

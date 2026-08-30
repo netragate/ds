@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Palette } from '@lucide/vue'
+import Palette from '@lucide/vue/dist/esm/icons/palette.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 

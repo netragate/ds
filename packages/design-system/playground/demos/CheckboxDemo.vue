@@ -4,8 +4,8 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { templateBooleanAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Checkbox, Switch } from '@/index'
-
+import Checkbox from '@/components/form/Checkbox.vue'
+import Switch from '@/components/form/Switch.vue'
 const { messages, t } = usePlaygroundLocale()
 
 const labelOptions = ['terms', 'newsletter', 'twoFactor', 'partial'] as const

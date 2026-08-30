@@ -4,8 +4,10 @@ import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, propTemplateBinding, templateStringAttr } from '../utils/propTemplateName'
 import { playgroundOptionStyle } from './playgroundOptionStyle'
-import { Button, Popover, Switch, type PopoverAppearance } from '@/index'
-
+import Button from '@/components/button/Button.vue'
+import Popover from '@/components/overlay/Popover.vue'
+import Switch from '@/components/form/Switch.vue'
+import type { type PopoverAppearance } from '@/components/overlay/overlayAppearance'
 const { t, messages } = usePlaygroundLocale()
 
 const variant = ref<PopoverAppearance>('outline')

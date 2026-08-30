@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { useRouter } from 'vue-router'
-import { Layers, LayoutGrid, BookOpen, ArrowRight } from '@lucide/vue'
+import Layers from '@lucide/vue/dist/esm/icons/layers.mjs'
+import LayoutGrid from '@lucide/vue/dist/esm/icons/layout-grid.mjs'
+import BookOpen from '@lucide/vue/dist/esm/icons/book-open.mjs'
+import ArrowRight from '@lucide/vue/dist/esm/icons/arrow-right.mjs'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
-import { catalogComponentCount } from '../data/componentCatalog'
+import { catalogComponentCount } from '../data/catalogGroups'
 
 const router = useRouter()
 const { t } = usePlaygroundLocale()

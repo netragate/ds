@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Type } from '@lucide/vue'
+import Type from '@lucide/vue/dist/esm/icons/type.mjs'
 import PlayCard from '../components/PlayCard.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { useCopy } from '../composables/useCopy'
