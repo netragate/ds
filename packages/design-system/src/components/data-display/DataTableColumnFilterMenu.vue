@@ -207,7 +207,7 @@ onUnmounted(() => {
       v-if="open"
       ref="panelRef"
       class="fixed z-[var(--ds-z-dropdown)] max-w-[calc(100vw-1rem)] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
-      :style="panelStyle"
+      :style="{ zIndex: 9999, ...panelStyle }"
       @click.stop
     >
       <div class="mb-3 flex items-center justify-between gap-3">

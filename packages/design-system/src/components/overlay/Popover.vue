@@ -72,6 +72,7 @@ onUnmounted(() => {
           props.class,
         )
       "
+      :style="{ zIndex: 9999 }"
       @click.stop
     >
       <slot name="content" />

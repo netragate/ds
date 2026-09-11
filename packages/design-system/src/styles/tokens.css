@@ -238,12 +238,12 @@
   /* ── Z-Index Scale ── */
   --ds-z-base:         0;
   --ds-z-raised:       100;
-  --ds-z-dropdown:     200;
+  --ds-z-dropdown:     600;
   --ds-z-sticky:       300;
   --ds-z-overlay:      400;
   --ds-z-modal:        500;
-  --ds-z-notification: 600;
-  --ds-z-tooltip:      700;
+  --ds-z-notification: 700;
+  --ds-z-tooltip:      800;
 
   /* ── Border Widths ── */
   --ds-border-width-none:   0px;

@@ -674,7 +674,7 @@ function dayButtonClass(day: {
         ref="panelRef"
         class="fixed z-[var(--ds-z-dropdown)] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
         :class="range ? 'w-max min-w-[16.5rem]' : 'min-w-[16.5rem]'"
-        :style="panelStyle"
+        :style="{ zIndex: 10000, ...panelStyle }"
         @click.stop
       >
       <div
