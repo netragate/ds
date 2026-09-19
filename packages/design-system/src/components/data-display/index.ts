@@ -5,10 +5,14 @@ export { default as AvatarGroup } from './AvatarGroup.vue'
 export { default as Lozenge } from './Lozenge.vue'
 export type { LozengeAppearance } from './Lozenge.vue'
 export { default as Table } from './Table.vue'
+export type { TableProps } from './Table.vue'
+export { DS_TABLE_NESTED_CLASS } from './tableConstants'
 export { default as TableHead } from './TableHead.vue'
 export { default as TableBody } from './TableBody.vue'
 export { default as TableRow } from './TableRow.vue'
 export { default as TableCell } from './TableCell.vue'
+export { default as TableExpandedRow } from './TableExpandedRow.vue'
+export type { TableExpandedRowProps } from './TableExpandedRow.vue'
 export { default as DataTable } from './DataTable.vue'
 export { default as DataTableColumnFilter } from './DataTableColumnFilter.vue'
 export { default as DataTableColumnFilterMenu } from './DataTableColumnFilterMenu.vue'
@@ -27,6 +31,8 @@ export type {
   DataTableColumnFilterValue,
   DataTableColumnFilters,
   DataTableDateRangeFilter,
+  DataTableExpandMode,
+  DataTableExpandPayload,
   DataTableFilterOption,
   DataTableFilterType,
   DataTableRequestParams,

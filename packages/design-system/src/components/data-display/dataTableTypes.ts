@@ -4,6 +4,8 @@ export type SortDirection = 'asc' | 'desc' | null
 
 export type DataTableFilterType = 'text' | 'date' | 'enum'
 
+export type DataTableExpandMode = 'eager' | 'lazy'
+
 export interface DataTableFilterOption {
   label: string
   value: string
@@ -50,6 +52,11 @@ export interface DataTableRequestParams {
   sortDirection: SortDirection
 }
 
+export interface DataTableExpandPayload {
+  key: string
+  row: Record<string, unknown>
+}
+
 export type DataTableRowKey<T> = keyof T & string | ((row: T, index: number) => string)
 
 export interface DataTableLabels {
@@ -71,4 +78,7 @@ export interface DataTableLabels {
   filterDateFromAriaLabel?: string
   filterDateToAriaLabel?: string
   filterEnumAll?: string
+  expandRow?: string
+  collapseRow?: string
+  expandLoadingText?: string
 }

@@ -9,7 +9,7 @@ const props = defineProps<TableBodyProps>()
 </script>
 
 <template>
-  <tbody :class="cn('[&_tr:last-child]:border-0', props.class)">
+  <tbody :class="cn('[&>tr:last-child]:border-0', props.class)">
     <slot />
   </tbody>
 </template>

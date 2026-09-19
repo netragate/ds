@@ -9,6 +9,7 @@ import TableHead from '@/components/data-display/TableHead.vue'
 import TableBody from '@/components/data-display/TableBody.vue'
 import TableRow from '@/components/data-display/TableRow.vue'
 import TableCell from '@/components/data-display/TableCell.vue'
+import TableExpandedRow from '@/components/data-display/TableExpandedRow.vue'
 import EmptyState from '@/components/data-display/EmptyState.vue'
 import DataTable from '@/components/data-display/DataTable.vue'
 import DataTableColumnFilterMenu from '@/components/data-display/DataTableColumnFilterMenu.vue'
@@ -189,6 +190,89 @@ describe('Table', () => {
       },
     })
     expect(wrapper.findAll('tr')).toHaveLength(2)
+  })
+
+  it('scopes stripe and hover to direct tbody rows so nested tables are not targeted', () => {
+    const wrapper = mount(Table, {
+      props: { striped: true },
+      slots: {
+        default: `
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <Table nested class="nested-table">
+                  <TableBody>
+                    <TableRow><TableCell>inner</TableCell></TableRow>
+                  </TableBody>
+                </Table>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        `,
+      },
+      global: {
+        components: { Table, TableBody, TableRow, TableCell },
+      },
+    })
+
+    const parentTable = wrapper.find('table')
+    const parentClass = parentTable.attributes('class') ?? ''
+    expect(parentClass).toContain('[&>tbody>tr:not([data-expanded-detail]):nth-child(even)]:bg-muted/50')
+    expect(parentClass).toContain('[&>tbody>tr:not([data-expanded-detail]):hover]:bg-muted/50')
+    expect(parentClass).not.toContain('[&_tbody_tr')
+    expect(wrapper.find('table.ds-table-nested').exists()).toBe(true)
+
+    const bodyClass = wrapper.find('tbody').attributes('class') ?? ''
+    expect(bodyClass).toContain('[&>tr:last-child]:border-0')
+    expect(bodyClass).not.toContain('[&_tr:last-child]')
+  })
+
+  it('styles nested table header cells distinctly from body cells', () => {
+    const wrapper = mount(Table, {
+      props: { nested: true },
+      slots: {
+        default: `
+          <TableHead>
+            <TableRow><TableCell>Project</TableCell></TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow><TableCell>Design System</TableCell></TableRow>
+          </TableBody>
+        `,
+      },
+      global: {
+        components: { TableHead, TableBody, TableRow, TableCell },
+      },
+    })
+
+    const nestedClass = wrapper.find('table').attributes('class') ?? ''
+    expect(nestedClass).toContain('ds-table-nested')
+    expect(nestedClass).toContain('[&>thead>tr>td]:bg-muted/70')
+    expect(nestedClass).toContain('[&>thead>tr>td]:uppercase')
+    expect(nestedClass).toContain('[&>thead>tr>td]:text-muted-foreground')
+  })
+})
+
+describe('TableExpandedRow', () => {
+  it('renders a detail row with colspan, slot content, and data-expanded-detail', () => {
+    const wrapper = mount(Table, {
+      slots: {
+        default: `
+          <TableBody>
+            <TableRow><TableCell>Parent</TableCell><TableCell>A</TableCell></TableRow>
+            <TableExpandedRow :colspan="2">Nested detail</TableExpandedRow>
+          </TableBody>
+        `,
+      },
+      global: {
+        components: { TableBody, TableRow, TableCell, TableExpandedRow },
+      },
+    })
+
+    const detail = wrapper.find('tr[data-expanded-detail]')
+    expect(detail.exists()).toBe(true)
+    expect(detail.find('td').attributes('colspan')).toBe('2')
+    expect(detail.text()).toContain('Nested detail')
   })
 })
 
@@ -554,6 +638,105 @@ describe('DataTable', () => {
     } finally {
       wrapper.unmount()
     }
+  })
+
+  it('supports accordion expand with aria-expanded and a single expanded-key', async () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 3),
+        rowKey: 'id',
+        searchable: false,
+        expandable: true,
+        expandedKey: null,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+      },
+      slots: {
+        'expanded-row': `<template #expanded-row="{ row }"><span class="detail">detail-{{ row.name }}</span></template>`,
+      },
+    })
+
+    const expandButtons = wrapper.findAll('button[aria-label="Expand row"]')
+    expect(expandButtons).toHaveLength(3)
+    expect(expandButtons[0]!.attributes('aria-expanded')).toBe('false')
+
+    await expandButtons[0]!.trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBe('1')
+    await wrapper.setProps({ expandedKey: '1' })
+    expect(wrapper.find('tr[data-expanded-detail]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Collapse row"]').exists()).toBe(true)
+
+    const remainingExpand = wrapper.findAll('button[aria-label="Expand row"]')
+    await remainingExpand[0]!.trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBe('2')
+    await wrapper.setProps({ expandedKey: '2' })
+    expect(wrapper.findAll('tr[data-expanded-detail]')).toHaveLength(1)
+
+    await wrapper.find('button[aria-label="Collapse row"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBeNull()
+  })
+
+  it('shows expanded-row content immediately in eager mode without panel loading', async () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 1),
+        rowKey: 'id',
+        searchable: false,
+        expandable: true,
+        expandMode: 'eager',
+        expandedKey: '1',
+        expandLoading: false,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+      },
+      slots: {
+        'expanded-row': '<span data-testid="eager-detail">eager lines</span>',
+      },
+    })
+
+    expect(wrapper.find('[data-testid="eager-detail"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="expand-panel-loading"]').exists()).toBe(false)
+  })
+
+  it('emits expand and shows panel loading in lazy mode without whole-table loading row', async () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        rowKey: 'id',
+        searchable: false,
+        expandable: true,
+        expandMode: 'lazy',
+        expandedKey: null,
+        expandLoading: false,
+        loading: false,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+      },
+      slots: {
+        'expanded-row': '<span data-testid="lazy-detail">lazy lines</span>',
+      },
+    })
+
+    await wrapper.findAll('button[aria-label="Expand row"]')[0]!.trigger('click')
+    expect(wrapper.emitted('expand')?.at(-1)?.[0]).toEqual({
+      key: '1',
+      row: sampleRows[0],
+    })
+
+    await wrapper.setProps({ expandedKey: '1', expandLoading: true })
+    expect(wrapper.find('[data-testid="expand-panel-loading"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="lazy-detail"]').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Loading data…')
+
+    await wrapper.setProps({ expandLoading: false })
+    expect(wrapper.find('[data-testid="expand-panel-loading"]').exists()).toBe(false)
+    expect(wrapper.find('[data-testid="lazy-detail"]').exists()).toBe(true)
   })
 })
 

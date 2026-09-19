@@ -15,7 +15,17 @@ import Badge from '@/components/feedback/Badge.vue'
 import Button from '@/components/button/Button.vue'
 import DataTable from '@/components/data-display/DataTable.vue'
 import Lozenge from '@/components/data-display/Lozenge.vue'
-import type { DataTableColumn, DataTableColumnFilters, DataTableSortEntry } from '@/components/data-display/dataTableTypes'
+import Table from '@/components/data-display/Table.vue'
+import TableBody from '@/components/data-display/TableBody.vue'
+import TableCell from '@/components/data-display/TableCell.vue'
+import TableHead from '@/components/data-display/TableHead.vue'
+import TableRow from '@/components/data-display/TableRow.vue'
+import type {
+  DataTableColumn,
+  DataTableColumnFilters,
+  DataTableExpandPayload,
+  DataTableSortEntry,
+} from '@/components/data-display/dataTableTypes'
 
 const { locale, t } = usePlaygroundLocale()
 const userTableColumns = useUserTableColumns()
@@ -41,6 +51,11 @@ const striped = ref(true)
 const forceLoading = ref(false)
 const showToolbar = ref(false)
 const forceEmpty = ref(false)
+const expandable = ref(true)
+const expandMode = ref<'eager' | 'lazy'>('eager')
+const expandedKey = ref<string | null>(null)
+const expandLoading = ref(false)
+const lazyProjects = ref<Record<string, UserRow['projects']>>({})
 const pageSizePreset = ref<'default' | 'compact'>('default')
 const columnFilterApplyMode = ref<'auto' | 'apply' | 'instant'>('auto')
 const searchPlaceholder = ref('')
@@ -118,6 +133,13 @@ watch(showSearch, (enabled) => {
   if (!enabled) search.value = ''
 })
 
+watch(expandable, (enabled) => {
+  if (!enabled) {
+    expandedKey.value = null
+    expandLoading.value = false
+  }
+})
+
 watch(pageSizePreset, () => {
   pageSize.value = pageSizeOptions.value[0] ?? 5
 })
@@ -130,6 +152,30 @@ function setMode(next: 'client' | 'api'): void {
   sortStack.value = []
   columnFilters.value = {}
   columnFilterApplyMode.value = 'auto'
+  expandedKey.value = null
+  lazyProjects.value = {}
+}
+
+async function onExpand(payload: DataTableExpandPayload): Promise<void> {
+  if (expandMode.value !== 'lazy') return
+  const key = payload.key
+  if (lazyProjects.value[key]) return
+  expandLoading.value = true
+  await new Promise((resolve) => setTimeout(resolve, 600))
+  const source = mockUsers.find((user) => user.id === key)
+  lazyProjects.value = {
+    ...lazyProjects.value,
+    [key]: source?.projects ?? [],
+  }
+  expandLoading.value = false
+}
+
+function projectsForRow(row: Record<string, unknown>): { name: string; role: string }[] {
+  const key = String(row.id ?? '')
+  if (expandMode.value === 'lazy') {
+    return (lazyProjects.value[key] ?? []) as { name: string; role: string }[]
+  }
+  return ((row.projects as { name: string; role: string }[] | undefined) ?? [])
 }
 
 function columnSnippet(key: string, label: string, extras: string[]): string {
@@ -173,6 +219,15 @@ const code = computed(() => {
   if (!showPageSize.value) props.push(`  ${templateBooleanAttr('showPageSize', false)}`)
   if (!striped.value) props.push(`  ${templateBooleanAttr('striped', false)}`)
   if (forceLoading.value) props.push(`  ${templateBooleanAttr('loading', true)}`)
+  if (expandable.value) {
+    props.push('  v-model:expanded-key="expandedKey"')
+    props.push(`  ${templateBooleanAttr('expandable', true)}`)
+    props.push(`  ${templateStringAttr('expandMode', expandMode.value)}`)
+    if (expandMode.value === 'lazy') {
+      props.push('  :expand-loading="expandLoading"')
+      props.push('  @expand="onExpand"')
+    }
+  }
   if (mode.value === 'api') {
     props.push(
       `  ${templateBooleanAttr('serverSide', true)}`,
@@ -208,6 +263,11 @@ const code = computed(() => {
   lines.push('      {{ value }}')
   lines.push('    </Lozenge>')
   lines.push('  </template>')
+  if (expandable.value) {
+    lines.push('  <template #expanded-row="{ row }">')
+    lines.push('    <Table :nested="true">…projects…</Table>')
+    lines.push('  </template>')
+  }
   lines.push('</DataTable>')
 
   return lines.join('\n')
@@ -260,6 +320,7 @@ const code = computed(() => {
         v-model:page-size="pageSize"
         v-model:sort-stack="sortStack"
         v-model:column-filters="columnFilters"
+        v-model:expanded-key="expandedKey"
         :columns="tableColumns"
         :rows="tableRows"
         :server-side="mode === 'api'"
@@ -270,6 +331,9 @@ const code = computed(() => {
         :show-total-records="showTotalRecords"
         :show-page-size="showPageSize"
         :striped="striped"
+        :expandable="expandable"
+        :expand-mode="expandMode"
+        :expand-loading="expandLoading"
         :page-size-options="pageSizeOptions"
         row-key="id"
         :search-placeholder="resolvedSearchPlaceholder"
@@ -278,6 +342,7 @@ const code = computed(() => {
         :labels="dataTableLabels"
         :locale="locale"
         @request="loadTable"
+        @expand="onExpand"
       >
         <template v-if="showToolbar" #toolbar>
           <Badge variant="primary" :value="tableRows.length" />
@@ -292,6 +357,27 @@ const code = computed(() => {
             {{ formatStatus(value as UserRow['status']) }}
           </Lozenge>
         </template>
+        <template v-if="expandable" #expanded-row="{ row }">
+          <Table nested>
+            <TableHead>
+              <TableRow>
+                <TableCell>{{ t('dataTable.projectCol') }}</TableCell>
+                <TableCell>{{ t('dataTable.roleCol') }}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow v-for="project in projectsForRow(row)" :key="project.name">
+                <TableCell>{{ project.name }}</TableCell>
+                <TableCell>{{ project.role }}</TableCell>
+              </TableRow>
+              <TableRow v-if="projectsForRow(row).length === 0">
+                <TableCell :colspan="2" class="text-muted-foreground">
+                  {{ t('dataTable.noProjects') }}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </template>
       </DataTable>
 
       <DataTablePlaygroundControls
@@ -304,6 +390,8 @@ const code = computed(() => {
         v-model:force-loading="forceLoading"
         v-model:show-toolbar="showToolbar"
         v-model:force-empty="forceEmpty"
+        v-model:expandable="expandable"
+        v-model:expand-mode="expandMode"
         v-model:page-size-preset="pageSizePreset"
         v-model:column-filter-apply-mode="columnFilterApplyMode"
         v-model:search-placeholder="searchPlaceholder"

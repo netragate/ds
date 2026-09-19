@@ -69,6 +69,7 @@ export const catalogGroups: CatalogGroup[] = [
       'TableBody',
       'TableRow',
       'TableCell',
+      'TableExpandedRow',
       'DataTable',
       'DataTableColumnFilter',
       'DataTableColumnFilterMenu',

@@ -607,7 +607,8 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
   Table: {
     usage: usageSnippets.Table!,
     props: [
-      p('striped', 'boolean', 'false', 'Alternating row background on tbody'),
+      p('striped', 'boolean', 'false', 'Alternating row background on direct tbody rows (skips nested tables and expanded detail rows)'),
+      p('nested', 'boolean', 'false', 'Marks nested table (adds ds-table-nested); use inside cells or expand panels'),
       cls(),
     ],
     slots: [s('default', undefined, 'TableHead and TableBody sections')],
@@ -640,6 +641,15 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     slots: [s('default', undefined, 'Cell content')],
   },
 
+  TableExpandedRow: {
+    usage: usageSnippets.TableExpandedRow!,
+    props: [
+      p('colspan', 'number', undefined, 'Parent column count to span (required)'),
+      cls(),
+    ],
+    slots: [s('default', undefined, 'Static nested Table or detail content')],
+  },
+
   DataTable: {
     usage: usageSnippets.DataTable!,
     props: [
@@ -656,6 +666,9 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('serverSide', 'boolean', 'false', 'Emit request events instead of client filtering/sorting'),
       p('columnFilterApply', 'boolean | null', 'null (follows serverSide)', 'Require Apply before column filters trigger requests'),
       p('striped', 'boolean', 'true', 'Striped table rows'),
+      p('expandable', 'boolean', 'false', 'Show expand column and support #expanded-row (accordion)'),
+      p('expandMode', "'eager' | 'lazy'", 'eager', 'Eager shows slot immediately; lazy emits expand and uses expandLoading'),
+      p('expandLoading', 'boolean', 'false', 'Panel-local loading spinner for lazy expand (not whole-table loading)'),
       p('emptyTitle', 'string', 'No results', 'Empty state title'),
       p('emptyDescription', 'string', 'Try adjusting your search or filters.', 'Empty state description'),
       p('labels', 'DataTableLabels', undefined, 'Localized label overrides'),
@@ -670,12 +683,17 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       m('columnFilters', 'DataTableColumnFilters', '{}', 'Column filter values (v-model:column-filters)'),
       m('sortKey', 'string | null', 'null', 'Legacy single sort key (v-model:sort-key)'),
       m('sortDirection', "'asc' | 'desc' | null", 'null', 'Legacy sort direction (v-model:sort-direction)'),
+      m('expandedKey', 'string | null', 'null', 'Accordion expanded row key (v-model:expanded-key)'),
     ],
     slots: [
       s('toolbar', undefined, 'Extra controls beside the search bar'),
       s('cell-{key}', '{ row, value, index }', 'Custom cell renderer per column key'),
+      s('expanded-row', '{ row, rowKey }', 'Static nested Table content for the expanded detail panel'),
     ],
-    events: [e('request', 'DataTableRequestParams', 'Emitted in server-side mode when data should be refetched')],
+    events: [
+      e('request', 'DataTableRequestParams', 'Emitted in server-side mode when data should be refetched'),
+      e('expand', 'DataTableExpandPayload', 'Emitted when a row is opened (use with expandMode lazy)'),
+    ],
   },
 
   DataTableColumnFilter: {

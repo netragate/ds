@@ -16,6 +16,10 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Allow multiple selection': 'Permite seleção múltipla',
   'Allow panel width drag resize': 'Permite redimensionar o painel arrastando',
   'Alternating row background on tbody': 'Fundo alternado nas linhas do tbody',
+  'Alternating row background on direct tbody rows (skips nested tables and expanded detail rows)':
+    'Fundo alternado nas linhas diretas do tbody (ignora tabelas aninhadas e linhas de detalhe)',
+  'Accordion expanded row key (v-model:expanded-key)':
+    'Chave da linha expandida no acordeão (v-model:expanded-key)',
   'Anchor href': 'Href do link',
   'Array of { name } objects (required)': 'Array de objetos { name } (obrigatório)',
   'Associates the label with a form control id': 'Associa o rótulo ao id do controle de formulário',
@@ -92,6 +96,10 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Element that toggles the popover': 'Elemento que abre/fecha o popover',
   'Emit request events instead of client filtering/sorting': 'Emite eventos de requisição em vez de filtrar/ordenar no cliente',
   'Emitted in server-side mode when data should be refetched': 'Emitido no modo server-side quando os dados devem ser recarregados',
+  'Emitted when a row is opened (use with expandMode lazy)':
+    'Emitido quando uma linha é aberta (use com expandMode lazy)',
+  'Eager shows slot immediately; lazy emits expand and uses expandLoading':
+    'Eager mostra o slot imediatamente; lazy emite expand e usa expandLoading',
   'Emitted when checked state changes': 'Emitido quando o estado marcado muda',
   'Emitted when indeterminate state changes': 'Emitido quando o estado indeterminado muda',
   'Emitted when page changes': 'Emitido quando a página muda',
@@ -258,6 +266,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Show page size selector': 'Exibe seletor de tamanho de página',
   'Show record and page counts': 'Exibe contagem de registros e páginas',
   'Show search input': 'Exibe campo de busca',
+  'Show expand column and support #expanded-row (accordion)':
+    'Mostra coluna de expand e suporte a #expanded-row (acordeão)',
   'Show success toast': 'Exibe toast de sucesso',
   'Show warning toast': 'Exibe toast de aviso',
   'Shows dismiss button': 'Exibe botão de fechar',
@@ -278,7 +288,17 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Spinner size': 'Tamanho do spinner',
   'Stacked children': 'Filhos empilhados',
   'Start with collapsed menu': 'Iniciar com menu recolhido',
+  'Static nested Table or detail content': 'Table aninhada estática ou conteúdo de detalhe',
+  'Static nested Table content for the expanded detail panel':
+    'Conteúdo Table aninhada estática do painel de detalhe expandido',
   'Striped table rows': 'Linhas da tabela listradas',
+  'Marks nested table (adds ds-table-nested); use inside cells or expand panels':
+    'Marca tabela aninhada (adiciona ds-table-nested); use em células ou painéis de expand',
+  'Panel-local loading spinner for lazy expand (not whole-table loading)':
+    'Spinner de loading só no painel para expand lazy (não é o loading da tabela inteira)',
+  'Parent column count to span (required)': 'Número de colunas do pai a abranger (obrigatório)',
+  'Detail row with colspan for expandable nested table content':
+    'Linha de detalhe com colspan para conteúdo de tabela aninhada expansível',
   'Styles helper text as success when :success is true': 'Estiliza texto de ajuda como sucesso quando :success é true',
   'Success validation state': 'Estado de validação de sucesso',
   'Supporting description text': 'Texto de descrição complementar',

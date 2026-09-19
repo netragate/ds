@@ -3,6 +3,8 @@ import { computed, ref, watch } from 'vue'
 import ArrowDown from '@lucide/vue/dist/esm/icons/arrow-down.mjs'
 import ArrowUp from '@lucide/vue/dist/esm/icons/arrow-up.mjs'
 import ArrowUpDown from '@lucide/vue/dist/esm/icons/arrow-up-down.mjs'
+import ChevronDown from '@lucide/vue/dist/esm/icons/chevron-down.mjs'
+import ChevronRight from '@lucide/vue/dist/esm/icons/chevron-right.mjs'
 import Search from '@lucide/vue/dist/esm/icons/search.mjs'
 import { cn } from '@/lib/utils'
 import Input from '@/components/form/Input.vue'
@@ -15,10 +17,13 @@ import TableHead from './TableHead.vue'
 import TableBody from './TableBody.vue'
 import TableRow from './TableRow.vue'
 import TableCell from './TableCell.vue'
+import TableExpandedRow from './TableExpandedRow.vue'
 import DataTableColumnFilterMenu from './DataTableColumnFilterMenu.vue'
 import type {
   DataTableColumn,
   DataTableColumnFilters,
+  DataTableExpandMode,
+  DataTableExpandPayload,
   DataTableLabels,
   DataTableRequestParams,
   DataTableSortEntry,
@@ -50,6 +55,12 @@ export interface DataTableProps {
   /** When null (default), follows `serverSide`. Set false for instant column filters in API mode. */
   columnFilterApply?: boolean | null
   striped?: boolean
+  /** When true, prepends an expand control column and supports `#expanded-row`. */
+  expandable?: boolean
+  /** Eager shows slot content immediately; lazy emits `expand` and uses `expandLoading`. */
+  expandMode?: DataTableExpandMode
+  /** Panel-local loading for lazy expand (does not replace the whole table). */
+  expandLoading?: boolean
   emptyTitle?: string
   emptyDescription?: string
   labels?: DataTableLabels
@@ -76,6 +87,9 @@ const defaultLabels: Required<DataTableLabels> = {
   filterDateFromAriaLabel: 'Filter from date',
   filterDateToAriaLabel: 'Filter to date',
   filterEnumAll: 'All {column}',
+  expandRow: 'Expand row',
+  collapseRow: 'Collapse row',
+  expandLoadingText: 'Loading details…',
 }
 
 const props = withDefaults(defineProps<DataTableProps>(), {
@@ -88,6 +102,9 @@ const props = withDefaults(defineProps<DataTableProps>(), {
   serverSide: false,
   columnFilterApply: null,
   striped: true,
+  expandable: false,
+  expandMode: 'eager',
+  expandLoading: false,
   emptyTitle: 'No results',
   emptyDescription: 'Try adjusting your search or filters.',
   locale: 'en',
@@ -109,12 +126,26 @@ const sortStack = defineModel<DataTableSortEntry[]>('sortStack', { default: () =
 const columnFilters = defineModel<DataTableColumnFilters>('columnFilters', { default: () => ({}) })
 const sortKey = defineModel<string | null>('sortKey', { default: null })
 const sortDirection = defineModel<SortDirection>('sortDirection', { default: null })
+const expandedKey = defineModel<string | null>('expandedKey', { default: null })
 
 const emit = defineEmits<{
   request: [params: DataTableRequestParams]
+  expand: [payload: DataTableExpandPayload]
 }>()
 
 const openFilterColumnKey = ref<string | null>(null)
+
+const totalColumnCount = computed(
+  () => props.columns.length + (props.expandable ? 1 : 0),
+)
+
+/** When expandable, CSS nth-child striping breaks on detail rows — stripe by data index instead. */
+const useCssStripe = computed(() => props.striped && !props.expandable)
+
+function rowStripeClass(rowIndex: number): string | undefined {
+  if (!props.striped || !props.expandable) return undefined
+  return rowIndex % 2 === 1 ? 'bg-muted/50' : undefined
+}
 
 function setFilterMenuOpen(columnKey: string, isOpen: boolean): void {
   openFilterColumnKey.value = isOpen ? columnKey : null
@@ -283,6 +314,24 @@ watch(
   },
   { immediate: true },
 )
+
+function rowKeyOf(row: Record<string, unknown>, rowIndex: number): string {
+  return resolveRowKey(row, rowIndex, props.rowKey)
+}
+
+function isRowExpanded(row: Record<string, unknown>, rowIndex: number): boolean {
+  return expandedKey.value === rowKeyOf(row, rowIndex)
+}
+
+function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
+  const key = rowKeyOf(row, rowIndex)
+  if (expandedKey.value === key) {
+    expandedKey.value = null
+    return
+  }
+  expandedKey.value = key
+  emit('expand', { key, row })
+}
 </script>
 
 <template>
@@ -313,9 +362,16 @@ watch(
         )
       "
     >
-      <Table :striped="striped" class="rounded-xl">
+      <Table :striped="useCssStripe" class="rounded-xl">
         <TableHead>
           <TableRow class="hover:bg-transparent">
+            <th
+              v-if="expandable"
+              scope="col"
+              class="h-12 w-10 px-2 text-left align-middle"
+            >
+              <span class="sr-only">{{ resolvedLabels.expandRow }}</span>
+            </th>
             <th
               v-for="column in columns"
               :key="column.key"
@@ -370,7 +426,7 @@ watch(
 
         <TableBody>
           <TableRow v-if="loading">
-            <TableCell :colspan="columns.length" class="py-16 text-center">
+            <TableCell :colspan="totalColumnCount" class="py-16 text-center">
               <div class="flex flex-col items-center gap-3">
                 <Spinner size="md" :glow="false" :aria-label="resolvedLabels.loadingAriaLabel" />
                 <span class="text-sm text-muted-foreground">{{ resolvedLabels.loadingText }}</span>
@@ -379,7 +435,7 @@ watch(
           </TableRow>
 
           <TableRow v-else-if="showEmpty">
-            <TableCell :colspan="columns.length" class="p-0">
+            <TableCell :colspan="totalColumnCount" class="p-0">
               <EmptyState
                 :title="emptyTitle"
                 :description="emptyDescription"
@@ -388,26 +444,75 @@ watch(
             </TableCell>
           </TableRow>
 
-          <TableRow
-            v-for="(row, rowIndex) in processedRows"
-            v-else
-            :key="resolveRowKey(row, rowIndex, rowKey)"
-          >
-            <TableCell
-              v-for="column in columns"
-              :key="column.key"
-              :class="alignClasses[column.align ?? 'left']"
+          <template v-else>
+            <template
+              v-for="(row, rowIndex) in processedRows"
+              :key="rowKeyOf(row, rowIndex)"
             >
-              <slot
-                :name="`cell-${column.key}`"
-                :row="row"
-                :value="getCellValue(row, column.key)"
-                :index="rowIndex"
+              <TableRow :class="rowStripeClass(rowIndex)">
+                <TableCell v-if="expandable" class="w-10 px-2">
+                  <button
+                    type="button"
+                    class="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    :aria-expanded="isRowExpanded(row, rowIndex)"
+                    :aria-label="
+                      isRowExpanded(row, rowIndex)
+                        ? resolvedLabels.collapseRow
+                        : resolvedLabels.expandRow
+                    "
+                    @click="toggleExpand(row, rowIndex)"
+                  >
+                    <ChevronDown
+                      v-if="isRowExpanded(row, rowIndex)"
+                      :size="16"
+                      aria-hidden="true"
+                    />
+                    <ChevronRight v-else :size="16" aria-hidden="true" />
+                  </button>
+                </TableCell>
+                <TableCell
+                  v-for="column in columns"
+                  :key="column.key"
+                  :class="alignClasses[column.align ?? 'left']"
+                >
+                  <slot
+                    :name="`cell-${column.key}`"
+                    :row="row"
+                    :value="getCellValue(row, column.key)"
+                    :index="rowIndex"
+                  >
+                    {{ displayCellValue(row, column) }}
+                  </slot>
+                </TableCell>
+              </TableRow>
+
+              <TableExpandedRow
+                v-if="expandable && isRowExpanded(row, rowIndex)"
+                :colspan="totalColumnCount"
               >
-                {{ displayCellValue(row, column) }}
-              </slot>
-            </TableCell>
-          </TableRow>
+                <div
+                  v-if="expandMode === 'lazy' && expandLoading"
+                  class="flex flex-col items-center gap-3 py-8"
+                  data-testid="expand-panel-loading"
+                >
+                  <Spinner
+                    size="md"
+                    :glow="false"
+                    :aria-label="resolvedLabels.loadingAriaLabel"
+                  />
+                  <span class="text-sm text-muted-foreground">
+                    {{ resolvedLabels.expandLoadingText }}
+                  </span>
+                </div>
+                <slot
+                  v-else
+                  name="expanded-row"
+                  :row="row"
+                  :row-key="rowKeyOf(row, rowIndex)"
+                />
+              </TableExpandedRow>
+            </template>
+          </template>
         </TableBody>
       </Table>
     </div>

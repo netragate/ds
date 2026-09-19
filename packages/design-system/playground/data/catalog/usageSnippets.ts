@@ -404,11 +404,19 @@ const toast = useToast()
     <TableHead>
       <TableRow>
         <TableCell>Name</TableCell>
+        <TableCell>Preview</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
       <TableRow>
         <TableCell>Ana</TableCell>
+        <TableCell>
+          <Table :nested="true">
+            <TableBody>
+              <TableRow><TableCell>Item A</TableCell></TableRow>
+            </TableBody>
+          </Table>
+        </TableCell>
       </TableRow>
     </TableBody>
   </Table>`,
@@ -426,6 +434,22 @@ const toast = useToast()
     '  <TableRow><TableCell>Ana</TableCell></TableRow>',
   ),
   TableCell: usage('TableCell', '  <TableCell>Ana</TableCell>'),
+  TableExpandedRow: usageMany(
+    ['Table', 'TableBody', 'TableCell', 'TableExpandedRow', 'TableHead', 'TableRow'],
+    `  <TableBody>
+    <TableRow><TableCell>Order #12</TableCell></TableRow>
+    <TableExpandedRow :colspan="1">
+      <Table :nested="true">
+        <TableHead>
+          <TableRow><TableCell>Item</TableCell></TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow><TableCell>Widget</TableCell></TableRow>
+        </TableBody>
+      </Table>
+    </TableExpandedRow>
+  </TableBody>`,
+  ),
   DataTable: usage(
     'DataTable',
     `  <DataTable
@@ -434,6 +458,7 @@ const toast = useToast()
     v-model:sort-stack="sortStack"
     v-model:column-filters="columnFilters"
     v-model:search="search"
+    v-model:expanded-key="expandedKey"
     :columns="columns"
     :rows="rows"
     :row-key="'id'"
@@ -444,7 +469,13 @@ const toast = useToast()
     :loading="loading"
     :server-side="false"
     :striped="true"
-  />`,
+    :expandable="true"
+    :expand-mode="'eager'"
+  >
+    <template #expanded-row="{ row }">
+      <Table :nested="true">…</Table>
+    </template>
+  </DataTable>`,
   ),
   DataTableColumnFilter: usage(
     'DataTableColumnFilter',

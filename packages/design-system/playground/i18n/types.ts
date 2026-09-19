@@ -409,17 +409,21 @@ export interface PlaygroundMessages {
     openPlayground: string
     modeClient: string
     modeApi: string
-    hints: [string, string, string, string]
+    hints: [string, string, string, string, string]
     sortLabel: string
     filtersLabel: string
     activeFilters: string
     noSort: string
+    projectCol: string
+    roleCol: string
+    noProjects: string
     controls: {
       features: string
       pageSizeOptions: string
       textFields: string
       emptyTitlePlaceholder: string
       emptyDescriptionPlaceholder: string
+      expandMode: string
     }
     columns: UserTableColumnMessages
     labels: {
@@ -443,6 +447,9 @@ export interface PlaygroundMessages {
       filterDateFromAriaLabel: string
       filterDateToAriaLabel: string
       filterEnumAll: string
+      expandRow: string
+      collapseRow: string
+      expandLoadingText: string
     }
   }
   drawer: {

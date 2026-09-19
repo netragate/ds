@@ -156,6 +156,55 @@ Single `Card` component with slots — there are no separate `CardHeader` / `Car
 
 Variants: `elevated` | `outlined` | `flat`.
 
+## Table
+
+Semantic table primitives: `Table`, `TableHead`, `TableBody`, `TableRow`, `TableCell`, and `TableExpandedRow`.
+
+Stripe/hover styles use **direct-child** selectors so a nested `Table` inside a cell is not painted by the parent. Mark nested instances with `:nested="true"` (adds `ds-table-nested`).
+
+### Pattern A — nested table in a cell
+
+```vue
+<Table :striped="true">
+  <TableBody>
+    <TableRow>
+      <TableCell>Order #12</TableCell>
+      <TableCell>
+        <Table :nested="true">
+          <TableHead>
+            <TableRow>
+              <TableCell>Item</TableCell>
+              <TableCell>Qty</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>Widget</TableCell>
+              <TableCell>2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+### Pattern B — expandable detail row (composition)
+
+```vue
+<TableBody>
+  <TableRow>
+    <TableCell>Order #12</TableCell>
+  </TableRow>
+  <TableExpandedRow :colspan="1">
+    <Table :nested="true">…static child rows…</Table>
+  </TableExpandedRow>
+</TableBody>
+```
+
+Prefer pattern B for longer child lists. Nested content MUST be static `Table` primitives — not a second full `DataTable`.
+
 ## DataTable
 
 Full table with global search, **multi-sort** (Ctrl+click / ⌘+click), column filters, pagination, and rows-per-page selector.
@@ -242,6 +291,63 @@ const columnFilters = ref<DataTableColumnFilters>({})
 The `@request` event sends `DataTableRequestParams` (`page`, `pageSize`, `search`, `sortStack`, `columnFilters`).
 
 With `server-side` enabled, column filters use an **Apply** button by default (`columnFilterApply` follows `serverSide`). Type in the popover and click Apply to fire `@request` — avoids reloading on every keystroke and losing input focus. For instant API filtering, pass `:column-filter-apply="false"`.
+
+### Expandable rows (nested static table)
+
+Set `:expandable="true"` for an accordion expand column (`v-model:expanded-key` — one open row at a time). Render a **static** nested `Table` in `#expanded-row` (not another `DataTable`).
+
+- **`expandMode="eager"`** (default): child data already on the row; expand shows `#expanded-row` immediately.
+- **`expandMode="lazy"`**: opening emits `expand` with `{ key, row }`; set `:expand-loading="true"` while fetching — spinner appears **only in the expand panel**, not as the whole-table loading row.
+
+```vue
+<script setup lang="ts">
+import { DataTable, Table, TableBody, TableCell, TableHead, TableRow } from '@netragate/design-system'
+import { ref } from 'vue'
+
+const expandedKey = ref<string | null>(null)
+const expandLoading = ref(false)
+const expandMode = ref<'eager' | 'lazy'>('eager')
+
+async function onExpand({ key, row }: { key: string; row: Record<string, unknown> }) {
+  if (expandMode.value !== 'lazy') return
+  expandLoading.value = true
+  // await fetch children for row…
+  expandLoading.value = false
+}
+</script>
+
+<template>
+  <DataTable
+    v-model:expanded-key="expandedKey"
+    :expandable="true"
+    :expand-mode="expandMode"
+    :expand-loading="expandLoading"
+    :columns="columns"
+    :rows="rows"
+    :row-key="'id'"
+    @expand="onExpand"
+  >
+    <template #expanded-row="{ row }">
+      <Table :nested="true">
+        <TableHead>
+          <TableRow>
+            <TableCell>Project</TableCell>
+            <TableCell>Role</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow v-for="item in (row.projects as { name: string; role: string }[])" :key="item.name">
+            <TableCell>{{ item.name }}</TableCell>
+            <TableCell>{{ item.role }}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </template>
+  </DataTable>
+</template>
+```
+
+Pattern A (mini-table in a cell) still works via `#cell-{key}` with a nested `Table :nested="true"`.
 
 ## Toasts
 
@@ -519,7 +625,7 @@ Regenerate `iconRegistry.bundle.js` and `iconFiles.ts` after editing `iconograph
 | **Forms** | `Input`, `DateInput`, `TimeInput`, `Textarea`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Toggle`, `Select`, `Label`, `FormField` |
 | **Feedback** | `Alert`, `Badge`, `Spinner`, `Progress`, `Skeleton`, `Toast`, `ToastHost` |
 | **Navigation** | `Tabs`, `TabList`, `Tab`, `TabPanel`, `Breadcrumb`, `BreadcrumbItem`, `Pagination`, `SidebarMenu*` |
-| **Data display** | `Card`, `Divider`, `Avatar`, `AvatarGroup`, `Lozenge`, `Table*`, `DataTable`, `DataTableColumnFilter*`, `PageSizeSelect`, `List`, `ListItem`, `EmptyState` |
+| **Data display** | `Card`, `Divider`, `Avatar`, `AvatarGroup`, `Lozenge`, `Table*`, `TableExpandedRow`, `DataTable`, `DataTableColumnFilter*`, `PageSizeSelect`, `List`, `ListItem`, `EmptyState` |
 | **Overlay** | `Modal`, `Dialog`, `Tooltip`, `Popover`, `Drawer` |
 | **Layout** | `Container`, `Stack`, `Grid`, `AppLayout` |
 | **Utils** | `cn`, `useToast`, `buttonVariants`, `iconography`, `resolveIcon`, `loadIcon` |
@@ -535,6 +641,8 @@ import type {
   ButtonIconName,
   DataTableColumn,
   DataTableColumnFilters,
+  DataTableExpandMode,
+  DataTableExpandPayload,
   DataTableRequestParams,
   DataTableSortEntry,
   SelectOption,

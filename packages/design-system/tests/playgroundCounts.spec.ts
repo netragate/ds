@@ -9,7 +9,7 @@ import {
 describe('playground counts', () => {
   it('Library component count matches catalogGroups (TimeInput included)', () => {
     expect(catalogGroups.some((g) => g.items.includes('TimeInput'))).toBe(true)
-    expect(catalogComponentCount).toBe(63)
+    expect(catalogComponentCount).toBe(64)
     expect(designSystemLibraryComponentCount).toBe(catalogComponentCount)
   })
 

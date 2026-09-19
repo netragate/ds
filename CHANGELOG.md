@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.13.0] - 2026-09-19
+
+### Added
+
+- **`Table` `nested` prop** — marks a nested table (`ds-table-nested`); stripe/hover stay scoped to the parent so nested rows are not restyled. Nested thead cells get distinct header chrome (muted background, uppercase, semibold).
+- **`TableExpandedRow`** — detail `<tr>` with `colspan` and `data-expanded-detail` for expandable nested content.
+- **`DataTable` expandable rows** — `:expandable`, `v-model:expanded-key` (accordion, one open row), `expandMode` (`eager` | `lazy`), `:expand-loading` (panel-local spinner), `#expanded-row` slot, and `@expand` payload `{ key, row }`.
+- **`DataTableLabels`** — `expandRow`, `collapseRow`, `expandLoadingText`.
+- **Docs & playground** — README Table/DataTable nesting + expand examples; catalog API for `TableExpandedRow` and expand props; DataTable demo controls for expandable + eager/lazy with nested projects table.
+
+### Changed
+
+- **`Table` / `TableBody` CSS** — stripe, hover, and last-row border use direct-child selectors and skip `data-expanded-detail` rows so nested tables and expand panels stay visually correct.
+
 ## [0.12.0] - 2026-08-29
 
 ### Changed

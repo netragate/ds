@@ -13,6 +13,8 @@ defineProps<{
   forceLoading: boolean
   showToolbar: boolean
   forceEmpty: boolean
+  expandable: boolean
+  expandMode: 'eager' | 'lazy'
   searchPlaceholder: string
   emptyTitle: string
   emptyDescription: string
@@ -30,6 +32,8 @@ defineEmits<{
   'update:forceLoading': [value: boolean]
   'update:showToolbar': [value: boolean]
   'update:forceEmpty': [value: boolean]
+  'update:expandable': [value: boolean]
+  'update:expandMode': [value: 'eager' | 'lazy']
   'update:searchPlaceholder': [value: string]
   'update:emptyTitle': [value: string]
   'update:emptyDescription': [value: string]
@@ -97,6 +101,34 @@ function optionStyle(active: boolean) {
           <Switch :model-value="forceEmpty" size="sm" @update:model-value="$emit('update:forceEmpty', $event)" />
           empty state
         </label>
+        <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
+          <Switch :model-value="expandable" size="sm" @update:model-value="$emit('update:expandable', $event)" />
+          {{ propTemplateBinding('expandable') }}
+        </label>
+      </div>
+    </div>
+
+    <div v-if="expandable">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">
+        {{ t('dataTable.controls.expandMode') }}
+      </p>
+      <div class="flex flex-wrap gap-1">
+        <button
+          type="button"
+          class="rounded px-2 py-1 font-mono text-xs"
+          :style="optionStyle(expandMode === 'eager')"
+          @click="$emit('update:expandMode', 'eager')"
+        >
+          eager
+        </button>
+        <button
+          type="button"
+          class="rounded px-2 py-1 font-mono text-xs"
+          :style="optionStyle(expandMode === 'lazy')"
+          @click="$emit('update:expandMode', 'lazy')"
+        >
+          lazy
+        </button>
       </div>
     </div>
 

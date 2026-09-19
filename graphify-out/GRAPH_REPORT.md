@@ -1,16 +1,16 @@
-# Graph Report - design_system_ci  (2026-06-29)
+# Graph Report - design_system_ci  (2026-09-19)
 
 ## Corpus Check
-- 363 files · ~268,768 words
+- 407 files · ~352,611 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1533 nodes · 1750 edges · 228 communities (183 shown, 45 thin omitted)
+- 1823 nodes · 2120 edges · 272 communities (222 shown, 50 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `db82f594`
+- Built from commit: `c8692413`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -50,6 +50,7 @@
 - [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
 - [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 38|Community 38]]
 - [[_COMMUNITY_Community 39|Community 39]]
 - [[_COMMUNITY_Community 40|Community 40]]
@@ -161,22 +162,58 @@
 - [[_COMMUNITY_Community 151|Community 151]]
 - [[_COMMUNITY_Community 152|Community 152]]
 - [[_COMMUNITY_Community 192|Community 192]]
+- [[_COMMUNITY_Community 228|Community 228]]
+- [[_COMMUNITY_Community 229|Community 229]]
+- [[_COMMUNITY_Community 230|Community 230]]
+- [[_COMMUNITY_Community 231|Community 231]]
+- [[_COMMUNITY_Community 232|Community 232]]
+- [[_COMMUNITY_Community 233|Community 233]]
+- [[_COMMUNITY_Community 234|Community 234]]
+- [[_COMMUNITY_Community 235|Community 235]]
+- [[_COMMUNITY_Community 236|Community 236]]
+- [[_COMMUNITY_Community 237|Community 237]]
+- [[_COMMUNITY_Community 238|Community 238]]
+- [[_COMMUNITY_Community 239|Community 239]]
+- [[_COMMUNITY_Community 240|Community 240]]
+- [[_COMMUNITY_Community 241|Community 241]]
+- [[_COMMUNITY_Community 242|Community 242]]
+- [[_COMMUNITY_Community 243|Community 243]]
+- [[_COMMUNITY_Community 245|Community 245]]
+- [[_COMMUNITY_Community 246|Community 246]]
+- [[_COMMUNITY_Community 247|Community 247]]
+- [[_COMMUNITY_Community 248|Community 248]]
+- [[_COMMUNITY_Community 249|Community 249]]
+- [[_COMMUNITY_Community 250|Community 250]]
+- [[_COMMUNITY_Community 251|Community 251]]
+- [[_COMMUNITY_Community 252|Community 252]]
+- [[_COMMUNITY_Community 253|Community 253]]
+- [[_COMMUNITY_Community 254|Community 254]]
+- [[_COMMUNITY_Community 255|Community 255]]
+- [[_COMMUNITY_Community 256|Community 256]]
+- [[_COMMUNITY_Community 257|Community 257]]
+- [[_COMMUNITY_Community 258|Community 258]]
+- [[_COMMUNITY_Community 259|Community 259]]
+- [[_COMMUNITY_Community 260|Community 260]]
+- [[_COMMUNITY_Community 261|Community 261]]
+- [[_COMMUNITY_Community 262|Community 262]]
+- [[_COMMUNITY_Community 263|Community 263]]
+- [[_COMMUNITY_Community 264|Community 264]]
+- [[_COMMUNITY_Community 265|Community 265]]
+- [[_COMMUNITY_Community 266|Community 266]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Requirements` - 29 edges
 2. `Component Design Details` - 27 edges
 3. `providePlaygroundLocale()` - 26 edges
-4. `@netragate/design-system` - 15 edges
-5. `compilerOptions` - 14 edges
-6. `PlaygroundLocale` - 11 edges
-7. `Correctness Properties` - 11 edges
-8. `Requirements` - 11 edges
-9. `Requirements` - 11 edges
-10. `Components and Interfaces` - 11 edges
+4. `@netragate/design-system` - 17 edges
+5. `Changelog` - 16 edges
+6. `compilerOptions` - 13 edges
+7. `scripts` - 11 edges
+8. `PlaygroundLocale` - 11 edges
+9. `Correctness Properties` - 11 edges
+10. `Requirements` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `PlaygroundLocaleContext` --references--> `PlaygroundLocale`  [EXTRACTED]
-  packages/design-system/playground/composables/usePlaygroundLocale.ts → packages/design-system/playground/i18n/types.ts
 - `PlaygroundLocaleContext` --references--> `PlaygroundMessages`  [EXTRACTED]
   packages/design-system/playground/composables/usePlaygroundLocale.ts → packages/design-system/playground/i18n/types.ts
 - `createLocaleWrapper()` --calls--> `providePlaygroundLocale()`  [EXTRACTED]
@@ -185,35 +222,37 @@
   packages/design-system/tests/HomepageRevamp.P1.pbt.spec.ts → packages/design-system/playground/composables/usePlaygroundLocale.ts
 - `createLocaleWrapper()` --calls--> `providePlaygroundLocale()`  [EXTRACTED]
   packages/design-system/tests/HomepageRevamp.P2.pbt.spec.ts → packages/design-system/playground/composables/usePlaygroundLocale.ts
+- `createLocaleWrapper()` --calls--> `providePlaygroundLocale()`  [EXTRACTED]
+  packages/design-system/tests/HomepageRevamp.P4.pbt.spec.ts → packages/design-system/playground/composables/usePlaygroundLocale.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (228 total, 45 thin omitted)
+## Communities (272 total, 50 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.17
 Nodes (11): addToast(), resolveShowOptions(), ShowToastOptions, state, timeouts, TOAST_POSITIONS, ToastItem, ToastPosition (+3 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (44): dependencies, class-variance-authority, clsx, tailwind-merge, @vueuse/core, description, devDependencies, fast-check (+36 more)
+Cohesion: 0.13
+Nodes (14): description, files, keywords, license, main, module, name, peerDependencies (+6 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.08
-Nodes (18): showPagination, totalPages, visiblePages, SIDEBAR_MENU_INJECTION_KEY, SidebarMenuContext, SidebarMenuGroupProps, SidebarMenuItemProps, classes (+10 more)
+Cohesion: 0.07
+Nodes (18): totalPages, visiblePages, SIDEBAR_MENU_INJECTION_KEY, SidebarMenuContext, SidebarMenuGroupProps, SidebarMenuItemProps, SidebarSubmenuMode, classes (+10 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.12
-Nodes (16): compilerOptions, baseUrl, esModuleInterop, isolatedModules, jsx, lib, module, moduleResolution (+8 more)
+Nodes (15): compilerOptions, esModuleInterop, isolatedModules, jsx, lib, module, moduleResolution, paths (+7 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.09
-Nodes (12): classes, hasAfter, hasBefore, resolvedSize, slots, group, groupName, isChecked (+4 more)
+Cohesion: 0.06
+Nodes (31): emptyDateRange(), emptyDateTime(), emptyDateTimeRange(), if(), group, groupName, isChecked, isDisabled (+23 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.11
-Nodes (11): overflow, filterAriaLabel, filterTitle, DataTableColumnFilterValue, DataTableDateRangeFilter, DataTableFilterOption, DataTableFilterType, DataTableLabels (+3 more)
+Cohesion: 0.12
+Nodes (10): overflow, DataTableExpandMode, DataTableExpandPayload, DataTableFilterOption, DataTableFilterType, DataTableLabels, DataTableRequestParams, DataTableRowKey (+2 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.15
@@ -236,8 +275,8 @@ Cohesion: 0.18
 Nodes (10): 10. Integration and Finalization, 1. Project Scaffold, 2. Design Tokens, 3. Action Components, 4. Form Components, 5. Feedback Components, 6. Navigation Components, 7. Data Display Components (+2 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.05
-Nodes (19): palette, activeMenuWidth, closePanel(), gridStyle, onEscape(), usesContentFooter, usesGridFooter, semanticSurfaceClasses (+11 more)
+Cohesion: 0.21
+Nodes (5): semanticSurfaceClasses, OverlayAppearance, overlayAppearanceClasses, PopoverAppearance, TooltipAppearance
 
 ### Community 12 - "Community 12"
 Cohesion: 0.04
@@ -280,40 +319,40 @@ Cohesion: 0.25
 Nodes (7): ADDED Requirements, Requirement: Breadcrumb component, Requirement: Pagination component, Requirement: Tabs component, Scenario: Current page is not a link, Scenario: Page change emits event, Scenario: Tab selection updates panel
 
 ### Community 22 - "Community 22"
-Cohesion: 0.20
-Nodes (9): devDependencies, @vitest/coverage-v8, name, private, scripts, build, dev, test (+1 more)
+Cohesion: 0.13
+Nodes (14): devDependencies, @vitest/coverage-v8, name, overrides, brace-expansion, fast-uri, nanoid, postcss (+6 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.29
-Nodes (6): compilerOptions, declaration, emitDeclarationOnly, outDir, extends, include
+Cohesion: 0.25
+Nodes (7): compilerOptions, declaration, emitDeclarationOnly, outDir, exclude, extends, include
 
 ### Community 24 - "Community 24"
-Cohesion: 0.10
-Nodes (20): [0.1.0] - 2026-06-16, [0.1.8] - 2026-06-16, [0.2.6] - 2026-06-16, [0.2.7] - 2026-06-16, [0.5.1] - 2026-06-28, [0.5.2] - 2026-06-29, Added, Added (+12 more)
+Cohesion: 0.29
+Nodes (6): [0.2.7] - 2026-06-16, [0.9.5] - 2026-08-29, Added, Changed, Changed, Changelog
 
 ### Community 27 - "Community 27"
 Cohesion: 0.50
 Nodes (3): TABS_INJECTION_KEY, TABS_UNMOUNT_KEY, TabsContext
 
 ### Community 29 - "Community 29"
-Cohesion: 0.33
-Nodes (5): BadgeAppearance, badgeAppearances, badgeAppearanceStyles, BadgeVariants, badgeVariantToAppearance
+Cohesion: 0.07
+Nodes (26): ADDED Requirements, Requirement: Button hover shadow, Requirement: Button idle shadow, Requirement: Button pressed state, Requirement: Playground state showcase, Requirement: Remove ds-glow-primary, Scenario: ButtonCard does not use ds-glow-primary, Scenario: Destructive variant has idle shadow (+18 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.12
-Nodes (6): createTestRouter(), mountAppWithRouter(), app, savedLocale, savedTheme, router
+Cohesion: 0.11
+Nodes (7): createTestRouter(), mountAppWithRouter(), app, savedLocale, savedTheme, router, AppWrapper
 
 ### Community 31 - "Community 31"
 Cohesion: 0.05
 Nodes (39): Abordagem Dual, App.vue — Modificações, Architecture, changelogData.ts, changelogData.ts com Dados Inválidos, Chave i18n Ausente, Components and Interfaces, Configuração de Testes de Propriedade (+31 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.06
-Nodes (30): 1. Importe os estilos, 2. Use os componentes, 3. Dark mode (opcional), Card, Colunas, Componentes exportados, Configuração rápida, DataTable (+22 more)
+Cohesion: 0.05
+Nodes (36): 1. Import styles, 2. Use components, 3. Dark mode (optional), Button icons, Card, Client-side usage, Columns, DataTable (+28 more)
 
 ### Community 33 - "Community 33"
 Cohesion: 0.07
-Nodes (3): playgroundDemoRegistry, panels, currentLabel
+Nodes (3): DemoModule, panels, currentLabel
 
 ### Community 34 - "Community 34"
 Cohesion: 0.08
@@ -332,12 +371,12 @@ Cohesion: 0.08
 Nodes (23): appearance-to-variant-migration Bugfix Design, Bug Condition, Bug Details, Changes Required, Correctness Properties, Exemplos Concretos, Expected Behavior, Exploratory Bug Condition Checking (+15 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.17
-Nodes (9): componentCatalogDescriptionsEn, componentCatalogDescriptionsPtBR, en, ptBR, CategoryKey, PlaygroundMessages, UserTableColumnMessages, LocaleShell (+1 more)
+Cohesion: 0.15
+Nodes (10): componentCatalogDescriptionsEn, componentCatalogDescriptionsPtBR, en, ptBR, CategoryKey, PlaygroundMessages, UserTableColumnMessages, iconography (+2 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.15
-Nodes (17): calendarDays, clearValue(), closeCalendar(), commitDisplayValue(), emitValue(), inputClasses, monthLabel, onDocumentPointerDown() (+9 more)
+Cohesion: 0.12
+Nodes (21): __dirname, iconFilesPath, iconLoadersPath, iconRegistryBundlePath, iconRegistryEntryPath, iconRegistryTypesPath, legacyIconRegistryPath, legacyLoadersPath (+13 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.11
@@ -349,26 +388,30 @@ Nodes (17): ADDED Requirements, Requirement: Browser back/forward navigation wor
 
 ### Community 45 - "Community 45"
 Cohesion: 0.12
-Nodes (17): 10. SectionMessage — novo componente, 13. Heading — nova primitiva tipográfica, 15. ProgressTracker — novo componente, 16. Acessibilidade transversal, 17. Exports em `index.ts`, 22. Tokens de Estado Interativo de Surface (Requisito 24), 3. Avatar — shape, presence, status, 4. Badge — novas appearances (+9 more)
+Nodes (17): 10. SectionMessage — novo componente, 13. Heading — nova primitiva tipográfica, 14. Text — nova primitiva tipográfica, 15. ProgressTracker — novo componente, 16. Acessibilidade transversal, 17. Exports em `index.ts`, 3. Avatar — shape, presence, status, 4. Badge — novas appearances (+9 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.14
-Nodes (5): containerClasses, flagVariants, sectionMessageVariants, flagVariants, sectionMessageVariants
+Cohesion: 0.11
+Nodes (6): containerClasses, flagVariants, sectionMessageVariants, flagVariants, sectionMessageVariants, ButtonWithSuspense
 
 ### Community 47 - "Community 47"
-Cohesion: 0.18
-Nodes (10): getComponentUsage(), catalogComponentCount, CatalogGroup, catalogGroups, hasPlaygroundDemo(), playgroundDemoName(), playgroundSet, playgroundAliases (+2 more)
+Cohesion: 0.22
+Nodes (8): getComponentUsage(), hasPlaygroundDemo(), playgroundDemoName(), playgroundSet, playgroundAliases, resolvePlaygroundDemo(), loadPlaygroundDemoComponent(), playgroundDemoLoaders
 
 ### Community 48 - "Community 48"
-Cohesion: 0.21
-Nodes (11): ChangelogChange, changelogEntries, ChangelogEntry, ChangelogType, changelogChangeArb, changelogEntryArb, VALID_TYPES, validTypeArb (+3 more)
+Cohesion: 0.15
+Nodes (14): ChangelogChange, changelogEntries, ChangelogEntry, ChangelogType, createLocaleWrapper(), mockEntries, mountChangelog(), changelogChangeArb (+6 more)
 
 ### Community 49 - "Community 49"
-Cohesion: 0.19
-Nodes (11): DataTableColumnFilters, DataTableSortEntry, SortDirection, paginateDataTableRows(), delay(), fetchUsers(), FetchUsersParams, FetchUsersResult (+3 more)
+Cohesion: 0.17
+Nodes (12): DataTableColumnFilters, DataTableSortEntry, SortDirection, paginateDataTableRows(), delay(), fetchUsers(), FetchUsersParams, FetchUsersResult (+4 more)
+
+### Community 50 - "Community 50"
+Cohesion: 0.14
+Nodes (8): BadgeAppearance, badgeAppearances, badgeAppearanceStyles, BadgeVariants, badgeVariantToAppearance, FLAG_GROUP_KEY, FlagGroupItem, FlagGroupState
 
 ### Community 51 - "Community 51"
-Cohesion: 0.15
+Cohesion: 0.20
 Nodes (5): inputPaddingClass, showHelper, showTrailingIcon, LocaleShell, mountDemo()
 
 ### Community 52 - "Community 52"
@@ -376,16 +419,16 @@ Cohesion: 0.19
 Nodes (10): createTranslator(), detectDefaultLocale(), localeCatalog, PlaygroundLocaleKey, usePlaygroundLocale(), useDataTableLabels(), UserRowStatus, useStatusLabel() (+2 more)
 
 ### Community 53 - "Community 53"
-Cohesion: 0.15
+Cohesion: 0.13
 Nodes (6): sortDataTableRows(), sortDataTableRowsMulti(), sampleColumns, SampleRow, sampleRows, sampleSteps
 
 ### Community 54 - "Community 54"
-Cohesion: 0.22
-Nodes (12): DataTableColumn, applyColumnFilters(), compareValues(), filterDataTableRows(), filterDataTableRowsPipeline(), formatCellValue(), FormatCellValueOptions, getCellValue() (+4 more)
+Cohesion: 0.17
+Nodes (15): DataTableColumn, DataTableColumnFilterValue, DataTableDateRangeFilter, applyColumnFilters(), compareValues(), filterDataTableRows(), filterDataTableRowsPipeline(), formatCellValue() (+7 more)
 
 ### Community 55 - "Community 55"
-Cohesion: 0.24
-Nodes (9): ButtonVariants, ButtonIconName, buttonIconNames, buttonIcons, iconography, iconographyComponents, IconographyName, iconographyNames (+1 more)
+Cohesion: 0.30
+Nodes (9): ButtonVariants, ButtonIconName, buttonIconNames, iconographyNames, iconographySelectOptions, buttonIcons, iconographyComponents, loadIcon() (+1 more)
 
 ### Community 56 - "Community 56"
 Cohesion: 0.15
@@ -396,16 +439,12 @@ Cohesion: 0.17
 Nodes (7): backgroundColor, classes, initials, showInitials, string, nameArbitrary, srcArbitrary
 
 ### Community 58 - "Community 58"
-Cohesion: 0.33
-Nodes (10): buildCalendarMonthGrid(), CalendarDayCell, dateInputPlaceholder(), formatIsoForLocale(), formatMonthYear(), getWeekdayLabels(), parseIsoDate(), parseLocaleDateInput() (+2 more)
+Cohesion: 0.20
+Nodes (19): buildCalendarMonthGrid(), CalendarDayCell, CalendarSelection, compareIsoDate(), dateInputPlaceholder(), dateRangeInputPlaceholder(), formatDateRangeForLocale(), formatIsoForLocale() (+11 more)
 
 ### Community 59 - "Community 59"
-Cohesion: 0.18
-Nodes (10): 1. `vue-router` como devDependency do playground, não do pacote, 2. Rotas planas, sem aninhamento, 3. Hash para seleção de componente no Catalog, 4. `createWebHistory` para URLs limpas, 5. Manter `PlaygroundCategoryNav` funcional, Context, Decisions, Goals / Non-Goals (+2 more)
-
-### Community 60 - "Community 60"
-Cohesion: 0.25
-Nodes (6): providePlaygroundLocale(), createLocaleWrapper(), mountHero(), makeProviderWrapper(), SAMPLE_PATHS, setup()
+Cohesion: 0.10
+Nodes (20): ADDED Requirements, Requirement: Accordion expandable rows, Requirement: Documentation for Table and DataTable nesting, Requirement: Eager expand mode, Requirement: Expand accessibility labels, Requirement: Lazy expand mode with panel loading, Requirement: Static nested table only in expand panel, Scenario: Accordion closes previous (+12 more)
 
 ### Community 61 - "Community 61"
 Cohesion: 0.18
@@ -440,28 +479,28 @@ Cohesion: 0.22
 Nodes (9): Critérios de Aceitação, Critérios de Aceitação, Critérios de Aceitação, Critérios de Aceitação, Requirements, Requisito 10 — Novo Componente SectionMessage, Requisito 1 — Expansão do Sistema de Tokens Semânticos, Requisito 3 — Aprimoramento do Componente Avatar (+1 more)
 
 ### Community 70 - "Community 70"
-Cohesion: 0.28
-Nodes (4): componentCatalogApiDescriptionsPtBR, PlaygroundLocale, createLocaleWrapper(), mountPurposeSection()
+Cohesion: 0.29
+Nodes (6): PlaygroundLocaleContext, PlaygroundLocale, createLocaleWrapper(), mountPurposeSection(), createLocaleWrapper(), mountPrinciplesSection()
 
 ### Community 71 - "Community 71"
-Cohesion: 0.25
-Nodes (3): createLocaleWrapper(), mockEntries, mountChangelog()
+Cohesion: 0.13
+Nodes (15): devDependencies, fast-check, happy-dom, rollup-plugin-visualizer, tailwindcss, @tailwindcss/vite, typescript, vite (+7 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.31
-Nodes (6): PlaygroundLocaleContext, createLocaleWrapper(), mountQuickNav(), createLocaleWrapper(), mountQuickNav(), pushMock
+Cohesion: 0.22
+Nodes (9): providePlaygroundLocale(), createLocaleWrapper(), mountQuickNav(), createLocaleWrapper(), mountQuickNav(), pushMock, makeProviderWrapper(), SAMPLE_PATHS (+1 more)
 
 ### Community 73 - "Community 73"
-Cohesion: 0.33
-Nodes (6): assertLocaleReactivity(), createLocaleWrapper(), getRenderedText(), getRenderedTokens(), createLocaleWrapper(), mountQuickStart()
+Cohesion: 0.27
+Nodes (4): assertLocaleReactivity(), createLocaleWrapper(), getRenderedText(), getRenderedTokens()
 
 ### Community 74 - "Community 74"
 Cohesion: 0.22
 Nodes (3): copy, modalActions, primaryButtonVariant
 
 ### Community 75 - "Community 75"
-Cohesion: 0.25
-Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Não-Objetivos, What Changes, Why
+Cohesion: 0.18
+Nodes (10): 1. `vue-router` como devDependency do playground, não do pacote, 2. Rotas planas, sem aninhamento, 3. Hash para seleção de componente no Catalog, 4. `createWebHistory` para URLs limpas, 5. Manter `PlaygroundCategoryNav` funcional, Context, Decisions, Goals / Non-Goals (+2 more)
 
 ### Community 76 - "Community 76"
 Cohesion: 0.29
@@ -472,12 +511,12 @@ Cohesion: 0.29
 Nodes (6): Architecture, Correctness Properties, Design Document, Estrutura de arquivos resultante, Overview, Stack mantida
 
 ### Community 78 - "Community 78"
-Cohesion: 0.29
-Nodes (6): Desenvolvimento, ds, Estrutura, Licença, O que tem aqui, Scripts (raiz)
+Cohesion: 0.25
+Nodes (7): Development, ds, License, Scripts (root), Structure, Using the package, What's in this repo
 
 ### Community 79 - "Community 79"
-Cohesion: 0.33
-Nodes (5): 1. Setup, 2. Refactor App.vue navigation state, 3. Catalog hash-based routing, 4. Test adjustments, 5. Finalize
+Cohesion: 0.18
+Nodes (11): scripts, analyze, build, build:lib, build:playground, dev, fix:lucide-imports, fix:playground-imports (+3 more)
 
 ### Community 80 - "Community 80"
 Cohesion: 0.33
@@ -504,8 +543,8 @@ Cohesion: 0.33
 Nodes (3): APP_LAYOUT_MENU_INJECTION_KEY, AppLayoutMenuContext, SettingsFooterMode
 
 ### Community 87 - "Community 87"
-Cohesion: 0.33
-Nodes (5): allPlaygroundDemos, PlaygroundDemoComponent, playgroundDemoComponents, ShowcaseDemoComponent, showcaseDemoComponents
+Cohesion: 0.24
+Nodes (9): catalogComponentCount, CatalogGroup, catalogGroups, allPlaygroundDemos, designSystemLibraryComponentCount, PlaygroundDemoComponent, playgroundDemoComponents, ShowcaseDemoComponent (+1 more)
 
 ### Community 88 - "Community 88"
 Cohesion: 0.60
@@ -518,6 +557,10 @@ Nodes (4): Context, Decisions, Goals / Non-Goals, Risks / Trade-offs
 ### Community 90 - "Community 90"
 Cohesion: 0.40
 Nodes (5): 26. Playground — Aba Foundations (Requisito 28), Componentes utilitários de documentação, Estrutura de arquivos sugerida, Implementação dos componentes utilitários, Seções da aba Foundations
+
+### Community 91 - "Community 91"
+Cohesion: 0.25
+Nodes (4): iconFiles, iconographyMeta, IconographyName, iconRegistry
 
 ### Community 92 - "Community 92"
 Cohesion: 0.50
@@ -540,8 +583,8 @@ Cohesion: 0.50
 Nodes (3): Glossary, Introduction, Requirements Document
 
 ### Community 100 - "Community 100"
-Cohesion: 0.50
-Nodes (3): FLAG_GROUP_KEY, FlagGroupItem, FlagGroupState
+Cohesion: 0.51
+Nodes (8): accordionOpenKeys(), ancestorMenuKeys(), ensureOpenKeysForActiveId(), isDescendantMenuKey(), menuIdsEqual(), normalizeMenuId(), parentMenuKey(), replaceOpenKeysForActiveId()
 
 ### Community 103 - "Community 103"
 Cohesion: 0.50
@@ -595,25 +638,157 @@ Nodes (3): 6. Modal — subcomponentes, `Modal.vue` — atualização, Novos arq
 Cohesion: 0.67
 Nodes (3): 8. Tabs — change event, shouldUnmount, id, `TabPanel.vue` — suporte a `v-if` vs `v-show`, `Tabs.vue` — adições
 
+### Community 118 - "Community 118"
+Cohesion: 0.18
+Nodes (3): coords, variantClasses, visible
+
+### Community 122 - "Community 122"
+Cohesion: 0.22
+Nodes (7): __dirname, pkgRoot, playgroundRoot, srcRoot, symbolToPath, transformFile(), walk()
+
+### Community 228 - "Community 228"
+Cohesion: 0.22
+Nodes (4): __dirname, nameToFile, pkgRoot, roots
+
+### Community 229 - "Community 229"
+Cohesion: 0.22
+Nodes (8): ADDED Requirements, Requirement: Expanded detail row primitive (pattern B composition), Requirement: Nesting-safe Table styles, Requirement: Static nested table in a cell (pattern A), Scenario: Cell hosts nested Table, Scenario: Expanded row spans columns, Scenario: Nested table rows ignore parent hover, Scenario: Nested table rows ignore parent stripe
+
+### Community 230 - "Community 230"
+Cohesion: 0.25
+Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Não-Objetivos, What Changes, Why
+
+### Community 231 - "Community 231"
+Cohesion: 0.29
+Nodes (6): activeMenuWidth, closePanel(), gridStyle, onEscape(), usesContentFooter, usesGridFooter
+
+### Community 232 - "Community 232"
+Cohesion: 0.25
+Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Non-Goals, What Changes, Why
+
+### Community 233 - "Community 233"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 234 - "Community 234"
+Cohesion: 0.29
+Nodes (7): [0.12.0] - 2026-08-29, [0.5.2] - 2026-06-29, Added, Breaking, Changed, Changed, Fixed
+
+### Community 236 - "Community 236"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 237 - "Community 237"
+Cohesion: 0.29
+Nodes (5): iconPixelSize, pillSizeClass, wrapClasses, wrapStyle, valueAbove99
+
+### Community 238 - "Community 238"
+Cohesion: 0.38
+Nodes (5): close(), onKeydown(), onOverlayClick(), resizeHandleClasses, showResizeHandle
+
+### Community 239 - "Community 239"
+Cohesion: 0.33
+Nodes (5): 1. Setup, 2. Refactor App.vue navigation state, 3. Catalog hash-based routing, 4. Test adjustments, 5. Finalize
+
+### Community 240 - "Community 240"
+Cohesion: 0.33
+Nodes (6): dependencies, class-variance-authority, clsx, @lucide/vue, tailwind-merge, @vueuse/core
+
+### Community 241 - "Community 241"
+Cohesion: 0.33
+Nodes (5): 1. Component Implementation, 2. Documentation, 3. Playground Demo, 4. Tests, 5. Final Validation
+
+### Community 242 - "Community 242"
+Cohesion: 0.33
+Nodes (5): ADDED Requirements, Requirement: Drawer backdrop visibility control, Scenario: Backdrop is hidden when backdrop=false, Scenario: Backdrop is visible by default, Scenario: Escape still closes drawer without backdrop
+
+### Community 243 - "Community 243"
+Cohesion: 0.33
+Nodes (5): ADDED Requirements, Requirement: Drawer resizable panel, Scenario: Drag handle appears when resizable=true, Scenario: Panel width changes on drag, Scenario: Resizable has no visible effect on top/bottom placement
+
+### Community 245 - "Community 245"
+Cohesion: 0.33
+Nodes (5): 1. Nesting-safe Table CSS (TDD), 2. TableExpandedRow primitive (TDD), 3. DataTable expandable API (TDD), 4. Documentation (README + catalog + playground), 5. Verify and knowledge graph
+
+### Community 246 - "Community 246"
+Cohesion: 0.40
+Nodes (4): Context, Decisions, Goals / Non-Goals, Risks / Trade-offs
+
+### Community 247 - "Community 247"
+Cohesion: 0.40
+Nodes (4): 1. Shadow tokens and buttonVariants, 2. Playground updates, 3. Tests, 4. Finalize
+
+### Community 248 - "Community 248"
+Cohesion: 0.40
+Nodes (5): [0.10.0] - 2026-08-29, [0.1.0] - 2026-06-16, Added, Breaking, Changed
+
+### Community 249 - "Community 249"
+Cohesion: 0.40
+Nodes (4): Context, Decisions, Goals / Non-Goals, Risks / Trade-offs
+
+### Community 251 - "Community 251"
+Cohesion: 0.40
+Nodes (4): Context, Decisions, Goals / Non-Goals, Risks / Trade-offs
+
+### Community 253 - "Community 253"
+Cohesion: 0.50
+Nodes (4): [0.1.8] - 2026-06-16, Added, Changed, Fixed
+
+### Community 254 - "Community 254"
+Cohesion: 0.50
+Nodes (4): [0.2.6] - 2026-06-16, Added, Changed, Fixed
+
+### Community 255 - "Community 255"
+Cohesion: 0.50
+Nodes (4): [0.5.1] - 2026-06-28, Added, Changed, Fixed
+
+### Community 256 - "Community 256"
+Cohesion: 0.50
+Nodes (4): [0.7.13] - 2026-08-22, Added, Changed, Fixed
+
+### Community 258 - "Community 258"
+Cohesion: 0.50
+Nodes (4): exports, ./styles.css, import, types
+
+### Community 260 - "Community 260"
+Cohesion: 0.67
+Nodes (3): [0.10.1] - 2026-08-29, Changed, Fixed
+
+### Community 261 - "Community 261"
+Cohesion: 0.67
+Nodes (3): [0.11.0] - 2026-08-29, Breaking, Changed
+
+### Community 262 - "Community 262"
+Cohesion: 0.67
+Nodes (3): [0.8.0] - 2026-08-22, Added, Changed
+
+### Community 263 - "Community 263"
+Cohesion: 0.67
+Nodes (3): [0.9.0] - 2026-08-23, Added, Changed
+
+### Community 264 - "Community 264"
+Cohesion: 0.67
+Nodes (3): [0.9.1] - 2026-08-23, Added, Changed
+
 ## Knowledge Gaps
-- **700 isolated node(s):** `@opencode-ai/plugin`, `name`, `private`, `workspaces`, `build` (+695 more)
+- **837 isolated node(s):** `@opencode-ai/plugin`, `name`, `private`, `workspaces`, `build` (+832 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **50 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `iconography` connect `Community 55` to `Community 41`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `providePlaygroundLocale()` connect `Community 60` to `Community 70`, `Community 71`, `Community 72`, `Community 41`, `Community 73`, `Community 51`, `Community 52`, `Community 88`, `Community 91`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `iconography` connect `Community 41` to `Community 55`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `providePlaygroundLocale()` connect `Community 72` to `Community 257`, `Community 70`, `Community 41`, `Community 73`, `Community 48`, `Community 51`, `Community 52`, `Community 88`, `Community 60`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `Community 71` to `Community 1`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **What connects `@opencode-ai/plugin`, `name`, `private` to the rest of the system?**
-  _700 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _837 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.07507507507507508 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06923076923076923 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.08505747126436781 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.125 - nodes in this community are weakly interconnected._
