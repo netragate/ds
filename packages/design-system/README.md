@@ -112,6 +112,17 @@ import { FormField, Input } from '@netragate/design-system'
 
 `Input`, `Textarea`, `DateInput`, and `Badge` accept `:size` (`sm` / `md` / `lg` on inputs; `Badge` only `sm` | `md`).
 
+`Input` `type` supports `'text' | 'email' | 'password' | 'search' | 'date' | 'file'`. For uploads, use `:type="'file'"` with optional `accept` / `multiple`. `v-model` receives the selected file name(s); read `FileList` from the native `@change` event.
+
+```vue
+<Input
+  v-model="fileName"
+  :type="'file'"
+  :accept="'.pdf,image/*'"
+  @change="(e) => { files = (e.target as HTMLInputElement).files }"
+/>
+```
+
 ### DateInput
 
 Date field with calendar. **Display** follows `locale` (`en` → `mm/dd/yyyy`, `pt-BR` → `dd/mm/yyyy`); persisted value is ISO `YYYY-MM-DD`.

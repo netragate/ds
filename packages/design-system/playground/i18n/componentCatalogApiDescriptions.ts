@@ -63,6 +63,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Column to filter (required)': 'Coluna a filtrar (obrigatório)',
   'Cross-axis alignment': 'Alinhamento no eixo transversal',
   'Current input value': 'Valor atual do input',
+  'Current input value (file name(s) when type is file)':
+    'Valor atual do input (nome(s) do arquivo quando type é file)',
   'Current page (v-model:current-page)': 'Página atual (v-model:current-page)',
   'Current page number': 'Número da página atual',
   'Current textarea value': 'Valor atual do textarea',
@@ -108,6 +110,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Emitted when selection changes': 'Emitido quando a seleção muda',
   'Emitted when the selected date changes': 'Emitido quando a data selecionada muda',
   'Emitted when the value changes': 'Emitido quando o valor muda',
+  'Emitted on native change (use for FileList when type is file)':
+    'Emitido no change nativo (use para FileList quando type é file)',
   'Emitted when toggled': 'Emitido quando alternado',
   'Empty state description': 'Descrição do estado vazio',
   'Empty state heading (required)': 'Título do estado vazio (obrigatório)',
@@ -193,6 +197,10 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Multi-column sort stack (v-model:sort-stack)': 'Pilha de ordenação multi-coluna (v-model:sort-stack)',
   'Native button type': 'Tipo nativo do botão',
   'Native input type': 'Tipo nativo do input',
+  'File input: accepted MIME types or extensions (native accept)':
+    'Input file: tipos MIME ou extensões aceitas (accept nativo)',
+  'File input: allow selecting multiple files':
+    'Input file: permite selecionar vários arquivos',
   'Nested SidebarMenuItem children': 'Filhos SidebarMenuItem aninhados',
   'Vertical flyout alignment relative to the group trigger — auto opens upward near the viewport bottom; use up for pinned settings in the AppLayout menu footer':
     'Alinhamento vertical do flyout relativo ao trigger do grupo — auto abre para cima perto do fundo da viewport; use up para settings pinado no rodapé do menu do AppLayout',

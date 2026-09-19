@@ -6,10 +6,14 @@ import { formInputVariants, type FormInputVariants } from './formInputVariants'
 export interface InputProps {
   size?: FormInputVariants['size'] | 'default'
   modelValue?: string
-  type?: 'text' | 'email' | 'password' | 'search' | 'date'
+  type?: 'text' | 'email' | 'password' | 'search' | 'date' | 'file'
   placeholder?: string
   minLength?: number
   maxLength?: number
+  /** File input: accepted MIME types / extensions (native `accept`). */
+  accept?: string
+  /** File input: allow selecting more than one file. */
+  multiple?: boolean
   disabled?: boolean
   readonly?: boolean
   error?: boolean
@@ -22,6 +26,7 @@ export interface InputProps {
    * Optional value transform applied on every input event (e.g. masks).
    * When the transformed value differs from what the user typed, the native
    * input is synced immediately so the DOM cannot keep rejected characters.
+   * Ignored when `type` is `file`.
    */
   transform?: (value: string) => string
 }
@@ -34,14 +39,18 @@ const props = withDefaults(defineProps<InputProps>(), {
   error: false,
   success: false,
   size: 'md',
+  multiple: false,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
+  change: [event: Event]
 }>()
 
 const slots = useSlots()
 const inputEl = useTemplateRef<HTMLInputElement>('inputEl')
+
+const isFile = computed(() => props.type === 'file')
 
 const hasBefore = computed(() => !!slots.elemBefore)
 const hasAfter = computed(() => !!slots.elemAfter)
@@ -52,6 +61,13 @@ const resolvedSize = computed(() => {
   return props.size as FormInputVariants['size']
 })
 
+const fileButtonSizeClasses: Record<NonNullable<FormInputVariants['size']>, string> = {
+  compact: 'file:px-2 file:text-xs',
+  sm: 'file:px-2 file:text-xs',
+  md: 'file:px-3 file:text-sm',
+  lg: 'file:px-4 file:text-base',
+}
+
 const classes = computed(() =>
   cn(
     formInputVariants({
@@ -61,18 +77,33 @@ const classes = computed(() =>
     }),
     hasBefore.value && 'pl-9',
     hasAfter.value && 'pr-9',
+    isFile.value &&
+      cn(
+        'cursor-pointer p-0 pe-3 file:me-3 file:h-full file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-border file:bg-muted file:font-medium file:text-foreground',
+        fileButtonSizeClasses[resolvedSize.value ?? 'md'],
+      ),
     props.class,
   ),
 )
 
 function syncDomValue(value: string): void {
+  if (isFile.value) return
   const el = inputEl.value
   if (el && el.value !== value) {
     el.value = value
   }
 }
 
+function fileNamesFromInput(el: HTMLInputElement): string {
+  const files = el.files
+  if (!files || files.length === 0) return ''
+  return Array.from(files)
+    .map((file) => file.name)
+    .join(', ')
+}
+
 function onInput(event: Event): void {
+  if (isFile.value) return
   const el = event.target as HTMLInputElement
   let value = el.value
   if (props.transform) {
@@ -84,6 +115,13 @@ function onInput(event: Event): void {
   void nextTick(() => {
     syncDomValue(props.modelValue ?? '')
   })
+}
+
+function onChange(event: Event): void {
+  if (!isFile.value) return
+  const el = event.target as HTMLInputElement
+  emit('update:modelValue', fileNamesFromInput(el))
+  emit('change', event)
 }
 
 watch(
@@ -107,17 +145,20 @@ watch(
         ref="inputEl"
         :id="id"
         :type="type"
-        :value="modelValue"
-        :placeholder="placeholder"
-        :minlength="minLength"
-        :maxlength="maxLength"
+        :value="isFile ? undefined : modelValue"
+        :placeholder="isFile ? undefined : placeholder"
+        :minlength="isFile ? undefined : minLength"
+        :maxlength="isFile ? undefined : maxLength"
+        :accept="isFile ? accept : undefined"
+        :multiple="isFile ? multiple : undefined"
         :disabled="disabled"
-        :readonly="readonly"
+        :readonly="isFile ? undefined : readonly"
         :lang="lang"
         :class="classes"
         :aria-invalid="error || undefined"
         :aria-describedby="error && message ? `${id}-error` : undefined"
         @input="onInput"
+        @change="onChange"
       />
       <span
         v-if="$slots.elemAfter"

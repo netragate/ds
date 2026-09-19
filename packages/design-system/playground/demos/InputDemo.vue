@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import UsageBlock from '../components/UsageBlock.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
 import { playgroundSnippetAttr, templateBooleanAttr, templateStringAttr } from '../utils/propTemplateName'
@@ -8,7 +8,7 @@ import Input from '@/components/form/Input.vue'
 import Switch from '@/components/form/Switch.vue'
 const { t } = usePlaygroundLocale()
 
-const typeOptions = ['text', 'email', 'password', 'search', 'date'] as const
+const typeOptions = ['text', 'email', 'password', 'search', 'date', 'file'] as const
 const sizeOptions = ['sm', 'md', 'lg'] as const
 const stateOptions = ['default', 'error', 'success', 'disabled'] as const
 
@@ -20,25 +20,50 @@ const value = ref('Ana Martins')
 const type = ref<InputType>('text')
 const size = ref<InputSize>('md')
 const placeholder = ref('Full name')
+const accept = ref('.pdf,image/*')
+const multiple = ref(false)
 const minLength = ref(0)
 const maxLength = ref(0)
 const readonly = ref(false)
 const state = ref<InputState>('default')
 
 const errorMessage = 'Invalid value'
+const isFile = computed(() => type.value === 'file')
+
+watch(type, (next) => {
+  if (next === 'file') {
+    value.value = ''
+    readonly.value = false
+  } else if (!value.value) {
+    value.value = 'Ana Martins'
+  }
+})
 
 const code = computed(() => {
   const lines = [
     '<Input',
-    '  v-model="name"',
-    `  ${playgroundSnippetAttr('type', type.value)}`,
-    `  ${playgroundSnippetAttr('size', size.value)}`,
-    `  ${playgroundSnippetAttr('placeholder', placeholder.value)}`,
   ]
 
-  if (minLength.value > 0) lines.push(`  ${templateStringAttr('minLength', minLength.value)}`)
-  if (maxLength.value > 0) lines.push(`  ${templateStringAttr('maxLength', maxLength.value)}`)
-  if (readonly.value) lines.push(`  ${templateBooleanAttr('readonly', true)}`)
+  if (!isFile.value) {
+    lines.push('  v-model="name"')
+  } else {
+    lines.push('  v-model="fileName"')
+    lines.push('  @change="onFileChange"')
+  }
+
+  lines.push(`  ${playgroundSnippetAttr('type', type.value)}`)
+  lines.push(`  ${playgroundSnippetAttr('size', size.value)}`)
+
+  if (!isFile.value) {
+    lines.push(`  ${playgroundSnippetAttr('placeholder', placeholder.value)}`)
+    if (minLength.value > 0) lines.push(`  ${templateStringAttr('minLength', minLength.value)}`)
+    if (maxLength.value > 0) lines.push(`  ${templateStringAttr('maxLength', maxLength.value)}`)
+    if (readonly.value) lines.push(`  ${templateBooleanAttr('readonly', true)}`)
+  } else {
+    if (accept.value) lines.push(`  ${playgroundSnippetAttr('accept', accept.value)}`)
+    if (multiple.value) lines.push(`  ${templateBooleanAttr('multiple', true)}`)
+  }
+
   if (state.value === 'error') {
     lines.push(`  ${templateBooleanAttr('error', true)}`)
     lines.push(`  ${templateStringAttr('message', errorMessage)}`)
@@ -57,22 +82,30 @@ const code = computed(() => {
   <div>
     <p class="mb-4 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('drawer.livePlayground') }}</p>
     <div class="pg-playground-panel mb-6 space-y-5 rounded-xl p-4">
-      <div class="pg-playground-preview flex items-center justify-center rounded-xl">
+      <div class="pg-playground-preview flex flex-col items-center justify-center gap-2 rounded-xl px-4 py-6">
         <Input
-          :key="`${type}-${size}-${state}-${readonly}-${minLength}-${maxLength}`"
+          :key="`${type}-${size}-${state}-${readonly}-${minLength}-${maxLength}-${accept}-${multiple}`"
           v-model="value"
           :type="type"
           :size="size"
-          :placeholder="placeholder"
-          :min-length="minLength || undefined"
-          :max-length="maxLength || undefined"
+          :placeholder="isFile ? undefined : placeholder"
+          :accept="isFile ? accept || undefined : undefined"
+          :multiple="isFile ? multiple : undefined"
+          :min-length="isFile ? undefined : minLength || undefined"
+          :max-length="isFile ? undefined : maxLength || undefined"
           class="max-w-xs"
-          :readonly="readonly"
+          :readonly="isFile ? false : readonly"
           :error="state === 'error'"
           :success="state === 'success'"
           :disabled="state === 'disabled'"
           :message="state === 'error' ? errorMessage : undefined"
         />
+        <p
+          v-if="isFile && value"
+          class="max-w-xs truncate font-mono text-xs text-[#7BA3C8]"
+        >
+          {{ value }}
+        </p>
       </div>
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -106,40 +139,58 @@ const code = computed(() => {
         </div>
       </div>
 
-      <div>
-        <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">placeholder</label>
-        <input
-          v-model="placeholder"
-          type="text"
-          class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
-        />
-      </div>
-
-      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <template v-if="!isFile">
         <div>
-          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">minLength</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">placeholder</label>
           <input
-            v-model.number="minLength"
-            type="number"
-            min="0"
+            v-model="placeholder"
+            type="text"
             class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
           />
         </div>
+
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div>
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">minLength</label>
+            <input
+              v-model.number="minLength"
+              type="number"
+              min="0"
+              class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+            />
+          </div>
+          <div>
+            <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">maxLength</label>
+            <input
+              v-model.number="maxLength"
+              type="number"
+              min="0"
+              class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+            />
+          </div>
+        </div>
+
+        <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
+          <Switch v-model="readonly" size="sm" />
+          readonly
+        </label>
+      </template>
+
+      <template v-else>
         <div>
-          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">maxLength</label>
+          <label class="mb-2 block font-mono text-xs uppercase tracking-wider text-[#4D6A87]">accept</label>
           <input
-            v-model.number="maxLength"
-            type="number"
-            min="0"
+            v-model="accept"
+            type="text"
             class="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-foreground"
+            placeholder=".pdf,image/*"
           />
         </div>
-      </div>
-
-      <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
-        <Switch v-model="readonly" size="sm" />
-        readonly
-      </label>
+        <label class="flex cursor-pointer items-center gap-2 text-xs text-[#4D6A87]">
+          <Switch v-model="multiple" size="sm" />
+          multiple
+        </label>
+      </template>
 
       <div>
         <p class="mb-2 font-mono text-xs uppercase tracking-wider text-[#4D6A87]">state</p>

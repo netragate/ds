@@ -46,11 +46,13 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
   Input: {
     usage: usageSnippets.Input!,
     props: [
-      p('type', "'text' | 'email' | 'password' | 'search' | 'date'", 'text', 'Native input type'),
+      p('type', "'text' | 'email' | 'password' | 'search' | 'date' | 'file'", 'text', 'Native input type'),
       p('size', "'sm' | 'md' | 'lg'", 'md', 'Input size'),
       p('placeholder', 'string', undefined, 'Placeholder text'),
       p('minLength', 'number', undefined, 'Minimum allowed input length (native minlength attribute)'),
       p('maxLength', 'number', undefined, 'Maximum allowed input length (native maxlength attribute)'),
+      p('accept', 'string', undefined, 'File input: accepted MIME types or extensions (native accept)'),
+      p('multiple', 'boolean', 'false', 'File input: allow selecting multiple files'),
       p('disabled', 'boolean', 'false', 'Disables the input'),
       p('readonly', 'boolean', 'false', 'Makes the input read-only'),
       p('error', 'boolean', 'false', 'Error validation state'),
@@ -60,8 +62,11 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('lang', 'string', undefined, 'Language for the input element'),
       cls(),
     ],
-    models: [m('modelValue', 'string', "''", 'Current input value')],
-    events: [e('update:modelValue', 'string', 'Emitted when the value changes')],
+    models: [m('modelValue', 'string', "''", 'Current input value (file name(s) when type is file)')],
+    events: [
+      e('update:modelValue', 'string', 'Emitted when the value changes'),
+      e('change', 'Event', 'Emitted on native change (use for FileList when type is file)'),
+    ],
   },
 
   DateInput: {

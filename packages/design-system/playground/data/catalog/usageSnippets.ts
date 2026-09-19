@@ -63,6 +63,14 @@ const SettingsIcon = resolveIcon('settings')
     :success="false"
     :message="'Helper or validation text'"
     :disabled="false"
+  />
+
+  <Input
+    v-model="fileName"
+    :type="'file'"
+    :accept="'.pdf,image/*'"
+    :multiple="false"
+    @change="onFileChange"
   />`,
   ),
   DateInput: usage(

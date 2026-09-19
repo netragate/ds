@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.14.0] - 2026-09-19
+
+### Added
+
+- **`Input` `type="file"`** — same chrome as other inputs (`formInputVariants` + Tailwind `file:` button styles). Props `accept` / `multiple`; `v-model` gets selected file name(s); native `@change` for `FileList`. Playground Input demo includes a `file` type control.
+
 ## [0.13.1] - 2026-09-19
 
 ### Changed
