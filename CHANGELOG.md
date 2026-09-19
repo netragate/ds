@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - **Dev dependency:** `vitest` upgraded to `^4.1.11` (and root `@vitest/coverage-v8` aligned) to address the Vitest security advisory requiring 4.1.11 or later.
+- **Package manager:** standardize on **npm** workspaces only. Removed stale `pnpm-lock.yaml` / `pnpm-workspace.yaml` (root and `packages/design-system`) that still pinned Vitest 3.x and triggered Dependabot alerts alongside `package-lock.json`.
 
 ## [0.13.0] - 2026-09-19
 
