@@ -48,6 +48,7 @@ const showColumnFilter = ref(true)
 const showTotalRecords = ref(true)
 const showPageSize = ref(true)
 const striped = ref(true)
+const resizable = ref(true)
 const forceLoading = ref(false)
 const showToolbar = ref(false)
 const forceEmpty = ref(false)
@@ -218,6 +219,7 @@ const code = computed(() => {
   if (!showTotalRecords.value) props.push(`  ${templateBooleanAttr('showTotalRecords', false)}`)
   if (!showPageSize.value) props.push(`  ${templateBooleanAttr('showPageSize', false)}`)
   if (!striped.value) props.push(`  ${templateBooleanAttr('striped', false)}`)
+  if (!resizable.value) props.push(`  ${templateBooleanAttr('resizable', false)}`)
   if (forceLoading.value) props.push(`  ${templateBooleanAttr('loading', true)}`)
   if (expandable.value) {
     props.push('  v-model:expanded-key="expandedKey"')
@@ -331,6 +333,7 @@ const code = computed(() => {
         :show-total-records="showTotalRecords"
         :show-page-size="showPageSize"
         :striped="striped"
+        :resizable="resizable"
         :expandable="expandable"
         :expand-mode="expandMode"
         :expand-loading="expandLoading"
@@ -387,6 +390,7 @@ const code = computed(() => {
         v-model:show-total-records="showTotalRecords"
         v-model:show-page-size="showPageSize"
         v-model:striped="striped"
+        v-model:resizable="resizable"
         v-model:force-loading="forceLoading"
         v-model:show-toolbar="showToolbar"
         v-model:force-empty="forceEmpty"

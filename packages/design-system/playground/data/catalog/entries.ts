@@ -671,6 +671,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('serverSide', 'boolean', 'false', 'Emit request events instead of client filtering/sorting'),
       p('columnFilterApply', 'boolean | null', 'null (follows serverSide)', 'Require Apply before column filters trigger requests'),
       p('striped', 'boolean', 'true', 'Striped table rows'),
+      p('resizable', 'boolean', 'true', 'Drag the header edge to resize columns; truncated cells show a tooltip'),
       p('expandable', 'boolean', 'false', 'Show expand column and support #expanded-row (accordion)'),
       p('expandMode', "'eager' | 'lazy'", 'eager', 'Eager shows slot immediately; lazy emits expand and uses expandLoading'),
       p('expandLoading', 'boolean', 'false', 'Panel-local loading spinner for lazy expand (not whole-table loading)'),

@@ -300,6 +300,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Static nested Table content for the expanded detail panel':
     'Conteúdo Table aninhada estática do painel de detalhe expandido',
   'Striped table rows': 'Linhas da tabela listradas',
+  'Drag the header edge to resize columns; truncated cells show a tooltip':
+    'Arraste a borda do cabeçalho para redimensionar colunas; células truncadas mostram um tooltip',
   'Marks nested table (adds ds-table-nested); use inside cells or expand panels':
     'Marca tabela aninhada (adiciona ds-table-nested); use em células ou painéis de expand',
   'Panel-local loading spinner for lazy expand (not whole-table loading)':

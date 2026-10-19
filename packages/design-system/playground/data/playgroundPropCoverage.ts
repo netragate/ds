@@ -132,6 +132,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
     'serverSide',
     'columnFilterApply',
     'striped',
+    'resizable',
     'expandable',
     'expandMode',
     'expandLoading',

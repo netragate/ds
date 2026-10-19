@@ -19,6 +19,7 @@ import TableRow from './TableRow.vue'
 import TableCell from './TableCell.vue'
 import TableExpandedRow from './TableExpandedRow.vue'
 import DataTableColumnFilterMenu from './DataTableColumnFilterMenu.vue'
+import DataTableTruncatedCell from './DataTableTruncatedCell.vue'
 import type {
   DataTableColumn,
   DataTableColumnFilters,
@@ -55,6 +56,8 @@ export interface DataTableProps {
   /** When null (default), follows `serverSide`. Set false for instant column filters in API mode. */
   columnFilterApply?: boolean | null
   striped?: boolean
+  /** Drag the header edge to resize columns. Uses fixed table layout. */
+  resizable?: boolean
   /** When true, prepends an expand control column and supports `#expanded-row`. */
   expandable?: boolean
   /** Eager shows slot content immediately; lazy emits `expand` and uses `expandLoading`. */
@@ -102,6 +105,7 @@ const props = withDefaults(defineProps<DataTableProps>(), {
   serverSide: false,
   columnFilterApply: null,
   striped: true,
+  resizable: true,
   expandable: false,
   expandMode: 'eager',
   expandLoading: false,
@@ -134,6 +138,75 @@ const emit = defineEmits<{
 }>()
 
 const openFilterColumnKey = ref<string | null>(null)
+
+const MIN_COLUMN_WIDTH = 96
+const columnWidths = ref<Record<string, string>>({})
+const resizedColumnKeys = ref<Set<string>>(new Set())
+
+watch(
+  () => props.columns.map((column) => `${column.key}:${column.width ?? ''}`).join('|'),
+  () => {
+    const next = { ...columnWidths.value }
+    const liveKeys = new Set(props.columns.map((column) => column.key))
+    for (const key of Object.keys(next)) {
+      if (!liveKeys.has(key)) delete next[key]
+    }
+    for (const column of props.columns) {
+      if (resizedColumnKeys.value.has(column.key)) continue
+      if (column.width) next[column.key] = column.width
+      else delete next[column.key]
+    }
+    columnWidths.value = next
+  },
+  { immediate: true },
+)
+
+function columnWidthStyle(column: DataTableColumn): Record<string, string> | undefined {
+  const width = columnWidths.value[column.key]
+  if (!width) return undefined
+  if (!props.resizable) return { width }
+  return { width, maxWidth: width }
+}
+
+function onResizePointerDown(column: DataTableColumn, event: PointerEvent): void {
+  if (!props.resizable) return
+  event.preventDefault()
+  event.stopPropagation()
+
+  const handle = event.currentTarget as HTMLElement
+  const headerCell = handle.closest('th')
+  if (!headerCell) return
+
+  const startX = event.clientX
+  const startWidth = headerCell.getBoundingClientRect().width
+  if (typeof handle.setPointerCapture === 'function') {
+    try {
+      handle.setPointerCapture(event.pointerId)
+    } catch {
+      // Some test environments do not implement pointer capture.
+    }
+  }
+
+  function onMove(moveEvent: PointerEvent): void {
+    const next = Math.max(MIN_COLUMN_WIDTH, startWidth + (moveEvent.clientX - startX))
+    columnWidths.value = {
+      ...columnWidths.value,
+      [column.key]: `${Math.round(next)}px`,
+    }
+  }
+
+  function onUp(upEvent: PointerEvent): void {
+    if (typeof handle.hasPointerCapture === 'function' && handle.hasPointerCapture(upEvent.pointerId)) {
+      handle.releasePointerCapture(upEvent.pointerId)
+    }
+    resizedColumnKeys.value = new Set(resizedColumnKeys.value).add(column.key)
+    document.removeEventListener('pointermove', onMove)
+    document.removeEventListener('pointerup', onUp)
+  }
+
+  document.addEventListener('pointermove', onMove)
+  document.addEventListener('pointerup', onUp)
+}
 
 const totalColumnCount = computed(
   () => props.columns.length + (props.expandable ? 1 : 0),
@@ -362,7 +435,10 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
         )
       "
     >
-      <Table :striped="useCssStripe" class="rounded-xl">
+      <Table
+        :striped="useCssStripe"
+        :class="cn('rounded-xl', resizable && 'table-fixed')"
+      >
         <TableHead>
           <TableRow class="hover:bg-transparent">
             <th
@@ -379,34 +455,35 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
               :aria-sort="headerAriaSort(column)"
               :class="
                 cn(
-                  'h-12 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wide text-muted-foreground',
+                  'relative h-12 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wide text-muted-foreground',
+                  resizable && 'overflow-hidden',
                   alignClasses[column.align ?? 'left'],
                 )
               "
-              :style="column.width ? { width: column.width } : undefined"
+              :style="columnWidthStyle(column)"
             >
-              <div class="inline-flex items-center gap-1">
+              <div class="inline-flex max-w-full items-center gap-1">
                 <button
                   v-if="column.sortable"
                   type="button"
-                  class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+                  class="inline-flex min-w-0 items-center gap-1.5 transition-colors hover:text-foreground"
                   @click="toggleSort(column, $event)"
                 >
-                  <span>{{ column.label }}</span>
+                  <span class="truncate">{{ column.label }}</span>
                   <span
                     v-if="sortPriority(column)"
-                    class="inline-flex size-4 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary"
+                    class="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary"
                   >
                     {{ sortPriority(column) }}
                   </span>
                   <component
                     :is="sortIcon(column)"
                     :size="14"
-                    :class="sortEntry(column) ? 'text-primary' : 'text-muted-foreground/70'"
+                    :class="cn('shrink-0', sortEntry(column) ? 'text-primary' : 'text-muted-foreground/70')"
                     aria-hidden="true"
                   />
                 </button>
-                <span v-else>{{ column.label }}</span>
+                <span v-else class="truncate">{{ column.label }}</span>
 
                 <DataTableColumnFilterMenu
                   v-if="column.filter"
@@ -420,6 +497,16 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
                   @update:open="setFilterMenuOpen(column.key, $event)"
                 />
               </div>
+              <button
+                v-if="resizable"
+                type="button"
+                role="separator"
+                aria-orientation="vertical"
+                :aria-label="`Resize ${column.label}`"
+                class="absolute inset-y-0 right-0 z-10 w-1.5 cursor-col-resize touch-none border-0 bg-transparent p-0 hover:bg-primary/40"
+                @pointerdown="onResizePointerDown(column, $event)"
+                @click.stop
+              />
             </th>
           </TableRow>
         </TableHead>
@@ -473,16 +560,19 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
                 <TableCell
                   v-for="column in columns"
                   :key="column.key"
-                  :class="alignClasses[column.align ?? 'left']"
+                  :class="cn(alignClasses[column.align ?? 'left'], resizable && 'overflow-hidden')"
+                  :style="columnWidthStyle(column)"
                 >
-                  <slot
-                    :name="`cell-${column.key}`"
-                    :row="row"
-                    :value="getCellValue(row, column.key)"
-                    :index="rowIndex"
-                  >
-                    {{ displayCellValue(row, column) }}
-                  </slot>
+                  <DataTableTruncatedCell :text="displayCellValue(row, column)">
+                    <slot
+                      :name="`cell-${column.key}`"
+                      :row="row"
+                      :value="getCellValue(row, column.key)"
+                      :index="rowIndex"
+                    >
+                      {{ displayCellValue(row, column) }}
+                    </slot>
+                  </DataTableTruncatedCell>
                 </TableCell>
               </TableRow>
 

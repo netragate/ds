@@ -10,6 +10,7 @@ defineProps<{
   showTotalRecords: boolean
   showPageSize: boolean
   striped: boolean
+  resizable: boolean
   forceLoading: boolean
   showToolbar: boolean
   forceEmpty: boolean
@@ -29,6 +30,7 @@ defineEmits<{
   'update:showTotalRecords': [value: boolean]
   'update:showPageSize': [value: boolean]
   'update:striped': [value: boolean]
+  'update:resizable': [value: boolean]
   'update:forceLoading': [value: boolean]
   'update:showToolbar': [value: boolean]
   'update:forceEmpty': [value: boolean]
@@ -88,6 +90,10 @@ function optionStyle(active: boolean) {
         <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
           <Switch :model-value="striped" size="sm" @update:model-value="$emit('update:striped', $event)" />
           {{ propTemplateBinding('striped') }}
+        </label>
+        <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
+          <Switch :model-value="resizable" size="sm" @update:model-value="$emit('update:resizable', $event)" />
+          {{ propTemplateBinding('resizable') }}
         </label>
         <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
           <Switch :model-value="forceLoading" size="sm" @update:model-value="$emit('update:forceLoading', $event)" />

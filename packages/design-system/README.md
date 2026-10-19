@@ -279,6 +279,7 @@ const columnFilters = ref<DataTableColumnFilters>({})
 - **Click** header: sort one column (`asc` → `desc` → clear)
 - **Ctrl+click** (⌘+click on Mac): add column to multi-sort (no limit)
 - **Filter:** button beside sort on columns with `filter` defined
+- **Resize:** drag the right edge of a header (`resizable`, default `true`). `column.width` is the starting width. When a cell value is wider than the column, hover shows a tooltip with the full value.
 
 ### Server-side usage
 

@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - **`Input` `type="file"`** — same chrome as other inputs (`formInputVariants` + Tailwind `file:` button styles). Props `accept` / `multiple`; `v-model` gets selected file name(s); native `@change` for `FileList`. Playground Input demo includes a `file` type control.
+- **`DataTable` column resize** — `resizable` (default `true`) adds a drag handle on each header edge (`table-layout: fixed`, min 96px). `column.width` is the starting width.
+- **`DataTable` overflow tooltip** — truncated cell values show the existing `Tooltip` with the full formatted value only when the text is wider than the column.
 
 ## [0.13.1] - 2026-09-19
 

@@ -37,6 +37,11 @@ const props = withDefaults(
      * would overflow the viewport, then clamp residual overflow.
      */
     flip?: boolean
+    /**
+     * Called when the pointer or focus enters the trigger.
+     * Return false to keep the tooltip hidden (e.g. text is not truncated).
+     */
+    canShow?: () => boolean
   }>(),
   {
     placement: 'top',
@@ -208,6 +213,7 @@ async function updatePosition(): Promise<void> {
 }
 
 function show(): void {
+  if (props.canShow && !props.canShow()) return
   if (showTimer !== null) {
     clearTimeout(showTimer)
   }

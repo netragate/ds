@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { DOMWrapper, flushPromises, mount } from '@vue/test-utils'
 import Card from '@/components/data-display/Card.vue'
 import ProgressTracker from '@/components/data-display/ProgressTracker.vue'
@@ -737,6 +738,119 @@ describe('DataTable', () => {
     await wrapper.setProps({ expandLoading: false })
     expect(wrapper.find('[data-testid="expand-panel-loading"]').exists()).toBe(false)
     expect(wrapper.find('[data-testid="lazy-detail"]').exists()).toBe(true)
+  })
+
+  it('renders a resize handle for each data column', () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 1),
+        searchable: false,
+        showPageSize: false,
+        showTotalRecords: false,
+        resizable: true,
+      },
+    })
+
+    expect(wrapper.findAll('[role="separator"]')).toHaveLength(sampleColumns.length)
+    expect(wrapper.find('table').classes()).toContain('table-fixed')
+  })
+
+  it('omits resize handles when resizable is false', () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 1),
+        searchable: false,
+        showPageSize: false,
+        showTotalRecords: false,
+        resizable: false,
+      },
+    })
+
+    expect(wrapper.find('[role="separator"]').exists()).toBe(false)
+    expect(wrapper.find('table').classes()).not.toContain('table-fixed')
+  })
+
+  it('grows a column when the header handle is dragged', async () => {
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: [{ key: 'name', label: 'Name', width: '120px' }],
+        rows: [{ id: '1', name: 'Ana' }],
+        rowKey: 'id',
+        searchable: false,
+        showPageSize: false,
+        showTotalRecords: false,
+        pageSize: 10,
+      },
+    })
+
+    const handle = wrapper.get('[role="separator"]')
+    const header = handle.element.parentElement as HTMLElement
+    vi.spyOn(header, 'getBoundingClientRect').mockReturnValue({
+      width: 120,
+      height: 48,
+      top: 0,
+      left: 0,
+      bottom: 48,
+      right: 120,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    })
+
+    function pointer(type: string, clientX: number): PointerEvent {
+      const event = new PointerEvent(type, { bubbles: true, pointerId: 1, clientX })
+      if (event.clientX !== clientX) {
+        Object.defineProperty(event, 'clientX', { value: clientX })
+      }
+      return event
+    }
+
+    handle.element.dispatchEvent(pointer('pointerdown', 100))
+    document.dispatchEvent(pointer('pointermove', 180))
+    document.dispatchEvent(pointer('pointerup', 180))
+    await nextTick()
+
+    expect(header.style.width).toBe('200px')
+  })
+
+  it('truncates cell text and shows a tooltip only when the value overflows', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(DataTable, {
+      attachTo: document.body,
+      props: {
+        columns: [{ key: 'name', label: 'Name', width: '80px' }],
+        rows: [{ id: '1', name: 'A very long display name' }],
+        rowKey: 'id',
+        searchable: false,
+        showPageSize: false,
+        showTotalRecords: false,
+        pageSize: 10,
+      },
+    })
+
+    try {
+      const text = wrapper.get('[data-testid="datatable-cell-text"]')
+      expect(text.classes()).toContain('truncate')
+      const trigger = new DOMWrapper(text.element.parentElement as HTMLElement)
+
+      Object.defineProperty(text.element, 'scrollWidth', { configurable: true, value: 40 })
+      Object.defineProperty(text.element, 'clientWidth', { configurable: true, value: 40 })
+      await trigger.trigger('mouseenter')
+      await vi.advanceTimersByTimeAsync(350)
+      expect(document.body.querySelector('[role="tooltip"]')).toBeNull()
+
+      Object.defineProperty(text.element, 'scrollWidth', { configurable: true, value: 240 })
+      await trigger.trigger('mouseenter')
+      await vi.advanceTimersByTimeAsync(350)
+      expect(document.body.querySelector('[role="tooltip"]')?.textContent).toContain(
+        'A very long display name',
+      )
+    } finally {
+      wrapper.unmount()
+      vi.useRealTimers()
+    }
   })
 })
 
