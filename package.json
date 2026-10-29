@@ -7,6 +7,7 @@
   "scripts": {
     "build": "npm run build -w @netragate/design-system",
     "test": "npm run test -w @netragate/design-system",
+    "test:coverage": "npm run test:coverage -w @netragate/design-system",
     "dev": "npm run dev -w @netragate/design-system"
   },
   "devDependencies": {

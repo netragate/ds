@@ -42,6 +42,7 @@
     "fix:playground-imports": "node scripts/fix-playground-imports.mjs && node scripts/fix-playground-vue-imports.mjs",
     "analyze": "ANALYZE=true vite build",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
   },
   "peerDependencies": {

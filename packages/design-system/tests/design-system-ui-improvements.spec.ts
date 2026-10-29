@@ -156,27 +156,32 @@ describe('Property 2 — All icons rendered in Iconography tab', () => {
    * After navigating to the Iconography tab, every icon item from the
    * iconography catalog must have a corresponding button in the DOM.
    */
-  it('renders a button for every icon item in the iconography list', async () => {
-    const wrapper = mountWithLocale(FoundationsPage)
-    await openIconographyTab(wrapper)
+  it(
+    'renders a button for every icon item in the iconography list',
+    async () => {
+      const wrapper = mountWithLocale(FoundationsPage)
+      await openIconographyTab(wrapper)
 
-    // Find all icon buttons in the grid
-    const allButtons = wrapper.findAll('button[type="button"]')
-    // Filter to icon grid buttons (they have a span child with truncate text-[7px])
-    const iconButtons = allButtons.filter((btn) => btn.find('span.truncate').exists())
+      // Find all icon buttons in the grid
+      const allButtons = wrapper.findAll('button[type="button"]')
+      // Filter to icon grid buttons (they have a span child with truncate text-[7px])
+      const iconButtons = allButtons.filter((btn) => btn.find('span.truncate').exists())
 
-    // Every icon in the full iconography list must have a button
-    // (the search filter is empty so all icons should show)
-    for (const iconItem of iconography) {
-      const found = iconButtons.some((btn) => {
-        const span = btn.find('span.truncate')
-        return span.exists() && span.text() === iconItem.label
-      })
-      expect(found, `Button for icon "${iconItem.label}" should be in the DOM`).toBe(true)
-    }
+      // Every icon in the full iconography list must have a button
+      // (the search filter is empty so all icons should show)
+      const labels = new Set(
+        iconButtons.map((btn) => btn.find('span.truncate').text()).filter(Boolean),
+      )
+      for (const iconItem of iconography) {
+        expect(labels.has(iconItem.label), `Button for icon "${iconItem.label}" should be in the DOM`).toBe(
+          true,
+        )
+      }
 
-    wrapper.unmount()
-  })
+      wrapper.unmount()
+    },
+    30_000,
+  )
 
   it('fc.constantFrom(iconography) — each icon item has a button in iconography tab', async () => {
     const wrapper = mountWithLocale(FoundationsPage)

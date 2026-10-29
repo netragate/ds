@@ -9,6 +9,8 @@ import Select from '@/components/form/Select.vue'
 import FormField from '@/components/form/FormField.vue'
 import Input from '@/components/form/Input.vue'
 import Chip from '@/components/form/Chip.vue'
+import Label from '@/components/form/Label.vue'
+import Toggle from '@/components/form/Toggle.vue'
 
 describe('Checkbox', () => {
   it('toggles value', async () => {
@@ -58,6 +60,81 @@ describe('RadioGroup', () => {
       slots: { default: '<input type="radio" />' },
     })
     expect(wrapper.find('input[type="radio"]').exists()).toBe(true)
+  })
+
+  it('updates model through Radio children', async () => {
+    const wrapper = mount(RadioGroup, {
+      props: {
+        modelValue: 'a',
+        name: 'choice',
+        'onUpdate:modelValue': (value: string | number) => wrapper.setProps({ modelValue: value }),
+      },
+      slots: {
+        default: `
+          <Radio value="a">A</Radio>
+          <Radio value="b">B</Radio>
+        `,
+      },
+      global: { components: { Radio } },
+    })
+
+    const radios = wrapper.findAll('input[type="radio"]')
+    expect(radios).toHaveLength(2)
+    await radios[1]!.setValue(true)
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['b'])
+  })
+})
+
+describe('Radio', () => {
+  it('emits update when used standalone', async () => {
+    const wrapper = mount(Radio, {
+      props: { modelValue: 'x', value: 'y', name: 'solo' },
+      slots: { default: 'Y' },
+    })
+    await wrapper.find('input').setValue(true)
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['y'])
+  })
+
+  it('does not emit when disabled', async () => {
+    const wrapper = mount(Radio, {
+      props: { modelValue: 'x', value: 'y', disabled: true },
+    })
+    await wrapper.find('input').trigger('change')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+})
+
+describe('Label', () => {
+  it('associates with a control via for', () => {
+    const wrapper = mount(Label, {
+      props: { for: 'email' },
+      slots: { default: 'Email' },
+    })
+    expect(wrapper.attributes('for')).toBe('email')
+    expect(wrapper.text()).toBe('Email')
+  })
+})
+
+describe('Toggle', () => {
+  it('toggles boolean model through Switch', async () => {
+    const wrapper = mount(Toggle, {
+      props: {
+        modelValue: false,
+        label: 'Notifications',
+        'onUpdate:modelValue': (value: boolean) => wrapper.setProps({ modelValue: value }),
+      },
+    })
+    expect(wrapper.text()).toContain('Notifications')
+    await wrapper.find('[role="switch"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([true])
+  })
+
+  it('respects disabled', () => {
+    const wrapper = mount(Toggle, {
+      props: { modelValue: false, disabled: true },
+      slots: { default: 'Off' },
+    })
+    expect(wrapper.find('[role="switch"]').attributes('disabled')).toBeDefined()
   })
 })
 

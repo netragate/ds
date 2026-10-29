@@ -70,6 +70,59 @@ describe('TimeInput', () => {
     expect(wrapper.props('modelValue')).toEqual({ from: '09:00:00', to: '18:30:00' })
     wrapper.unmount()
   })
+
+  it('clears the value and respects disabled', async () => {
+    const wrapper = mount(TimeInput, {
+      props: {
+        modelValue: '10:15:00',
+        locale: 'pt-BR',
+        'onUpdate:modelValue': (value: string | { from: string; to: string }) => {
+          void wrapper.setProps({ modelValue: value })
+        },
+      },
+      attachTo: document.body,
+    })
+
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const clear = wrapper.findAll('button').find((btn) => btn.text() === 'Limpar')
+    await clear!.trigger('click')
+    expect(wrapper.props('modelValue')).toBe('')
+    wrapper.unmount()
+
+    const disabled = mount(TimeInput, {
+      props: { modelValue: '08:00:00', disabled: true },
+      attachTo: document.body,
+    })
+    await disabled.find('button[aria-expanded]').trigger('click')
+    expect(disabled.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
+    disabled.unmount()
+  })
+
+  it('applies minute and second steps to option lists', async () => {
+    const wrapper = mount(TimeInput, {
+      props: { modelValue: '00:00:00', minuteStep: 15, secondStep: 30 },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const selects = wrapper.findAll('select')
+    const minuteOptions = selects[1]!.findAll('option').map((o) => o.element.value)
+    const secondOptions = selects[2]!.findAll('option').map((o) => o.element.value)
+    expect(minuteOptions).toEqual(['00', '15', '30', '45'])
+    expect(secondOptions).toEqual(['00', '30'])
+    wrapper.unmount()
+  })
+
+  it('closes on Escape', async () => {
+    const wrapper = mount(TimeInput, {
+      props: { modelValue: '12:00:00' },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
+    wrapper.unmount()
+  })
 })
 
 describe('DateInput', () => {
@@ -248,6 +301,175 @@ describe('DateInput', () => {
     })
 
     expect((wrapper.find('input').element as HTMLInputElement).value).toBe('15/06/2026')
+    wrapper.unmount()
+  })
+
+  it('selects a single day and closes the calendar', async () => {
+    const wrapper = dateInputMount({
+      props: {
+        modelValue: '',
+        locale: 'en',
+        'onUpdate:modelValue': (value) => wrapper.setProps({ modelValue: value }),
+      },
+      attachTo: document.body,
+    })
+
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const day = wrapper
+      .findAll('div.grid.grid-cols-7.gap-1 button')
+      .find((btn) => btn.text() === '15' && !btn.classes().join(' ').includes('muted'))
+    await day!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.props('modelValue')).toMatch(/^\d{4}-\d{2}-15$/)
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
+    wrapper.unmount()
+  })
+
+  it('clears single and range values', async () => {
+    const single = dateInputMount({
+      props: {
+        modelValue: '2026-06-15',
+        locale: 'en',
+        'onUpdate:modelValue': (value) => single.setProps({ modelValue: value }),
+      },
+      attachTo: document.body,
+    })
+    await single.find('button[aria-expanded]').trigger('click')
+    const clear = single.findAll('button').find((btn) => btn.text() === 'Clear')
+    await clear!.trigger('click')
+    expect(single.props('modelValue')).toBe('')
+    single.unmount()
+
+    const range = dateInputMount({
+      props: {
+        range: true,
+        modelValue: { from: '2026-06-10', to: '2026-06-12' },
+        locale: 'en',
+        'onUpdate:modelValue': (value) => range.setProps({ modelValue: value }),
+      },
+      attachTo: document.body,
+    })
+    await range.find('button[aria-expanded]').trigger('click')
+    const clearRange = range.findAll('button').find((btn) => btn.text() === 'Clear')
+    await clearRange!.trigger('click')
+    expect(range.props('modelValue')).toEqual({ from: '', to: '' })
+    range.unmount()
+  })
+
+  it('selects today for single mode', async () => {
+    const single = dateInputMount({
+      props: {
+        modelValue: '',
+        locale: 'en',
+        'onUpdate:modelValue': (value) => single.setProps({ modelValue: value }),
+      },
+      attachTo: document.body,
+    })
+    await single.find('button[aria-expanded]').trigger('click')
+    const today = single.findAll('button').find((btn) => btn.text() === 'Today')
+    expect(today).toBeTruthy()
+    await today!.trigger('click')
+    expect(String(single.props('modelValue'))).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    single.unmount()
+  })
+
+  it('closes on Escape and outside click', async () => {
+    const wrapper = dateInputMount({
+      props: { modelValue: '2026-06-15', locale: 'en' },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('true')
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
+
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    document.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
+    wrapper.unmount()
+  })
+
+  it('parses typed locale dates and restores invalid input', async () => {
+    const wrapper = dateInputMount({
+      props: {
+        modelValue: '2026-06-15',
+        locale: 'en',
+        'onUpdate:modelValue': (value) => wrapper.setProps({ modelValue: value }),
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.setValue('06/20/2026')
+    await input.trigger('blur')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.props('modelValue')).toBe('2026-06-20')
+
+    await input.setValue('not-a-date')
+    await input.trigger('blur')
+    await wrapper.vm.$nextTick()
+    expect((input.element as HTMLInputElement).value).toMatch(/06\/20\/2026|2026/)
+    wrapper.unmount()
+  })
+
+  it('keeps calendar open with showTime for single datetime values', async () => {
+    const wrapper = dateInputMount({
+      props: {
+        showTime: true,
+        modelValue: { date: '2026-06-15', time: '10:00:00' },
+        locale: 'en',
+        'onUpdate:modelValue': (value) => wrapper.setProps({ modelValue: value }),
+      },
+      attachTo: document.body,
+    })
+
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const day = wrapper
+      .findAll('div.grid.grid-cols-7.gap-1 button')
+      .find((btn) => btn.text() === '18' && !btn.classes().join(' ').includes('muted'))
+    await day!.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('true')
+    expect(wrapper.findComponent(TimeInput).exists()).toBe(true)
+
+    const clear = wrapper.findAll('button').find((btn) => btn.text() === 'Clear')
+    await clear!.trigger('click')
+    expect(wrapper.props('modelValue')).toEqual({ date: '', time: '' })
+    wrapper.unmount()
+  })
+
+  it('shifts months with navigation buttons', async () => {
+    const wrapper = dateInputMount({
+      props: { modelValue: '2026-06-15', locale: 'en' },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    expect(wrapper.text()).toMatch(/June 2026/i)
+    const next = wrapper.find('button[aria-label="Next month"]')
+    if (next.exists()) {
+      await next.trigger('click')
+      await wrapper.vm.$nextTick()
+      expect(wrapper.text()).toMatch(/July 2026/i)
+    } else {
+      const navButtons = wrapper.findAll('button').filter((btn) => btn.find('svg').exists())
+      await navButtons[navButtons.length - 1]!.trigger('click')
+      await wrapper.vm.$nextTick()
+      expect(wrapper.text()).toMatch(/July 2026/i)
+    }
+    wrapper.unmount()
+  })
+
+  it('does not open when disabled', async () => {
+    const wrapper = dateInputMount({
+      props: { modelValue: '2026-06-15', disabled: true, locale: 'en' },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('false')
     wrapper.unmount()
   })
 })
