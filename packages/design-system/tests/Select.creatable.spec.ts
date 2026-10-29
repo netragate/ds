@@ -46,6 +46,58 @@ describe('Select creatable', () => {
     expect(emitted?.at(-1)?.[0]).toBe('Payments')
     wrapper.unmount()
   })
+
+  it('shows created modelValue as a chip in multiple mode', () => {
+    const wrapper = mount(Select, {
+      props: {
+        options: [{ label: 'Finance', value: 'Finance' }],
+        modelValue: ['Custom Category'],
+        multiple: true,
+        creatable: true,
+      },
+    })
+    expect(wrapper.text()).toContain('Custom Category')
+    wrapper.unmount()
+  })
+
+  it('creates, closes, and shows chip in multiple mode', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        options: [{ label: 'Finance', value: 'Finance' }],
+        searchable: true,
+        creatable: true,
+        multiple: true,
+        modelValue: [],
+      },
+      attachTo: document.body,
+    })
+
+    const trigger = wrapper.find('[role="combobox"]')
+    await trigger.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const input = document.body.querySelector('input') as HTMLInputElement
+    expect(input).toBeTruthy()
+    input.value = 'Payments'
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+
+    const createBtn = Array.from(document.body.querySelectorAll('button')).find((btn) =>
+      btn.textContent?.includes('Create'),
+    )
+    expect(createBtn).toBeTruthy()
+    createBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual(['Payments'])
+    expect(trigger.attributes('aria-expanded')).toBe('false')
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull()
+
+    await wrapper.setProps({ modelValue: ['Payments'] })
+    expect(wrapper.text()).toContain('Payments')
+
+    wrapper.unmount()
+  })
 })
 
 describe('Select open behavior', () => {

@@ -22,6 +22,10 @@ export interface SelectProps {
    */
   creatable?: boolean
   /**
+   * When true (default), multiple mode shows the “N selected / Clear all” footer.
+   */
+  clearable?: boolean
+  /**
    * When true, options are not filtered locally. Parent owns filtering via the
    * `search` event and by updating `options`. Disables create-from-query.
    */
@@ -41,6 +45,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   multiple: false,
   searchable: true,
   creatable: false,
+  clearable: true,
   serverSearch: false,
   minSearchChars: 0,
   loading: false,
@@ -104,9 +109,14 @@ const selectedValues = computed<string[]>(() => {
   return typeof props.modelValue === 'string' && props.modelValue ? [props.modelValue] : []
 })
 
-const selectedOptions = computed(() =>
-  props.options.filter((option) => selectedValues.value.includes(option.value)),
-)
+const selectedOptions = computed(() => {
+  const known = props.options.filter((option) => selectedValues.value.includes(option.value))
+  const knownValues = new Set(known.map((option) => option.value))
+  const created = selectedValues.value
+    .filter((value) => !knownValues.has(value))
+    .map((value) => ({ label: value, value }))
+  return [...known, ...created]
+})
 
 const creatableEnabled = computed(() => props.creatable && !props.serverSearch)
 
@@ -189,7 +199,15 @@ function clearAll(): void {
 function createFromQuery(): void {
   const term = createCandidate.value
   if (!term) return
-  selectOption(term)
+  if (props.multiple) {
+    if (!isSelected(term)) {
+      emit('update:modelValue', [...selectedValues.value, term])
+    }
+  } else {
+    emit('update:modelValue', term)
+  }
+  open.value = false
+  query.value = ''
 }
 
 function emitServerSearch(term: string): void {
@@ -377,7 +395,7 @@ onUnmounted(() => {
         </div>
 
         <div
-          v-if="multiple"
+          v-if="multiple && clearable"
           class="flex items-center justify-between border-t border-border/60 px-3 py-2 text-xs"
         >
           <span class="text-muted-foreground">{{ selectedValues.length }} selected</span>

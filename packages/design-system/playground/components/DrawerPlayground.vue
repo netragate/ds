@@ -66,6 +66,7 @@ const selectCatalogAll = [
 ]
 
 const selectOptions = ref([...selectCatalogAll])
+const selectCreatedOptions = ref<{ label: string; value: string }[]>([])
 let selectSearchTimer: ReturnType<typeof setTimeout> | null = null
 
 watch(selectServerSearch, (enabled) => {
@@ -74,9 +75,42 @@ watch(selectServerSearch, (enabled) => {
     selectOptions.value = []
   } else {
     selectLoading.value = false
-    selectOptions.value = [...selectCatalogAll]
+    selectOptions.value = [...selectCatalogAll, ...selectCreatedOptions.value]
   }
 })
+
+function ensureSelectCreatedOption(value: string): void {
+  if (!selectCreatable.value || selectServerSearch.value) return
+  const term = value.trim()
+  if (!term) return
+  const exists =
+    selectCatalogAll.some(
+      (option) =>
+        option.value.toLowerCase() === term.toLowerCase() ||
+        option.label.toLowerCase() === term.toLowerCase(),
+    ) ||
+    selectCreatedOptions.value.some(
+      (option) =>
+        option.value.toLowerCase() === term.toLowerCase() ||
+        option.label.toLowerCase() === term.toLowerCase(),
+    )
+  if (exists) return
+  const created = { label: term, value: term }
+  selectCreatedOptions.value = [...selectCreatedOptions.value, created]
+  selectOptions.value = [...selectOptions.value, created]
+}
+
+function onSelectSingleUpdate(value: string | string[]): void {
+  const next = typeof value === 'string' ? value : ''
+  selectValue.value = next
+  if (next) ensureSelectCreatedOption(next)
+}
+
+function onSelectMultipleUpdate(value: string | string[]): void {
+  const next = Array.isArray(value) ? value : []
+  selectMultipleValue.value = next
+  for (const item of next) ensureSelectCreatedOption(item)
+}
 
 function onSelectServerSearch(query: string): void {
   if (!selectServerSearch.value) return
@@ -461,7 +495,7 @@ function optionStyle(active: boolean) {
         </div>
         <Select
           v-if="!selectMultiple"
-          v-model="selectValue"
+          :model-value="selectValue"
           :options="selectOptions"
           :searchable="selectSearchable"
           :creatable="selectServerSearch ? false : selectCreatable"
@@ -470,11 +504,12 @@ function optionStyle(active: boolean) {
           :loading="selectLoading"
           :disabled="selectDisabled"
           :placeholder="selectPlaceholderSingle || selectPlayground.placeholderSingle"
+          @update:model-value="onSelectSingleUpdate"
           @search="onSelectServerSearch"
         />
         <Select
           v-else
-          v-model="selectMultipleValue"
+          :model-value="selectMultipleValue"
           multiple
           :options="selectOptions"
           :searchable="selectSearchable"
@@ -484,6 +519,7 @@ function optionStyle(active: boolean) {
           :loading="selectLoading"
           :disabled="selectDisabled"
           :placeholder="selectPlaceholderMulti || selectPlayground.placeholderMulti"
+          @update:model-value="onSelectMultipleUpdate"
           @search="onSelectServerSearch"
         />
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
