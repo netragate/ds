@@ -904,9 +904,10 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('showMenu', 'boolean', 'true', 'Render sidebar menu region'),
       p('showFooter', 'boolean', 'true', 'Render footer region'),
       p('settingsMenu', 'boolean', 'false', 'Pin a SidebarMenuGroup or SidebarMenuItem whose id equals settingsMenuId to the menu footer'),
-      p('submenuMode', "'flyout' | 'inline'", 'flyout', 'How group children open: hover flyout (default) or click to expand inline below the group. Collapsed rail and pinned settings stay flyout'),
+      p('submenuMode', "'flyout' | 'inline'", 'flyout', 'How group children open: hover flyout (default) or click to expand inline. Collapsed rail stays flyout; mobile menu forces inline including pinned settings'),
       p('settingsMenuId', 'string', 'settings', 'Exact id of the SidebarMenuGroup or lone SidebarMenuItem to pin (any string; must match the node id)'),
       p('footerWidth', "'full' | 'content'", 'full', 'Footer spans full width or content column only'),
+      p('forceMobile', 'boolean', 'false', 'Force mobile shell (hamburger + drawer) regardless of viewport width'),
       cls('Shell sizing — use class="min-h-svh" (or h-full on #app) for full-viewport apps; does not style slot content'),
     ],
     models: [
@@ -914,6 +915,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       m('panelOpen', 'boolean', 'false', 'Side panel open state (v-model:panel-open)'),
       m('activeMenuId', 'string', "''", 'Active sidebar item id — auto-selects first menu item when empty (v-model:active-menu-id)'),
       m('openMenuKeys', 'string[]', '[]', 'Expanded sidebar group keys (v-model:open-menu-keys)'),
+      m('menuDrawerOpen', 'boolean', 'false', 'Mobile menu drawer open state (v-model:menu-drawer-open)'),
     ],
     slots: [
       s('header', undefined, 'Top header bar — compose markup and Tailwind classes inside the slot'),
@@ -930,6 +932,7 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
         c('header slot', 'Brand bar with border-b, px-4 py-3, typography classes'),
         c('menu slot', 'Navigation items — pin settings with SidebarMenuGroup id="settings" or lone SidebarMenuItem id="settings"'),
         c('menu toggle', 'Built-in chevron button with tooltip — no extra component required'),
+        c('mobile menu', 'Below lg (or forceMobile): hamburger in header opens a left drawer; selecting an item closes it', true),
         c('submenuMode prop', 'flyout (default) or inline expand-on-click for SidebarMenuGroup children', true),
         c('settingsMenu prop', 'When true, the menu node whose id equals settingsMenuId is pinned to the footer', true),
         c('settingsMenuId prop', 'Compared with exact string equality to the SidebarMenuGroup / lone SidebarMenuItem id', true),

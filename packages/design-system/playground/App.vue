@@ -10,6 +10,7 @@ import PlaygroundLocaleSelect from './components/PlaygroundLocaleSelect.vue'
 import PlaygroundCategoryNav from './components/PlaygroundCategoryNav.vue'
 import { usePlaygroundTheme } from './composables/usePlaygroundTheme'
 import { providePlaygroundLocale } from './composables/usePlaygroundLocale'
+import { providePlaygroundMobilePreview } from './composables/usePlaygroundMobilePreview'
 import ToastHost from '@/components/feedback/ToastHost.vue'
 
 const route = useRoute()
@@ -18,6 +19,7 @@ const drawerName = ref<string | null>(null)
 const drawerOpen = ref(false)
 const { isDark, toggleTheme } = usePlaygroundTheme()
 const { t } = providePlaygroundLocale()
+providePlaygroundMobilePreview()
 
 function openDrawer(name: string): void {
   drawerName.value = name

@@ -143,6 +143,12 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Flex direction': 'Direção do flex',
   'Footer actions aligned to the end': 'Ações do footer alinhadas ao final',
   'Footer spans full width or content column only': 'Footer ocupa largura total ou apenas a coluna de conteúdo',
+  'Force mobile shell (hamburger + drawer) regardless of viewport width':
+    'Força o shell mobile (hamburger + drawer) independentemente da largura da viewport',
+  'Mobile menu drawer open state (v-model:menu-drawer-open)':
+    'Estado aberto do drawer do menu mobile (v-model:menu-drawer-open)',
+  'Below lg (or forceMobile): hamburger in header opens a left drawer; selecting an item closes it':
+    'Abaixo de lg (ou forceMobile): hamburger no header abre um drawer à esquerda; selecionar um item fecha',
   'Pin a SidebarMenuGroup or SidebarMenuItem whose id equals settingsMenuId to the menu footer':
     'Fixa no rodapé do menu um SidebarMenuGroup ou SidebarMenuItem cujo id seja igual a settingsMenuId',
   'Exact id of the SidebarMenuGroup or lone SidebarMenuItem to pin (any string; must match the node id)':

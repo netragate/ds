@@ -538,6 +538,8 @@ export const en: PlaygroundMessages = {
     component: 'Component',
     livePlayground: 'Live Playground',
     loadingDemo: 'Loading demo…',
+    mobilePreview: 'Mobile preview',
+    desktopPreview: 'Desktop preview',
     previewFallback: '{name} preview',
     playgroundPlaceholders: {
       Chip: 'Type and press Enter...',

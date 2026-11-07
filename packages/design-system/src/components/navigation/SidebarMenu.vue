@@ -20,6 +20,8 @@ const props = withDefaults(
      * Collapsed rail always uses flyout.
      */
     submenuMode?: SidebarSubmenuMode
+    /** Called after an item becomes active (e.g. close mobile menu drawer). */
+    onNavigate?: (id: string) => void
     class?: string
   }>(),
   {
@@ -175,6 +177,7 @@ function hasOpenDescendantFlyouts(depth: number): boolean {
 function setActive(id: string): void {
   activeId.value = id
   closeAllFlyouts()
+  props.onNavigate?.(id)
 }
 
 const context: SidebarMenuContext = {

@@ -538,6 +538,8 @@ export const ptBR: PlaygroundMessages = {
     component: 'Componente',
     livePlayground: 'Playground ao vivo',
     loadingDemo: 'Carregando demo…',
+    mobilePreview: 'Preview mobile',
+    desktopPreview: 'Preview desktop',
     previewFallback: 'Preview de {name}',
     playgroundPlaceholders: {
       Chip: 'Digite e pressione Enter...',

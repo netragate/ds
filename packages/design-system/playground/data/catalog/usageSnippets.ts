@@ -624,16 +624,19 @@ const settingsMenuId = ref('settings')
 const footerWidth = ref<'full' | 'content'>('full')
 const activeId = ref('dashboard')
 const openKeys = ref<string[]>([])
+const menuDrawerOpen = ref(false)
 const pageTitle = ref('Dashboard')
 <\/script>
 
 <template>
   <!-- AppLayout arranges regions; style each slot with Tailwind/classes -->
+  <!-- Below lg: hamburger in header opens a left drawer (also via forceMobile / v-model:menu-drawer-open) -->
   <AppLayout
     v-model:menu-collapsed="menuCollapsed"
     v-model:panel-open="panelOpen"
     v-model:active-menu-id="activeId"
     v-model:open-menu-keys="openKeys"
+    v-model:menu-drawer-open="menuDrawerOpen"
     :menu-width="menuWidth"
     :menu-collapsed-width="menuCollapsedWidth"
     :menu-label="menuLabel"

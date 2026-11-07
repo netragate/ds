@@ -456,6 +456,8 @@ export interface PlaygroundMessages {
     component: string
     livePlayground: string
     loadingDemo: string
+    mobilePreview: string
+    desktopPreview: string
     previewFallback: string
     descriptions: Record<string, string>
     playgroundPlaceholders: Record<string, string>

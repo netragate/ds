@@ -19,6 +19,7 @@ const props = withDefaults(
     settingsMenu?: boolean
     settingsMenuId?: string
     submenuMode?: 'flyout' | 'inline'
+    onNavigate?: (id: string) => void
   }>(),
   {
     menuCollapsible: true,
@@ -99,6 +100,7 @@ provide(APP_LAYOUT_MENU_INJECTION_KEY, {
       v-model:open-keys="openKeys"
       :collapsed="collapsed"
       :submenu-mode="submenuMode"
+      :on-navigate="onNavigate"
       class="flex h-full min-h-0 w-full flex-1 flex-col"
     >
       <div class="flex h-full min-h-0 w-full flex-1 flex-col">

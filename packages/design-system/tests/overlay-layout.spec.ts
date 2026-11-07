@@ -570,6 +570,136 @@ describe('layout components', () => {
     expect(wrapper.emitted('update:panelOpen')?.[0]).toEqual([false])
     wrapper.unmount()
   })
+
+  it('AppLayout forceMobile hides aside and shows hamburger in header', () => {
+    const wrapper = mount(AppLayout, {
+      props: { showHeader: true, showMenu: true, forceMobile: true },
+      slots: {
+        header: 'Header area',
+        menu: 'Menu area',
+        default: 'Content area',
+      },
+    })
+
+    expect(wrapper.find('aside').exists()).toBe(false)
+    expect(wrapper.find('button[aria-label="Open menu"]').exists()).toBe(true)
+    expect(wrapper.attributes('data-mobile')).toBe('true')
+    wrapper.unmount()
+  })
+
+  it('AppLayout mobile hamburger opens drawer inside the layout shell', async () => {
+    const wrapper = mount(AppLayout, {
+      props: {
+        showHeader: true,
+        showMenu: true,
+        forceMobile: true,
+        menuDrawerOpen: false,
+        'onUpdate:menuDrawerOpen': (value: boolean) => wrapper.setProps({ menuDrawerOpen: value }),
+      },
+      slots: {
+        header: 'Header area',
+        menu: '<button type="button">Menu leaf</button>',
+        default: 'Content area',
+      },
+    })
+
+    await wrapper.find('button[aria-label="Open menu"]').trigger('click')
+    expect(wrapper.emitted('update:menuDrawerOpen')?.[0]).toEqual([true])
+    await wrapper.setProps({ menuDrawerOpen: true })
+    await flushPromises()
+
+    const drawer = wrapper.find('[data-app-layout-menu-drawer]')
+    expect(drawer.exists()).toBe(true)
+    expect(drawer.text()).toContain('Menu leaf')
+    expect(wrapper.find('button[aria-label="Close menu"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('AppLayout closes mobile drawer when a menu item is selected', async () => {
+    const wrapper = mount(AppLayout, {
+      props: {
+        showHeader: true,
+        showMenu: true,
+        forceMobile: true,
+        menuDrawerOpen: true,
+        activeMenuId: 'dashboard',
+        'onUpdate:menuDrawerOpen': (value: boolean) => wrapper.setProps({ menuDrawerOpen: value }),
+        'onUpdate:activeMenuId': (value: string) => wrapper.setProps({ activeMenuId: value }),
+      },
+      slots: {
+        header: 'Header',
+        menu: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuItem id="settings" label="Settings" />
+        `,
+        default: 'Content',
+      },
+      global: {
+        components: { SidebarMenuItem },
+      },
+    })
+
+    await flushPromises()
+    const drawer = wrapper.find('[data-app-layout-menu-drawer]')
+    const settings = drawer.findAll('button').find((btn) => btn.text().includes('Settings'))
+    expect(settings).toBeTruthy()
+    await settings!.trigger('click')
+    await flushPromises()
+    expect(wrapper.emitted('update:menuDrawerOpen')?.some((args) => args[0] === false)).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('AppLayout desktop keeps aside and collapse toggle when forceMobile is false', () => {
+    const wrapper = mount(AppLayout, {
+      props: { showHeader: true, showMenu: true, forceMobile: false, menuCollapsible: true },
+      slots: { header: 'Header', menu: 'Menu', default: 'Content' },
+    })
+
+    expect(wrapper.find('aside').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Open menu"]').exists()).toBe(false)
+    expect(wrapper.find('button[aria-label="Collapse menu"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('AppLayout mobile settings expands inline inside the menu drawer', async () => {
+    const wrapper = mount(AppLayout, {
+      props: {
+        showHeader: true,
+        showMenu: true,
+        forceMobile: true,
+        menuDrawerOpen: true,
+        settingsMenu: true,
+      },
+      slots: {
+        header: 'Header',
+        menu: `
+          <SidebarMenuItem id="dashboard" label="Dashboard" />
+          <SidebarMenuGroup id="settings" label="Settings" :child-ids="['settings.profile']">
+            <SidebarMenuItem id="settings.profile" label="Profile" />
+          </SidebarMenuGroup>
+        `,
+        default: 'Content',
+      },
+      global: {
+        components: { SidebarMenuGroup, SidebarMenuItem },
+      },
+    })
+
+    await flushPromises()
+    const drawer = wrapper.find('[data-app-layout-menu-drawer]')
+    expect(drawer.exists()).toBe(true)
+
+    const settingsTrigger = drawer
+      .findAll('button')
+      .find((button) => button.text().includes('Settings'))
+    expect(settingsTrigger).toBeDefined()
+    await settingsTrigger!.trigger('click')
+    await flushPromises()
+
+    expect(drawer.text()).toContain('Profile')
+    expect(document.body.querySelector('[data-sidebar-flyout]')).toBeNull()
+    wrapper.unmount()
+  })
 })
 
 describe('Tooltip', () => {

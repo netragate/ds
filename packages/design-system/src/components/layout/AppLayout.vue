@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, onUnmounted, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { cn } from '@/lib/utils'
+import { resolveIcon } from '@/icons/resolveIcon'
 import AppLayoutPanelOverlay from './AppLayoutPanelOverlay.vue'
 import AppLayoutSidebarMenu from './AppLayoutSidebarMenu.vue'
+
+const MOBILE_MEDIA_QUERY = '(max-width: 1023px)'
+const MenuIcon = resolveIcon('menu')
 
 export interface AppLayoutProps {
   menuWidth?: string
@@ -29,6 +33,11 @@ export interface AppLayoutProps {
   submenuMode?: 'flyout' | 'inline'
   /** `full` spans header/menu/content; `content` keeps footer under main content only. */
   footerWidth?: 'full' | 'content'
+  /**
+   * Force the mobile shell (hamburger + drawer) regardless of viewport width.
+   * Used by the playground mobile preview.
+   */
+  forceMobile?: boolean
   class?: string
 }
 
@@ -50,22 +59,49 @@ const props = withDefaults(defineProps<AppLayoutProps>(), {
   settingsMenuId: 'settings',
   submenuMode: 'flyout',
   footerWidth: 'full',
+  forceMobile: false,
 })
 
 const menuCollapsed = defineModel<boolean>('menuCollapsed', { default: false })
 const panelOpen = defineModel<boolean>('panelOpen', { default: false })
 const activeMenuId = defineModel<string>('activeMenuId', { default: '' })
 const openMenuKeys = defineModel<string[]>('openMenuKeys', { default: () => [] })
+const menuDrawerOpen = defineModel<boolean>('menuDrawerOpen', { default: false })
 
-onBeforeMount(() => {
-  if (props.defaultMenuCollapsed) {
-    menuCollapsed.value = true
+const mediaMobile = ref(false)
+let mobileMediaQuery: MediaQueryList | null = null
+
+function syncMobileMedia(): void {
+  mediaMobile.value = mobileMediaQuery?.matches ?? false
+}
+
+onMounted(() => {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return
   }
+
+  mobileMediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
+  syncMobileMedia()
+  mobileMediaQuery.addEventListener('change', syncMobileMedia)
 })
+
+onUnmounted(() => {
+  mobileMediaQuery?.removeEventListener('change', syncMobileMedia)
+  mobileMediaQuery = null
+  document.removeEventListener('keydown', onEscape)
+})
+
+const isMobile = computed(() => props.forceMobile || mediaMobile.value)
+
+const showMobileMenuButton = computed(() => isMobile.value && props.showMenu && props.showHeader)
 
 const activeMenuWidth = computed(() =>
   menuCollapsed.value ? props.menuCollapsedWidth : props.menuWidth,
 )
+
+const menuCollapsedForShell = computed(() => (isMobile.value ? false : menuCollapsed.value))
+const menuCollapsibleForShell = computed(() => (isMobile.value ? false : props.menuCollapsible))
+const submenuModeForShell = computed(() => (isMobile.value ? 'inline' : props.submenuMode))
 
 const usesGridFooter = computed(
   () => props.showFooter && !(props.footerWidth === 'content' && props.showMenu),
@@ -115,8 +151,14 @@ const gridStyle = computed(() => {
   }
 })
 
+const shellStyle = computed(() => ({
+  gridArea: 'shell',
+  gridTemplateColumns: isMobile.value ? 'minmax(0, 1fr)' : 'auto minmax(0, 1fr)',
+  gridTemplateRows: 'minmax(0, 1fr)',
+}))
+
 function toggleMenu(): void {
-  if (!props.menuCollapsible) {
+  if (!props.menuCollapsible || isMobile.value) {
     return
   }
 
@@ -127,11 +169,32 @@ function closePanel(): void {
   panelOpen.value = false
 }
 
+function closeMenuDrawer(): void {
+  menuDrawerOpen.value = false
+}
+
+function toggleMenuDrawer(): void {
+  menuDrawerOpen.value = !menuDrawerOpen.value
+}
+
 function onEscape(event: KeyboardEvent): void {
-  if (event.key === 'Escape' && panelOpen.value) {
+  if (event.key !== 'Escape') return
+
+  if (menuDrawerOpen.value) {
+    closeMenuDrawer()
+    return
+  }
+
+  if (panelOpen.value) {
     closePanel()
   }
 }
+
+onBeforeMount(() => {
+  if (props.defaultMenuCollapsed) {
+    menuCollapsed.value = true
+  }
+})
 
 watch(
   () => props.menuCollapsible,
@@ -142,39 +205,62 @@ watch(
   },
 )
 
-watch(panelOpen, (open) => {
-  if (open) {
-    document.addEventListener('keydown', onEscape)
-    return
+watch(isMobile, (mobile) => {
+  if (!mobile) {
+    menuDrawerOpen.value = false
   }
-
-  document.removeEventListener('keydown', onEscape)
-}, { immediate: true })
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', onEscape)
 })
+
+watch(
+  [panelOpen, menuDrawerOpen],
+  ([panel, menu]) => {
+    if (panel || menu) {
+      document.addEventListener('keydown', onEscape)
+      return
+    }
+
+    document.removeEventListener('keydown', onEscape)
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
   <div
     :class="cn('grid h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background', props.class)"
     :style="gridStyle"
+    :data-mobile="isMobile ? 'true' : 'false'"
   >
     <header
       v-if="showHeader"
-      class="border-b border-border bg-card"
+      class="relative border-b border-border bg-card"
       style="grid-area: header"
     >
-      <slot name="header" />
+      <button
+        v-if="showMobileMenuButton"
+        type="button"
+        class="absolute inset-y-0 left-0 z-10 flex appearance-none items-center justify-center border-0 bg-transparent p-0 px-3 text-muted-foreground shadow-none outline-none ring-0 transition-colors hover:bg-transparent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+        :aria-label="menuDrawerOpen ? 'Close menu' : 'Open menu'"
+        :aria-expanded="menuDrawerOpen"
+        @click="toggleMenuDrawer"
+      >
+        <component :is="MenuIcon" :size="18" class="size-[1.125rem] shrink-0" aria-hidden="true" />
+      </button>
+      <div
+        class="min-w-0"
+        :class="{ 'ds-app-layout-header-with-menu': showMobileMenuButton }"
+      >
+        <slot name="header" />
+      </div>
     </header>
 
     <div
       v-if="showMenu"
       class="relative grid min-h-0 min-w-0 overflow-hidden bg-background"
-      style="grid-area: shell; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)"
+      :style="shellStyle"
     >
       <aside
+        v-if="!isMobile"
         :class="
           cn(
             'flex h-full min-h-0 shrink-0 flex-col overflow-hidden border-r border-border bg-card/60 px-0 py-0 transition-[width] duration-300 ease-in-out',
@@ -187,15 +273,15 @@ onUnmounted(() => {
           <AppLayoutSidebarMenu
             v-model:active-id="activeMenuId"
             v-model:open-keys="openMenuKeys"
-            :collapsed="menuCollapsed"
+            :collapsed="menuCollapsedForShell"
             :menu-label="menuLabel"
             :menu-width="menuWidth"
             :menu-collapsed-width="menuCollapsedWidth"
-            :menu-collapsible="menuCollapsible"
+            :menu-collapsible="menuCollapsibleForShell"
             :toggle-menu="toggleMenu"
             :settings-menu="settingsMenu"
             :settings-menu-id="settingsMenuId"
-            :submenu-mode="submenuMode"
+            :submenu-mode="submenuModeForShell"
           >
             <slot name="menu" />
           </AppLayoutSidebarMenu>
@@ -222,6 +308,53 @@ onUnmounted(() => {
               <slot name="panel" v-bind="panelSlot" />
             </template>
           </AppLayoutPanelOverlay>
+
+          <!-- Mobile menu: contained in AppLayout shell (not teleported to viewport) -->
+          <Transition
+            enter-active-class="transition-opacity duration-300 ease-in-out"
+            leave-active-class="transition-opacity duration-300 ease-in-out"
+            enter-from-class="opacity-0"
+            leave-to-class="opacity-0"
+          >
+            <button
+              v-if="isMobile && menuDrawerOpen"
+              type="button"
+              class="absolute inset-0 z-30 bg-background/50"
+              aria-label="Close menu"
+              @click="closeMenuDrawer"
+            />
+          </Transition>
+
+          <Transition
+            enter-active-class="transition-transform duration-300 ease-in-out"
+            leave-active-class="transition-transform duration-300 ease-in-out"
+            enter-from-class="-translate-x-full"
+            leave-to-class="-translate-x-full"
+          >
+            <aside
+              v-if="isMobile && menuDrawerOpen"
+              data-app-layout-menu-drawer
+              class="absolute inset-y-0 left-0 z-40 flex min-h-0 max-w-[85%] flex-col overflow-hidden border-r border-border bg-card shadow-xl"
+              :style="{ width: menuWidth }"
+            >
+              <AppLayoutSidebarMenu
+                v-model:active-id="activeMenuId"
+                v-model:open-keys="openMenuKeys"
+                :collapsed="false"
+                :menu-label="menuLabel"
+                :menu-width="menuWidth"
+                :menu-collapsed-width="menuCollapsedWidth"
+                :menu-collapsible="false"
+                :toggle-menu="toggleMenu"
+                :settings-menu="settingsMenu"
+                :settings-menu-id="settingsMenuId"
+                :submenu-mode="submenuModeForShell"
+                :on-navigate="closeMenuDrawer"
+              >
+                <slot name="menu" />
+              </AppLayoutSidebarMenu>
+            </aside>
+          </Transition>
         </div>
 
         <footer
@@ -267,3 +400,11 @@ onUnmounted(() => {
     </footer>
   </div>
 </template>
+
+<style scoped>
+/* Pad the header slot child so its background spans under the hamburger. */
+.ds-app-layout-header-with-menu > :deep(*) {
+  box-sizing: border-box;
+  padding-left: 2.5rem;
+}
+</style>

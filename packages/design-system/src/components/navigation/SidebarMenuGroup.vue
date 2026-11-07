@@ -77,15 +77,15 @@ const isPinnedSettingsGroup = computed(
 )
 
 /**
- * Inline expand only when the menu asks for it and the rail can show labels.
- * Collapsed rail, flyout nesting, and pinned settings footer always stay flyout.
+ * Inline expand when the menu asks for it and the rail can show labels.
+ * Collapsed rail and flyout nesting stay flyout. Pinned settings use inline too
+ * when submenuMode is inline (mobile drawer) so the panel stays inside AppLayout.
  */
 const useInlineSubmenu = computed(
   () =>
     sidebarMenu.submenuMode?.value === 'inline'
     && !sidebarMenu.collapsed.value
-    && !sidebarMenu.inFlyout.value
-    && !isPinnedSettingsGroup.value,
+    && !sidebarMenu.inFlyout.value,
 )
 
 const inlineOpen = computed(() => sidebarMenu.isOpen(props.id))
@@ -189,7 +189,9 @@ const chevronClasses = computed(() =>
   cn(
     sidebarMenuChevronClass(),
     groupActive.value && '!text-primary',
-    useInlineSubmenu.value && inlineOpen.value && 'rotate-90',
+    useInlineSubmenu.value
+      && inlineOpen.value
+      && (renderInSettingsFooter.value ? '-rotate-90' : 'rotate-90'),
   ),
 )
 
@@ -410,6 +412,9 @@ watch(
       v-if="renderInMain || renderInSettingsFooter"
       ref="rootRef"
       class="flex w-full flex-col"
+      :class="
+        renderInSettingsFooter && useInlineSubmenu ? 'flex-col-reverse' : undefined
+      "
       @mouseenter="showFlyout"
       @mouseleave="scheduleHideFlyout($event)"
     >

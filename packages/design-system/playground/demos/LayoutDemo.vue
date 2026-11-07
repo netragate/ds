@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { usePlaygroundMobilePreview } from '../composables/usePlaygroundMobilePreview'
 import AlertCircle from '@lucide/vue/dist/esm/icons/circle-alert.mjs'
 import BarChart2 from '@lucide/vue/dist/esm/icons/chart-no-axes-column.mjs'
 import Box from '@lucide/vue/dist/esm/icons/box.mjs'
@@ -23,6 +24,7 @@ import SidebarMenuGroup from '@/components/navigation/SidebarMenuGroup.vue'
 import SidebarMenuItem from '@/components/navigation/SidebarMenuItem.vue'
 import Switch from '@/components/form/Switch.vue'
 const { messages, t } = usePlaygroundLocale()
+const { isMobilePreview } = usePlaygroundMobilePreview()
 
 const STORAGE_KEY = 'ds-layout-demo-nav'
 
@@ -301,6 +303,7 @@ const code = computed(() => {
     <div class="pg-playground-panel mb-6 space-y-4 rounded-xl p-4">
       <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ t('layoutPlayground.preview') }}</p>
 
+      <div class="pg-playground-preview rounded-xl p-0">
       <AppLayout
         :key="previewKey"
         v-model:menu-collapsed="menuCollapsed"
@@ -324,11 +327,12 @@ const code = computed(() => {
         :settings-menu-id="settingsMenuId"
         :submenu-mode="submenuMode"
         :footer-width="footerWidth"
+        :force-mobile="isMobilePreview"
         class="min-h-[26rem] h-[26rem] border-[#00E5B0]/20"
       >
         <template #header>
           <div
-            class="flex w-full items-center justify-between gap-3 rounded p-2"
+            class="flex w-full items-center justify-between gap-3 px-3 py-2"
             style="background: rgba(0,212,255,0.06)"
           >
             <div class="flex items-center gap-2">
@@ -438,6 +442,7 @@ const code = computed(() => {
           </div>
         </template>
       </AppLayout>
+      </div>
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div class="min-w-0 space-y-2">

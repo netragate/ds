@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
+import Smartphone from '@lucide/vue/dist/esm/icons/smartphone.mjs'
+import Monitor from '@lucide/vue/dist/esm/icons/monitor.mjs'
 import X from '@lucide/vue/dist/esm/icons/x.mjs'
 import GlowDot from './GlowDot.vue'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
+import { usePlaygroundMobilePreview } from '../composables/usePlaygroundMobilePreview'
 
 const DrawerPlayground = defineAsyncComponent(() => import('./DrawerPlayground.vue'))
 
 const props = defineProps<{ name: string | null }>()
 const open = defineModel<boolean>('open', { default: false })
 const { messages, t } = usePlaygroundLocale()
+const { isMobilePreview, toggleMobilePreview } = usePlaygroundMobilePreview()
 
 const description = computed(() => {
   if (!props.name) return ''
@@ -53,15 +57,31 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
               {{ description }}
             </p>
           </div>
-          <button
-            type="button"
-            class="pg-text-muted rounded-lg p-2 transition-colors hover:bg-black/5 hover:text-[var(--pg-text)] dark:hover:bg-white/5"
-            @click="open = false"
-          >
-            <X :size="16" />
-          </button>
+          <div class="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              class="pg-text-muted rounded-lg p-2 transition-colors hover:bg-black/5 hover:text-[var(--pg-text)] dark:hover:bg-white/5"
+              :aria-label="isMobilePreview ? t('drawer.desktopPreview') : t('drawer.mobilePreview')"
+              :aria-pressed="isMobilePreview"
+              :title="isMobilePreview ? t('drawer.desktopPreview') : t('drawer.mobilePreview')"
+              @click="toggleMobilePreview"
+            >
+              <Monitor v-if="isMobilePreview" :size="16" />
+              <Smartphone v-else :size="16" />
+            </button>
+            <button
+              type="button"
+              class="pg-text-muted rounded-lg p-2 transition-colors hover:bg-black/5 hover:text-[var(--pg-text)] dark:hover:bg-white/5"
+              @click="open = false"
+            >
+              <X :size="16" />
+            </button>
+          </div>
         </div>
-        <div class="playground-scroll flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 sm:px-6 sm:py-6">
+        <div
+          class="playground-scroll flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 sm:px-6 sm:py-6"
+          :data-mobile-preview="isMobilePreview ? '' : undefined"
+        >
           <Suspense v-if="open && name">
             <DrawerPlayground :name="name" />
             <template #fallback>
