@@ -163,7 +163,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
     'panelOpen',
   ],
   'Layout Primitives': ['direction', 'gap', 'align', 'justify', 'cols', 'mdCols', 'lgCols', 'maxWidth'],
-  Modal: ['open', 'title', 'size'],
+  Modal: ['open', 'title', 'width'],
   Dialog: ['closeOnOverlay'],
   Drawer: ['closeOnOverlay', 'placement'],
   Tooltip: ['content', 'placement', 'variant'],

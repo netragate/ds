@@ -75,7 +75,19 @@ export const mockUsers: UserRow[] = [
 
 const userColumns = [
   { key: 'name', label: 'Name', sortable: true, filter: 'text' as const },
-  { key: 'email', label: 'Email', sortable: true, filter: 'text' as const },
+  {
+    key: 'email',
+    label: 'Email',
+    sortable: true,
+    filter: 'text' as const,
+    visibility: 'desktop' as const,
+  },
+  {
+    key: 'emailShort',
+    label: 'Email',
+    searchable: false,
+    visibility: 'mobile' as const,
+  },
   { key: 'role', label: 'Role', sortable: true, filter: 'text' as const },
   {
     key: 'status',
@@ -88,13 +100,31 @@ const userColumns = [
       { label: 'Pending', value: 'pending' },
     ],
   },
-  { key: 'lastLogin', label: 'Last login', sortable: true, filter: 'date' as const },
+  {
+    key: 'lastLogin',
+    label: 'Last login',
+    sortable: true,
+    filter: 'date' as const,
+    visibility: 'desktop' as const,
+  },
 ]
 
 export function createUserTableColumns(columns: UserTableColumnMessages) {
   return [
     { key: 'name', label: columns.name, sortable: true, filter: 'text' as const },
-    { key: 'email', label: columns.email, sortable: true, filter: 'text' as const },
+    {
+      key: 'email',
+      label: columns.email,
+      sortable: true,
+      filter: 'text' as const,
+      visibility: 'desktop' as const,
+    },
+    {
+      key: 'emailShort',
+      label: columns.email,
+      searchable: false,
+      visibility: 'mobile' as const,
+    },
     { key: 'role', label: columns.role, sortable: true, filter: 'text' as const },
     {
       key: 'status',
@@ -107,7 +137,13 @@ export function createUserTableColumns(columns: UserTableColumnMessages) {
         { label: columns.statusPending, value: 'pending' },
       ],
     },
-    { key: 'lastLogin', label: columns.lastLogin, sortable: true, filter: 'date' as const },
+    {
+      key: 'lastLogin',
+      label: columns.lastLogin,
+      sortable: true,
+      filter: 'date' as const,
+      visibility: 'desktop' as const,
+    },
   ]
 }
 

@@ -1,27 +1,27 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { cn } from '@/lib/utils'
+import {
+  MODAL_WIDTH_DEFAULT,
+  modalWidthPanelClasses,
+  modalWidthShellClass,
+  type ModalWidth,
+} from './modalWidth'
 
 const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(
   defineProps<{
     closeOnOverlay?: boolean
-    width?: 'small' | 'medium' | 'large' | 'xlarge'
+    width?: ModalWidth
     titleId?: string
     class?: string
   }>(),
   {
     closeOnOverlay: true,
+    width: MODAL_WIDTH_DEFAULT,
   },
 )
-
-const widthMap: Record<NonNullable<typeof props.width>, string> = {
-  small:  'max-w-[400px]',
-  medium: 'max-w-[600px]',
-  large:  'max-w-[800px]',
-  xlarge: 'max-w-[968px]',
-}
 
 const panelRef = ref<HTMLElement | null>(null)
 
@@ -76,7 +76,14 @@ onUnmounted(() => {
         aria-hidden="true"
         @click="onOverlayClick"
       />
-      <div class="pointer-events-none fixed inset-0 flex items-center justify-center p-4">
+      <div
+        :class="
+          cn(
+            'pointer-events-none fixed inset-0 flex items-center justify-center',
+            modalWidthShellClass(props.width),
+          )
+        "
+      >
         <div
           ref="panelRef"
           role="dialog"
@@ -86,7 +93,7 @@ onUnmounted(() => {
           :class="
             cn(
               'pointer-events-auto relative w-full rounded-lg border border-border bg-card p-6 text-card-foreground shadow-[var(--ds-shadow-modal)] outline-none',
-              props.width ? widthMap[props.width] : 'max-w-lg',
+              modalWidthPanelClasses[props.width],
               props.class,
             )
           "

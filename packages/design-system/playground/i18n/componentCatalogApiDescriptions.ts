@@ -58,9 +58,13 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Column count at lg breakpoint': 'Número de colunas no breakpoint lg',
   'Column count at md breakpoint': 'Número de colunas no breakpoint md',
   'Column definitions (required)': 'Definições de colunas (obrigatório)',
+  'Column definitions (required); optional visibility mobile|desktop per column':
+    'Definições de colunas (obrigatório); visibility opcional mobile|desktop por coluna',
   'Column filter values (v-model:column-filters)': 'Valores de filtro por coluna (v-model:column-filters)',
   'Column span for the cell': 'Span de colunas da célula',
   'Column to filter (required)': 'Coluna a filtrar (obrigatório)',
+  'Show only on mobile or desktop; omit to show on both':
+    'Mostrar só no mobile ou no desktop; omita para mostrar nos dois',
   'Cross-axis alignment': 'Alinhamento no eixo transversal',
   'Current input value': 'Valor atual do input',
   'Current input value (file name(s) when type is file)':
@@ -236,6 +240,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Page size dropdown options': 'Opções do dropdown de tamanho de página',
   'Panel content shown when tab is active': 'Conteúdo do painel exibido quando a aba está ativa',
   'Panel width, padding, and layout classes': 'Classes de largura, padding e layout do painel',
+  'Panel padding and layout classes': 'Classes de padding e layout do painel',
+  'Panel max width — full fills the viewport': 'Largura máxima do painel — full preenche a viewport',
   'Placeholder sizing and shape via Tailwind classes': 'Tamanho e forma do placeholder via classes Tailwind',
   'Placeholder text': 'Texto placeholder',
   'Placeholder when nothing is selected': 'Placeholder quando nada está selecionado',
@@ -352,6 +358,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Whether the menu is collapsed (required)': 'Se o menu está recolhido (obrigatório)',
   'Modal exposes one default slot. Use class="max-w-md overflow-hidden p-0" on the panel and compose header, body, and footer as separate blocks inside it.':
     'Modal expõe um único slot default. Use class="max-w-md overflow-hidden p-0" no painel e componha header, body e footer como blocos separados dentro dele.',
+  'Modal exposes one default slot. Set width for panel size and use class="overflow-hidden p-0" when composing header, body, and footer as separate blocks.':
+    'Modal expõe um único slot default. Defina width para o tamanho do painel e use class="overflow-hidden p-0" ao compor header, body e footer como blocos separados.',
   'Title row with border-b — title on the left': 'Linha de título com border-b — título à esquerda',
   'Optional × in the header with aria-label="Close" wired to close the modal':
     '× opcional no header com aria-label="Close" ligado ao fechamento do modal',

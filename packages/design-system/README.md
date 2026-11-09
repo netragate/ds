@@ -173,6 +173,24 @@ Semantic table primitives: `Table`, `TableHead`, `TableBody`, `TableRow`, `Table
 
 Stripe/hover styles use **direct-child** selectors so a nested `Table` inside a cell is not painted by the parent. Mark nested instances with `:nested="true"` (adds `ds-table-nested`).
 
+### Responsive column visibility
+
+`TableCell` accepts optional `visibility`: `'mobile' | 'desktop'`. **Omit the prop to show on both** viewports. Breakpoint is `lg` (1024px), same mobile cutoff as `AppLayout`. Apply the same value on matching header and body cells.
+
+```vue
+<TableRow>
+  <TableCell>Name</TableCell>
+  <TableCell visibility="desktop">Email</TableCell>
+  <TableCell visibility="mobile">Summary</TableCell>
+</TableRow>
+```
+
+| `visibility` | When it shows |
+|---|---|
+| *(omit)* | Mobile and desktop |
+| `desktop` | ≥1024px only |
+| `mobile` | &lt;1024px only |
+
 ### Pattern A — nested table in a cell
 
 ```vue
@@ -228,6 +246,19 @@ import type { DataTableColumn } from '@netragate/design-system'
 const columns: DataTableColumn[] = [
   { key: 'name', label: 'Name', sortable: true, filter: 'text' },
   {
+    key: 'email',
+    label: 'Email',
+    sortable: true,
+    filter: 'text',
+    visibility: 'desktop',
+  },
+  {
+    key: 'emailShort',
+    label: 'Email',
+    visibility: 'mobile',
+    searchable: false,
+  },
+  {
     key: 'status',
     label: 'Status',
     sortable: true,
@@ -237,11 +268,13 @@ const columns: DataTableColumn[] = [
       { label: 'Inactive', value: 'inactive' },
     ],
   },
-  { key: 'createdAt', label: 'Created', sortable: true, filter: 'date' },
+  { key: 'createdAt', label: 'Created', sortable: true, filter: 'date', visibility: 'desktop' },
 ]
 ```
 
 Filter types: `'text'` | `'date'` (from/to) | `'enum'` (multi-select). The filter icon in the header opens a popover per column.
+
+Optional `visibility: 'mobile' | 'desktop'` on a column (omit = both). Same `lg` breakpoint as `TableCell` / `AppLayout`. `DataTable` removes non-matching columns from the grid (so `table-fixed`, expand `colspan`, and nested tables resize); search/filter/sort still use the full `columns` config.
 
 ### Client-side usage
 
@@ -280,6 +313,7 @@ const columnFilters = ref<DataTableColumnFilters>({})
 - **Ctrl+click** (⌘+click on Mac): add column to multi-sort (no limit)
 - **Filter:** button beside sort on columns with `filter` defined
 - **Resize:** drag the right edge of a header (`resizable`, default `true`). `column.width` is the starting width. When a cell value is wider than the column, hover shows a tooltip with the full value.
+- **Visibility:** set `column.visibility` to `'desktop'` or `'mobile'` to hide a column below/above `lg`; omit for both.
 
 ### Server-side usage
 
@@ -426,6 +460,24 @@ import { Button, Popover, Tooltip } from '@netragate/design-system'
     <Button :variant="'outline'">Hover</Button>
   </Tooltip>
 </template>
+```
+
+### Modal and Dialog
+
+`Modal` and `Dialog` share optional `width`:
+
+| `width` | Max width |
+|---|---|
+| `small` | 400px |
+| `medium` | 600px (**default** when omitted) |
+| `large` | 800px |
+| `xlarge` | 1280px |
+| `xxlarge` | 1600px (framed Full HD) |
+| `full` | Entire viewport (`h-dvh` / `w-dvw`, no outer padding) |
+
+```vue
+<Modal v-model:open="open" width="xxlarge">…</Modal>
+<Dialog v-model:open="open" width="full">…</Dialog>
 ```
 
 ### Drawer
@@ -657,8 +709,10 @@ import type {
   DataTableExpandPayload,
   DataTableRequestParams,
   DataTableSortEntry,
+  ModalWidth,
   SelectOption,
   SortDirection,
+  TableColumnVisibility,
   ToastPosition,
 } from '@netragate/design-system'
 ```

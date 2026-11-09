@@ -641,6 +641,12 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.TableCell!,
     props: [
       p('colspan', 'number', undefined, 'Column span for the cell'),
+      p(
+        'visibility',
+        "'mobile' | 'desktop'",
+        undefined,
+        'Show only on mobile or desktop; omit to show on both',
+      ),
       cls(),
     ],
     slots: [s('default', undefined, 'Cell content')],
@@ -658,7 +664,12 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
   DataTable: {
     usage: usageSnippets.DataTable!,
     props: [
-      p('columns', 'DataTableColumn[]', undefined, 'Column definitions (required)'),
+      p(
+        'columns',
+        'DataTableColumn[]',
+        undefined,
+        'Column definitions (required); optional visibility mobile|desktop per column',
+      ),
       p('rows', 'Record<string, unknown>[]', undefined, 'Row data (required)'),
       p('rowKey', 'string | ((row, index) => string)', undefined, 'Unique row key field or resolver'),
       p('pageSizeOptions', 'number[]', '[5, 10, 25, 50]', 'Page size dropdown options'),
@@ -771,13 +782,19 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.Modal!,
     props: [
       p('closeOnOverlay', 'boolean', 'true', 'Close when clicking the backdrop'),
-      cls('Panel width, padding, and layout classes'),
+      p(
+        'width',
+        "'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'full'",
+        'medium',
+        'Panel max width — full fills the viewport',
+      ),
+      cls('Panel padding and layout classes'),
     ],
     models: [m('open', 'boolean', 'false', 'Visibility state (v-model:open)')],
     slots: [s('default', undefined, 'Modal content — compose header, body, and footer manually')],
     composition: {
       description:
-        'Modal exposes one default slot. Use class="max-w-md overflow-hidden p-0" on the panel and compose header, body, and footer as separate blocks inside it.',
+        'Modal exposes one default slot. Set width for panel size and use class="overflow-hidden p-0" when composing header, body, and footer as separate blocks.',
       parts: [
         c('header', 'Title row with border-b — title on the left'),
         c('close button', 'Optional × in the header with aria-label="Close" wired to close the modal', true),
@@ -797,6 +814,12 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     usage: usageSnippets.Dialog!,
     props: [
       p('closeOnOverlay', 'boolean', 'true', 'Close when clicking the backdrop'),
+      p(
+        'width',
+        "'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'full'",
+        'medium',
+        'Panel max width — full fills the viewport',
+      ),
       cls('Dialog panel classes'),
     ],
     models: [m('open', 'boolean', 'false', 'Visibility state (v-model:open)')],

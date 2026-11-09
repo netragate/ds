@@ -254,6 +254,38 @@ describe('Table', () => {
   })
 })
 
+describe('TableCell visibility', () => {
+  it('applies desktop visibility classes', () => {
+    const wrapper = mount(TableCell, {
+      props: { visibility: 'desktop' },
+      slots: { default: 'Desktop' },
+    })
+    const classes = wrapper.find('td').classes()
+    expect(classes).toContain('hidden')
+    expect(classes).toContain('lg:table-cell')
+  })
+
+  it('applies mobile visibility classes', () => {
+    const wrapper = mount(TableCell, {
+      props: { visibility: 'mobile' },
+      slots: { default: 'Mobile' },
+    })
+    const classes = wrapper.find('td').classes()
+    expect(classes).toContain('table-cell')
+    expect(classes).toContain('lg:hidden')
+  })
+
+  it('omits visibility classes when visibility is unset', () => {
+    const wrapper = mount(TableCell, {
+      slots: { default: 'Both' },
+    })
+    const classes = wrapper.find('td').classes()
+    expect(classes).not.toContain('hidden')
+    expect(classes).not.toContain('lg:table-cell')
+    expect(classes).not.toContain('lg:hidden')
+  })
+})
+
 describe('TableExpandedRow', () => {
   it('renders a detail row with colspan, slot content, and data-expanded-detail', () => {
     const wrapper = mount(Table, {
@@ -394,6 +426,113 @@ describe('DataTable', () => {
 
     expect(wrapper.findAll('tbody tr')).toHaveLength(2)
     expect(wrapper.text()).toContain('Ana')
+  })
+
+  it('renders desktop columns and omits mobile-only columns by default', async () => {
+    const columns: DataTableColumn<SampleRow>[] = [
+      { key: 'name', label: 'Name' },
+      { key: 'role', label: 'Role', visibility: 'desktop' },
+      { key: 'status', label: 'Status', visibility: 'mobile' },
+    ]
+    const wrapper = mount(DataTable, {
+      props: {
+        columns,
+        rows: sampleRows.slice(0, 1),
+        searchable: false,
+        showTotalRecords: false,
+        showPageSize: false,
+      },
+    })
+    await flushPromises()
+
+    const headerText = wrapper.find('thead').text()
+    expect(headerText).toContain('Name')
+    expect(headerText).toContain('Role')
+    expect(headerText).not.toContain('Status')
+    expect(wrapper.findAll('tbody td')).toHaveLength(2)
+  })
+
+  it('switches visible columns and expand colspan when viewport becomes mobile', async () => {
+    let matches = false
+    const listeners = new Set<() => void>()
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        get matches() {
+          return matches
+        },
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: (_event: string, listener: () => void) => {
+          listeners.add(listener)
+        },
+        removeEventListener: (_event: string, listener: () => void) => {
+          listeners.delete(listener)
+        },
+        dispatchEvent: vi.fn(),
+      })),
+    })
+
+    const columns: DataTableColumn<SampleRow>[] = [
+      { key: 'name', label: 'Name' },
+      { key: 'role', label: 'Role', visibility: 'desktop' },
+      { key: 'status', label: 'Status', visibility: 'mobile' },
+    ]
+    const wrapper = mount(DataTable, {
+      props: {
+        columns,
+        rows: sampleRows.slice(0, 1),
+        searchable: false,
+        showTotalRecords: false,
+        showPageSize: false,
+        expandable: true,
+        expandedKey: '1',
+        rowKey: 'id',
+      },
+      slots: {
+        'expanded-row': '<div data-testid="nested">nested</div>',
+      },
+    })
+    await flushPromises()
+
+    expect(wrapper.find('thead').text()).toContain('Role')
+    expect(wrapper.find('thead').text()).not.toContain('Status')
+    expect(wrapper.find('[data-expanded-detail] td').attributes('colspan')).toBe('3')
+
+    matches = true
+    listeners.forEach((listener) => listener())
+    await flushPromises()
+    await nextTick()
+
+    expect(wrapper.find('thead').text()).not.toContain('Role')
+    expect(wrapper.find('thead').text()).toContain('Status')
+    expect(wrapper.find('[data-expanded-detail] td').attributes('colspan')).toBe('3')
+    expect(wrapper.find('[data-testid="nested"]').exists()).toBe(true)
+  })
+
+  it('uses visible column count for loading colspan', async () => {
+    const columns: DataTableColumn<SampleRow>[] = [
+      { key: 'name', label: 'Name' },
+      { key: 'role', label: 'Role', visibility: 'desktop' },
+      { key: 'status', label: 'Status', visibility: 'mobile' },
+    ]
+    const wrapper = mount(DataTable, {
+      props: {
+        columns,
+        rows: [],
+        loading: true,
+        searchable: false,
+        showTotalRecords: false,
+        showPageSize: false,
+      },
+    })
+    await flushPromises()
+
+    // Desktop default: name + role (status mobile-only omitted)
+    expect(wrapper.find('tbody td').attributes('colspan')).toBe('2')
   })
 
   it('filters rows client-side', async () => {

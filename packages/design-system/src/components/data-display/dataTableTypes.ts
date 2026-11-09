@@ -1,4 +1,5 @@
 import type { DateRangeValue } from '@/lib/dateTimeTypes'
+import type { TableColumnVisibility } from './tableVisibility'
 
 export type SortDirection = 'asc' | 'desc' | null
 
@@ -30,6 +31,8 @@ export interface DataTableColumn<T = Record<string, unknown>> {
   filterOptions?: DataTableFilterOption[]
   align?: 'left' | 'center' | 'right'
   width?: string
+  /** Restrict column to mobile or desktop; omit to show on both. */
+  visibility?: TableColumnVisibility
 }
 
 export interface DataTableSortEntry {

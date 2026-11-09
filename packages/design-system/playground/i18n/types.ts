@@ -337,6 +337,7 @@ export interface PlaygroundMessages {
     closeAriaLabel: string
     cancel: string
     controlsTitle: string
+    widthLabel: string
     showHeader: string
     showBody: string
     showFooter: string

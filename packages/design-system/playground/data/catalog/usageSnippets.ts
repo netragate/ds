@@ -412,19 +412,15 @@ const toast = useToast()
     <TableHead>
       <TableRow>
         <TableCell>Name</TableCell>
-        <TableCell>Preview</TableCell>
+        <TableCell :visibility="'desktop'">Email</TableCell>
+        <TableCell :visibility="'mobile'">Summary</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
       <TableRow>
         <TableCell>Ana</TableCell>
-        <TableCell>
-          <Table :nested="true">
-            <TableBody>
-              <TableRow><TableCell>Item A</TableCell></TableRow>
-            </TableBody>
-          </Table>
-        </TableCell>
+        <TableCell :visibility="'desktop'">ana@acme.io</TableCell>
+        <TableCell :visibility="'mobile'">Ana · Designer</TableCell>
       </TableRow>
     </TableBody>
   </Table>`,
@@ -441,7 +437,12 @@ const toast = useToast()
     ['TableCell', 'TableRow'],
     '  <TableRow><TableCell>Ana</TableCell></TableRow>',
   ),
-  TableCell: usage('TableCell', '  <TableCell>Ana</TableCell>'),
+  TableCell: usage(
+    'TableCell',
+    `  <TableCell>Always visible</TableCell>
+  <TableCell :visibility="'desktop'">Desktop only</TableCell>
+  <TableCell :visibility="'mobile'">Mobile only</TableCell>`,
+  ),
   TableExpandedRow: usageMany(
     ['Table', 'TableBody', 'TableCell', 'TableExpandedRow', 'TableHead', 'TableRow'],
     `  <TableBody>
@@ -460,7 +461,13 @@ const toast = useToast()
   ),
   DataTable: usage(
     'DataTable',
-    `  <DataTable
+    `  const columns = [
+    { key: 'name', label: 'Name', sortable: true },
+    { key: 'email', label: 'Email', visibility: 'desktop' },
+    { key: 'emailShort', label: 'Email', visibility: 'mobile', searchable: false },
+  ]
+
+  <DataTable
     v-model:current-page="page"
     v-model:page-size="pageSize"
     v-model:sort-stack="sortStack"
@@ -480,6 +487,7 @@ const toast = useToast()
     :expandable="true"
     :expand-mode="'eager'"
   >
+    <template #cell-emailShort="{ row }">{{ row.email }}</template>
     <template #expanded-row="{ row }">
       <Table :nested="true">…</Table>
     </template>
@@ -519,7 +527,7 @@ const toast = useToast()
     ['Button', 'Modal'],
     `  <Button @click="open = true">Open modal</Button>
 
-  <Modal v-model:open="open" class="max-w-md overflow-hidden p-0">
+  <Modal v-model:open="open" :width="'medium'" class="overflow-hidden p-0">
     <div class="flex items-start justify-between border-b px-6 py-4">
       <h2 class="text-lg font-semibold">Confirm action</h2>
       <button type="button" aria-label="Close" @click="open = false">&times;</button>
@@ -535,7 +543,7 @@ const toast = useToast()
   ),
   Dialog: usageMany(
     ['Button', 'Dialog'],
-    `  <Dialog v-model:open="open">
+    `  <Dialog v-model:open="open" :width="'medium'">
     <template #title>Confirm action</template>
     <template #description>This cannot be undone.</template>
     <p>Are you sure?</p>

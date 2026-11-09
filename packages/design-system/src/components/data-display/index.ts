@@ -13,6 +13,13 @@ export { default as TableRow } from './TableRow.vue'
 export { default as TableCell } from './TableCell.vue'
 export { default as TableExpandedRow } from './TableExpandedRow.vue'
 export type { TableExpandedRowProps } from './TableExpandedRow.vue'
+export type { TableColumnVisibility } from './tableVisibility'
+export {
+  TABLE_MOBILE_MEDIA_QUERY,
+  filterVisibleColumns,
+  isColumnVisible,
+  tableVisibilityClass,
+} from './tableVisibility'
 export { default as DataTable } from './DataTable.vue'
 export { default as DataTableColumnFilter } from './DataTableColumnFilter.vue'
 export { default as DataTableColumnFilterMenu } from './DataTableColumnFilterMenu.vue'

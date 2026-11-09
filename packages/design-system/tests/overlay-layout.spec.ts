@@ -2,6 +2,13 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { defineComponent, ref } from 'vue'
 import Modal from '@/components/overlay/Modal.vue'
+import Dialog from '@/components/overlay/Dialog.vue'
+import {
+  MODAL_WIDTH_DEFAULT,
+  modalWidthPanelClasses,
+  modalWidthShellClass,
+  type ModalWidth,
+} from '@/components/overlay/modalWidth'
 import Drawer from '@/components/overlay/Drawer.vue'
 import Container from '@/components/layout/Container.vue'
 import Stack from '@/components/layout/Stack.vue'
@@ -34,6 +41,75 @@ describe('Modal', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
     await flushPromises()
     expect(wrapper.emitted('update:open')?.[0]).toEqual([false])
+    wrapper.unmount()
+  })
+
+  it.each(
+    (Object.keys(modalWidthPanelClasses) as ModalWidth[]).map((width) => [width]),
+  )('applies %s width classes to panel and shell', (width) => {
+    const wrapper = mount(Modal, {
+      props: { open: true, width },
+      slots: { default: 'Sized modal' },
+      attachTo: document.body,
+    })
+
+    const panel = document.body.querySelector('[role="dialog"]')
+    const shell = panel?.parentElement
+    expect(panel?.className).toContain(modalWidthPanelClasses[width].split(' ')[0])
+    for (const token of modalWidthPanelClasses[width].split(/\s+/)) {
+      expect(panel?.className.split(/\s+/)).toContain(token)
+    }
+    expect(shell?.className.split(/\s+/)).toContain(modalWidthShellClass(width))
+
+    wrapper.unmount()
+  })
+
+  it('defaults to medium width when width is omitted', () => {
+    const wrapper = mount(Modal, {
+      props: { open: true },
+      slots: { default: 'Default width' },
+      attachTo: document.body,
+    })
+
+    const panel = document.body.querySelector('[role="dialog"]')
+    expect(panel?.className).toContain(modalWidthPanelClasses[MODAL_WIDTH_DEFAULT].split(' ')[0])
+    expect(panel?.className).not.toContain('max-w-lg')
+
+    wrapper.unmount()
+  })
+
+  it('uses full-screen shell and panel for width=full', () => {
+    const wrapper = mount(Modal, {
+      props: { open: true, width: 'full' },
+      slots: { default: 'Full modal' },
+      attachTo: document.body,
+    })
+
+    const panel = document.body.querySelector('[role="dialog"]')
+    const shell = panel?.parentElement
+    expect(shell?.className.split(/\s+/)).toContain('p-0')
+    expect(shell?.className.split(/\s+/)).not.toContain('p-4')
+    expect(panel?.className.split(/\s+/)).toEqual(
+      expect.arrayContaining(['h-dvh', 'w-dvw', 'max-w-none', 'rounded-none', 'overflow-y-auto']),
+    )
+
+    wrapper.unmount()
+  })
+})
+
+describe('Dialog width', () => {
+  it('forwards width to the Modal panel', () => {
+    const wrapper = mount(Dialog, {
+      props: { open: true, width: 'xlarge' },
+      slots: { default: 'Dialog body' },
+      attachTo: document.body,
+    })
+
+    const panel = document.body.querySelector('[role="dialog"]')
+    for (const token of modalWidthPanelClasses.xlarge.split(/\s+/)) {
+      expect(panel?.className.split(/\s+/)).toContain(token)
+    }
+
     wrapper.unmount()
   })
 })

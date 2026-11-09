@@ -138,6 +138,9 @@ function setMode(next: DataMode): void {
         class="min-h-0 flex-1"
         @request="loadFromApi"
       >
+        <template #cell-emailShort="{ row }">
+          {{ (row as UserRow).email }}
+        </template>
         <template #cell-status="{ value }">
           <Lozenge :variant="statusAppearance[value as UserRow['status']]">
             {{ formatStatus(value as UserRow['status']) }}

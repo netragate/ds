@@ -9,14 +9,18 @@ import Button from '@/components/button/Button.vue'
 import Input from '@/components/form/Input.vue'
 import Label from '@/components/form/Label.vue'
 import Modal from '@/components/overlay/Modal.vue'
+import type { ModalWidth } from '@/components/overlay/modalWidth'
 import Switch from '@/components/form/Switch.vue'
 import Textarea from '@/components/form/Textarea.vue'
+import { playgroundOptionStyle } from './playgroundOptionStyle'
+
 type ModalVariant = 'confirm' | 'form' | 'danger'
 
 const { t, messages } = usePlaygroundLocale()
 
 const variant = ref<ModalVariant>('confirm')
 const modalOpen = ref(false)
+const modalWidth = ref<ModalWidth>('medium')
 const projectName = ref('')
 const projectDescription = ref('')
 const showHeader = ref(true)
@@ -27,6 +31,7 @@ const showCancelButton = ref(true)
 const showPrimaryButton = ref(true)
 
 const variants: ModalVariant[] = ['confirm', 'form', 'danger']
+const widthOptions: ModalWidth[] = ['small', 'medium', 'large', 'xlarge', 'xxlarge', 'full']
 
 const modalTitles = computed(() => messages.value.modalPlayground.titles)
 const modalActions = computed(() => messages.value.modalPlayground.actions)
@@ -120,7 +125,7 @@ const code = computed(() => {
   const lines = [
     '<Button @click="modalOpen = true">Open Modal</Button>',
     '',
-    '<Modal v-model:open="modalOpen" class="max-w-md overflow-hidden p-0">',
+    `<Modal v-model:open="modalOpen" ${templateStringAttr('width', modalWidth.value)} class="overflow-hidden p-0">`,
     ...buildHeaderLines(title),
     ...buildBodyLines(),
     ...buildFooterLines(action),
@@ -155,6 +160,22 @@ const code = computed(() => {
         {{ copy.openButton }}
         <ArrowUpRight :size="14" />
       </button>
+
+      <div class="space-y-2 border-t border-border/60 pt-4">
+        <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ copy.widthLabel }}</p>
+        <div class="grid grid-cols-2 gap-1 sm:grid-cols-3">
+          <button
+            v-for="item in widthOptions"
+            :key="item"
+            type="button"
+            class="rounded px-2 py-1 text-left text-xs transition-all"
+            :style="playgroundOptionStyle(modalWidth === item)"
+            @click="modalWidth = item"
+          >
+            {{ item }}
+          </button>
+        </div>
+      </div>
 
       <div class="space-y-2 border-t border-border/60 pt-4">
         <p class="font-mono text-xs uppercase tracking-wider text-[#4D6A87]">{{ copy.controlsTitle }}</p>
@@ -194,7 +215,7 @@ const code = computed(() => {
       </div>
     </div>
 
-    <Modal v-model:open="modalOpen" class="max-w-md overflow-hidden p-0">
+    <Modal v-model:open="modalOpen" :width="modalWidth" class="overflow-hidden p-0">
       <div
         v-if="showHeader"
         class="border-b border-border px-6 py-4"

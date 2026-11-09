@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.17.0] - 2026-11-09
+
+### Added
+
+- **`TableCell` / `DataTableColumn` `visibility`** — optional `'mobile' | 'desktop'` (omit = both viewports). `TableCell` uses `lg` CSS classes; `DataTable` filters columns via `matchMedia` (same 1024px cutoff as `AppLayout`) so expand `colspan` and nested tables fill the width. Shared helpers in `tableVisibility.ts`.
+- **`Modal` / `Dialog` `width`** — `'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'full'` (default `medium`). Framed sizes up to 1600px; `full` fills the viewport. Shared helper in `modalWidth.ts`.
+- **Docs & playground** — README Table/DataTable visibility and Modal widths; catalog API + usage snippets; DataTable demo shows desktop/mobile email columns; Modal demo width control.
+
+### Changed
+
+- **`Modal` default width** — omitted `width` now uses `medium` (`max-w-[600px]`) instead of `max-w-lg` (512px).
+- **`Modal` `xlarge`** — max width raised from 968px to 1280px.
+
 ## [0.14.0] - 2026-09-19
 
 ### Added

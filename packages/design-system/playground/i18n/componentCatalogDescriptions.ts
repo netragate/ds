@@ -45,18 +45,21 @@ export const componentCatalogDescriptionsEn: Record<string, string> = {
   TableHead: 'Table header section containing header rows.',
   TableBody: 'Table body section containing data rows.',
   TableRow: 'Single table row.',
-  TableCell: 'Single table cell within a row.',
+  TableCell:
+    'Single table cell within a row. Optional visibility mobile|desktop (omit = both viewports at lg).',
   TableExpandedRow: 'Detail row with colspan for expandable nested table content.',
   DataTable:
-    'Full datatable with search, multi-sort, column filters, pagination, expandable nested tables, and client or server-side modes.',
+    'Full datatable with search, multi-sort, column filters, pagination, expandable nested tables, responsive column visibility, and client or server-side modes.',
   DataTableColumnFilter: 'Inline or popover filter fields for a single DataTable column.',
   DataTableColumnFilterMenu: 'Header filter trigger and popover wrapper for column filters.',
   PageSizeSelect: 'Compact select for rows-per-page in table footers.',
   List: 'Vertical list container for related items.',
   ListItem: 'Single row inside a List component.',
   EmptyState: 'Placeholder when a list or table has no results.',
-  Modal: 'Blocking overlay dialog requiring user interaction or dismissal.',
-  Dialog: 'Accessible dialog surface for confirmations and forms.',
+  Modal:
+    'Blocking overlay dialog requiring user interaction or dismissal. Width scale from small to full viewport.',
+  Dialog:
+    'Accessible dialog surface for confirmations and forms. Shares Modal width sizes.',
   Tooltip: 'Small contextual hint shown on hover or focus.',
   Popover: 'Non-modal floating panel anchored to a trigger element.',
   Drawer: 'Slide-in panel for secondary workflows without leaving the page.',
@@ -112,18 +115,21 @@ export const componentCatalogDescriptionsPtBR: Record<string, string> = {
   TableHead: 'Seção de cabeçalho da tabela com linhas de título.',
   TableBody: 'Seção de corpo da tabela com linhas de dados.',
   TableRow: 'Linha individual da tabela.',
-  TableCell: 'Célula individual dentro de uma linha.',
+  TableCell:
+    'Célula individual dentro de uma linha. Visibility opcional mobile|desktop (omitir = ambos os viewports em lg).',
   TableExpandedRow: 'Linha de detalhe com colspan para tabela aninhada expansível.',
   DataTable:
-    'Tabela completa com busca, multi-sort, filtros por coluna, paginação, expand com tabela aninhada e modos client/server.',
+    'Tabela completa com busca, multi-sort, filtros por coluna, paginação, expand com tabela aninhada, visibilidade responsiva de colunas e modos client/server.',
   DataTableColumnFilter: 'Campos de filtro inline ou em popover para uma coluna do DataTable.',
   DataTableColumnFilterMenu: 'Gatilho de filtro no cabeçalho e popover para filtros de coluna.',
   PageSizeSelect: 'Select compacto de linhas por página no rodapé de tabelas.',
   List: 'Container de lista vertical para itens relacionados.',
   ListItem: 'Linha individual dentro de um componente List.',
   EmptyState: 'Placeholder quando uma lista ou tabela não tem resultados.',
-  Modal: 'Diálogo modal bloqueante que exige interação ou fechamento.',
-  Dialog: 'Superfície de diálogo acessível para confirmações e formulários.',
+  Modal:
+    'Diálogo modal bloqueante que exige interação ou fechamento. Escala de largura de small até full.',
+  Dialog:
+    'Superfície de diálogo acessível para confirmações e formulários. Compartilha as larguras do Modal.',
   Tooltip: 'Dica contextual exibida ao passar o mouse ou focar.',
   Popover: 'Painel flutuante não modal ancorado a um gatilho.',
   Drawer: 'Painel deslizante para fluxos secundários sem sair da página.',

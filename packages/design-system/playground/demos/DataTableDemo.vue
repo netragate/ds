@@ -190,6 +190,12 @@ const code = computed(() => {
       ...(showSort.value ? ['sortable: true'] : []),
       ...(showColumnFilter.value ? ["filter: 'text'"] : []),
     ]),
+    columnSnippet('email', 'Email', [
+      ...(showSort.value ? ['sortable: true'] : []),
+      ...(showColumnFilter.value ? ["filter: 'text'"] : []),
+      "visibility: 'desktop'",
+    ]),
+    columnSnippet('emailShort', 'Email', ["visibility: 'mobile'", 'searchable: false']),
     columnSnippet('status', 'Status', [
       ...(showSort.value ? ['sortable: true'] : []),
       ...(showColumnFilter.value
@@ -260,6 +266,9 @@ const code = computed(() => {
     lines.push('  </template>')
   }
 
+  lines.push('  <template #cell-emailShort="{ row }">')
+  lines.push('    {{ row.email }}')
+  lines.push('  </template>')
   lines.push('  <template #cell-status="{ value }">')
   lines.push('    <Lozenge :variant="value === \'active\' ? \'success\' : \'warning\'">')
   lines.push('      {{ value }}')
@@ -351,6 +360,9 @@ const code = computed(() => {
           <Badge variant="primary" :value="tableRows.length" />
           <Button variant="outline" size="sm">Export</Button>
         </template>
+        <template #cell-emailShort="{ row }">
+          {{ (row as UserRow).email }}
+        </template>
         <template #cell-status="{ value }">
           <Lozenge
             :variant="
@@ -361,7 +373,7 @@ const code = computed(() => {
           </Lozenge>
         </template>
         <template v-if="expandable" #expanded-row="{ row }">
-          <Table nested>
+          <Table nested class="w-full">
             <TableHead>
               <TableRow>
                 <TableCell>{{ t('dataTable.projectCol') }}</TableCell>

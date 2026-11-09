@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import ArrowDown from '@lucide/vue/dist/esm/icons/arrow-down.mjs'
 import ArrowUp from '@lucide/vue/dist/esm/icons/arrow-up.mjs'
 import ArrowUpDown from '@lucide/vue/dist/esm/icons/arrow-up-down.mjs'
@@ -38,6 +38,10 @@ import {
   resolveRowKey,
   sortDataTableRowsMulti,
 } from './dataTableUtils'
+import {
+  TABLE_MOBILE_MEDIA_QUERY,
+  filterVisibleColumns,
+} from './tableVisibility'
 
 export type { DataTableLabels } from './dataTableTypes'
 
@@ -139,6 +143,31 @@ const emit = defineEmits<{
 
 const openFilterColumnKey = ref<string | null>(null)
 
+/** Desktop-first when matchMedia is unavailable (SSR / jsdom). */
+const isMobileViewport = ref(false)
+let viewportMediaQuery: MediaQueryList | null = null
+
+function syncViewportMedia(): void {
+  isMobileViewport.value = viewportMediaQuery?.matches ?? false
+}
+
+onMounted(() => {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
+  viewportMediaQuery = window.matchMedia(TABLE_MOBILE_MEDIA_QUERY)
+  syncViewportMedia()
+  viewportMediaQuery.addEventListener('change', syncViewportMedia)
+})
+
+onUnmounted(() => {
+  viewportMediaQuery?.removeEventListener('change', syncViewportMedia)
+  viewportMediaQuery = null
+})
+
+/** Columns rendered in the grid — hidden visibility columns leave the layout so expand colspan fills width. */
+const visibleColumns = computed(() =>
+  filterVisibleColumns(props.columns, isMobileViewport.value),
+)
+
 const MIN_COLUMN_WIDTH = 96
 const columnWidths = ref<Record<string, string>>({})
 const resizedColumnKeys = ref<Set<string>>(new Set())
@@ -209,7 +238,7 @@ function onResizePointerDown(column: DataTableColumn, event: PointerEvent): void
 }
 
 const totalColumnCount = computed(
-  () => props.columns.length + (props.expandable ? 1 : 0),
+  () => visibleColumns.value.length + (props.expandable ? 1 : 0),
 )
 
 /** When expandable, CSS nth-child striping breaks on detail rows — stripe by data index instead. */
@@ -449,7 +478,7 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
               <span class="sr-only">{{ resolvedLabels.expandRow }}</span>
             </th>
             <th
-              v-for="column in columns"
+              v-for="column in visibleColumns"
               :key="column.key"
               scope="col"
               :aria-sort="headerAriaSort(column)"
@@ -558,7 +587,7 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
                   </button>
                 </TableCell>
                 <TableCell
-                  v-for="column in columns"
+                  v-for="column in visibleColumns"
                   :key="column.key"
                   :class="cn(alignClasses[column.align ?? 'left'], resizable && 'overflow-hidden')"
                   :style="columnWidthStyle(column)"
