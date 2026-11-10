@@ -90,7 +90,8 @@ const columnFilters = ref<DataTableColumnFilters>({})
   </DataTable>
 </template>
 
-<!-- Click header: single sort. Ctrl+click: multi-sort. Filter icon: column popover. -->`
+<!-- Click header: single sort. Ctrl+click: multi-sort. Filter icon: column popover.
+     Mobile only (< lg): tap row to expand (if expandable) or @row-click (e.g. open Dialog). -->`
 
 const componentGroups = [
   { category: 'Layout', items: ['Container', 'Stack', 'Grid', 'AppLayout'] },
@@ -215,6 +216,7 @@ const localizedGroups = computed(() =>
         {{ locale === 'pt-BR' ? 'para multi-sort (Ctrl+clique na UI), e' : 'for multi-sort (Ctrl+click in UI), and' }}
         <code class="pg-docs-inline">{{ t('docs.dataTableBodyColumnFilters') }}</code>
         {{ locale === 'pt-BR' ? 'para filtros por coluna abertos pelo ícone no cabeçalho.' : 'for per-column filters opened from the header icon.' }}
+        {{ ' ' + t('docs.dataTableBodyRowClick') }}
       </p>
       <UsageBlock :code="dataTableUsage" />
     </section>

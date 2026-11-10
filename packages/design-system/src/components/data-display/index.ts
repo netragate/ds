@@ -40,6 +40,7 @@ export type {
   DataTableDateRangeFilter,
   DataTableExpandMode,
   DataTableExpandPayload,
+  DataTableRowClickPayload,
   DataTableFilterOption,
   DataTableFilterType,
   DataTableRequestParams,

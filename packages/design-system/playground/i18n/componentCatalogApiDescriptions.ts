@@ -104,6 +104,10 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Emitted in server-side mode when data should be refetched': 'Emitido no modo server-side quando os dados devem ser recarregados',
   'Emitted when a row is opened (use with expandMode lazy)':
     'Emitido quando uma linha é aberta (use com expandMode lazy)',
+  'Mobile only (< lg): emitted when a row is tapped and expandable is false — use to open a modal, navigate, etc.':
+    'Só no mobile (< lg): emitido ao tocar a linha com expandable false — use para abrir modal, navegar, etc.',
+  'Show expand column and support #expanded-row (accordion); on mobile, tapping the row also toggles expand':
+    'Mostra coluna de expand e suporte a #expanded-row (acordeão); no mobile, tocar a linha também alterna o expand',
   'Eager shows slot immediately; lazy emits expand and uses expandLoading':
     'Eager mostra o slot imediatamente; lazy emite expand e usa expandLoading',
   'Emitted when checked state changes': 'Emitido quando o estado marcado muda',
@@ -149,6 +153,8 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Footer spans full width or content column only': 'Footer ocupa largura total ou apenas a coluna de conteúdo',
   'Force mobile shell (hamburger + drawer) regardless of viewport width':
     'Força o shell mobile (hamburger + drawer) independentemente da largura da viewport',
+  'Force mobile column visibility and row tap behavior regardless of viewport width':
+    'Força visibilidade de colunas mobile e toque na linha independentemente da largura da viewport',
   'Mobile menu drawer open state (v-model:menu-drawer-open)':
     'Estado aberto do drawer do menu mobile (v-model:menu-drawer-open)',
   'Below lg (or forceMobile): hamburger in header opens a left drawer; selecting an item closes it':
@@ -286,8 +292,6 @@ export const componentCatalogApiDescriptionsPtBR: Record<string, string> = {
   'Show page size selector': 'Exibe seletor de tamanho de página',
   'Show record and page counts': 'Exibe contagem de registros e páginas',
   'Show search input': 'Exibe campo de busca',
-  'Show expand column and support #expanded-row (accordion)':
-    'Mostra coluna de expand e suporte a #expanded-row (acordeão)',
   'Show success toast': 'Exibe toast de sucesso',
   'Show warning toast': 'Exibe toast de aviso',
   'Shows dismiss button': 'Exibe botão de fechar',

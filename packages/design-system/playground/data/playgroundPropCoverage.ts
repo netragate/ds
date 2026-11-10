@@ -137,6 +137,7 @@ export const playgroundPropCoverage: Record<string, readonly string[]> = {
     'expandable',
     'expandMode',
     'expandLoading',
+    'forceMobile',
     'expandedKey',
     'emptyTitle',
     'emptyDescription',

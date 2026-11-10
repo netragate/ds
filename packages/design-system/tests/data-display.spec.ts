@@ -879,6 +879,172 @@ describe('DataTable', () => {
     expect(wrapper.find('[data-testid="lazy-detail"]').exists()).toBe(true)
   })
 
+  function mockViewport(matchesMobile: boolean): void {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: matchesMobile,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    })
+  }
+
+  it('on mobile toggles expand when a data cell is clicked and does not double-toggle via the chevron', async () => {
+    mockViewport(true)
+    const onRowClick = vi.fn()
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        rowKey: 'id',
+        searchable: false,
+        expandable: true,
+        expandedKey: null,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+        onRowClick,
+      },
+      slots: {
+        'expanded-row': '<span data-testid="row-click-detail">detail</span>',
+      },
+    })
+
+    await wrapper.find('[data-testid="datatable-cell-text"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBe('1')
+    expect(wrapper.emitted('row-click')).toBeUndefined()
+    expect(onRowClick).not.toHaveBeenCalled()
+
+    await wrapper.setProps({ expandedKey: '1' })
+    expect(wrapper.find('[data-testid="row-click-detail"]').exists()).toBe(true)
+
+    await wrapper.find('[data-testid="datatable-cell-text"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBeNull()
+
+    await wrapper.setProps({ expandedKey: null })
+    await wrapper.find('button[aria-label="Expand row"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.filter((entry) => entry[0] === '1')).toHaveLength(2)
+    expect(wrapper.emitted('row-click')).toBeUndefined()
+  })
+
+  it('on desktop ignores cell clicks for expand and still expands via the chevron', async () => {
+    mockViewport(false)
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        rowKey: 'id',
+        searchable: false,
+        expandable: true,
+        expandedKey: null,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+      },
+      slots: {
+        'expanded-row': '<span data-testid="row-click-detail">detail</span>',
+      },
+    })
+
+    await wrapper.find('[data-testid="datatable-cell-text"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')).toBeUndefined()
+
+    await wrapper.find('button[aria-label="Expand row"]').trigger('click')
+    expect(wrapper.emitted('update:expandedKey')?.at(-1)?.[0]).toBe('1')
+  })
+
+  it('on mobile emits row-click for non-expandable rows and ignores interactive cell controls', async () => {
+    mockViewport(true)
+    const onRowClick = vi.fn()
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 2),
+        rowKey: 'id',
+        searchable: false,
+        expandable: false,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+        onRowClick,
+      },
+      slots: {
+        'cell-name': `<template #cell-name="{ row }">
+          <span data-testid="row-label">{{ row.name }}</span>
+          <button type="button" data-testid="cell-action">Action</button>
+        </template>`,
+      },
+    })
+
+    await wrapper.find('[data-testid="row-label"]').trigger('click')
+    expect(wrapper.emitted('row-click')?.at(-1)?.[0]).toEqual({
+      key: '1',
+      row: sampleRows[0],
+      index: 0,
+    })
+    expect(onRowClick).toHaveBeenCalledTimes(1)
+
+    await wrapper.find('[data-testid="cell-action"]').trigger('click')
+    expect(wrapper.emitted('row-click')).toHaveLength(1)
+    expect(onRowClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('on desktop does not emit row-click from cell taps', async () => {
+    mockViewport(false)
+    const onRowClick = vi.fn()
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 1),
+        rowKey: 'id',
+        searchable: false,
+        expandable: false,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+        onRowClick,
+      },
+    })
+
+    await wrapper.find('[data-testid="datatable-cell-text"]').trigger('click')
+    expect(wrapper.emitted('row-click')).toBeUndefined()
+    expect(onRowClick).not.toHaveBeenCalled()
+  })
+
+  it('emits row-click on desktop when forceMobile is true', async () => {
+    mockViewport(false)
+    const onRowClick = vi.fn()
+    const wrapper = mount(DataTable, {
+      props: {
+        columns: sampleColumns,
+        rows: sampleRows.slice(0, 1),
+        rowKey: 'id',
+        searchable: false,
+        expandable: false,
+        forceMobile: true,
+        pageSize: 10,
+        showPageSize: false,
+        showTotalRecords: false,
+        onRowClick,
+      },
+    })
+
+    await wrapper.find('[data-testid="datatable-cell-text"]').trigger('click')
+    expect(wrapper.emitted('row-click')?.at(-1)?.[0]).toEqual({
+      key: '1',
+      row: sampleRows[0],
+      index: 0,
+    })
+    expect(onRowClick).toHaveBeenCalledTimes(1)
+  })
+
   it('renders a resize handle for each data column', () => {
     const wrapper = mount(DataTable, {
       props: {

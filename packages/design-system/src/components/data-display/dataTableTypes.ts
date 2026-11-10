@@ -60,6 +60,12 @@ export interface DataTableExpandPayload {
   row: Record<string, unknown>
 }
 
+export interface DataTableRowClickPayload {
+  key: string
+  row: Record<string, unknown>
+  index: number
+}
+
 export type DataTableRowKey<T> = keyof T & string | ((row: T, index: number) => string)
 
 export interface DataTableLabels {

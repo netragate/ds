@@ -467,31 +467,27 @@ const toast = useToast()
     { key: 'emailShort', label: 'Email', visibility: 'mobile', searchable: false },
   ]
 
+  // Expandable accordion (chevron; on mobile the whole row also toggles)
   <DataTable
-    v-model:current-page="page"
-    v-model:page-size="pageSize"
-    v-model:sort-stack="sortStack"
-    v-model:column-filters="columnFilters"
-    v-model:search="search"
     v-model:expanded-key="expandedKey"
     :columns="columns"
     :rows="rows"
     :row-key="'id'"
-    :searchable="true"
-    :show-total-records="true"
-    :show-page-size="true"
-    :page-size-options="[5, 10, 25]"
-    :loading="loading"
-    :server-side="false"
-    :striped="true"
     :expandable="true"
-    :expand-mode="'eager'"
   >
-    <template #cell-emailShort="{ row }">{{ row.email }}</template>
     <template #expanded-row="{ row }">
       <Table :nested="true">…</Table>
     </template>
-  </DataTable>`,
+  </DataTable>
+
+  // Mobile-only row tap → open Dialog / navigate (expandable must be false)
+  <DataTable
+    :columns="columns"
+    :rows="rows"
+    :row-key="'id'"
+    :expandable="false"
+    @row-click="({ key, row }) => openUserDialog(row)"
+  />`,
   ),
   DataTableColumnFilter: usage(
     'DataTableColumnFilter',

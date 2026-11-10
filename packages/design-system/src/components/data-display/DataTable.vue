@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue'
 import ArrowDown from '@lucide/vue/dist/esm/icons/arrow-down.mjs'
 import ArrowUp from '@lucide/vue/dist/esm/icons/arrow-up.mjs'
 import ArrowUpDown from '@lucide/vue/dist/esm/icons/arrow-up-down.mjs'
@@ -27,6 +27,7 @@ import type {
   DataTableExpandPayload,
   DataTableLabels,
   DataTableRequestParams,
+  DataTableRowClickPayload,
   DataTableSortEntry,
   SortDirection,
 } from './dataTableTypes'
@@ -68,6 +69,8 @@ export interface DataTableProps {
   expandMode?: DataTableExpandMode
   /** Panel-local loading for lazy expand (does not replace the whole table). */
   expandLoading?: boolean
+  /** Force mobile column visibility and row tap behavior regardless of viewport width. */
+  forceMobile?: boolean
   emptyTitle?: string
   emptyDescription?: string
   labels?: DataTableLabels
@@ -113,6 +116,7 @@ const props = withDefaults(defineProps<DataTableProps>(), {
   expandable: false,
   expandMode: 'eager',
   expandLoading: false,
+  forceMobile: false,
   emptyTitle: 'No results',
   emptyDescription: 'Try adjusting your search or filters.',
   locale: 'en',
@@ -139,16 +143,31 @@ const expandedKey = defineModel<string | null>('expandedKey', { default: null })
 const emit = defineEmits<{
   request: [params: DataTableRequestParams]
   expand: [payload: DataTableExpandPayload]
+  'row-click': [payload: DataTableRowClickPayload]
 }>()
+
+const instance = getCurrentInstance()
+
+const hasRowClickListener = computed(() => {
+  const vnodeProps = instance?.vnode.props
+  return Boolean(vnodeProps?.onRowClick ?? vnodeProps?.['onRow-click'])
+})
 
 const openFilterColumnKey = ref<string | null>(null)
 
 /** Desktop-first when matchMedia is unavailable (SSR / jsdom). */
-const isMobileViewport = ref(false)
+const mediaMobile = ref(false)
 let viewportMediaQuery: MediaQueryList | null = null
 
+const isMobileViewport = computed(() => props.forceMobile || mediaMobile.value)
+
+/** Row tap/click (expand or `row-click`) only below the `lg` breakpoint (or `forceMobile`). */
+const isRowInteractive = computed(
+  () => isMobileViewport.value && (props.expandable || hasRowClickListener.value),
+)
+
 function syncViewportMedia(): void {
-  isMobileViewport.value = viewportMediaQuery?.matches ?? false
+  mediaMobile.value = viewportMediaQuery?.matches ?? false
 }
 
 onMounted(() => {
@@ -434,12 +453,47 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
   expandedKey.value = key
   emit('expand', { key, row })
 }
+
+function isInteractiveTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return false
+  return Boolean(
+    target.closest('button, a, input, textarea, select, label, [data-prevent-row-click]'),
+  )
+}
+
+function activateRow(row: Record<string, unknown>, rowIndex: number): void {
+  if (!isMobileViewport.value) return
+  if (props.expandable) {
+    toggleExpand(row, rowIndex)
+    return
+  }
+  if (!hasRowClickListener.value) return
+  emit('row-click', {
+    key: rowKeyOf(row, rowIndex),
+    row,
+    index: rowIndex,
+  })
+}
+
+function onRowClick(row: Record<string, unknown>, rowIndex: number, event: MouseEvent): void {
+  if (!isRowInteractive.value) return
+  if (isInteractiveTarget(event.target)) return
+  activateRow(row, rowIndex)
+}
+
+function onRowKeydown(row: Record<string, unknown>, rowIndex: number, event: KeyboardEvent): void {
+  if (!isMobileViewport.value || props.expandable || !hasRowClickListener.value) return
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  if (isInteractiveTarget(event.target) && event.target !== event.currentTarget) return
+  event.preventDefault()
+  activateRow(row, rowIndex)
+}
 </script>
 
 <template>
   <div :class="cn('flex w-full flex-col gap-4', props.class)">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div v-if="searchable" class="w-full sm:max-w-xs">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <div v-if="searchable" class="w-full lg:w-1/2 lg:shrink-0">
         <Input
           v-model="search"
           :placeholder="searchPlaceholder"
@@ -451,7 +505,7 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
         </Input>
       </div>
 
-      <div class="flex items-center gap-3 sm:ml-auto">
+      <div class="flex items-center gap-3 lg:ml-auto">
         <slot name="toolbar" />
       </div>
     </div>
@@ -565,7 +619,12 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
               v-for="(row, rowIndex) in processedRows"
               :key="rowKeyOf(row, rowIndex)"
             >
-              <TableRow :class="rowStripeClass(rowIndex)">
+              <TableRow
+                :class="cn(rowStripeClass(rowIndex), isRowInteractive && 'cursor-pointer')"
+                :tabindex="!expandable && hasRowClickListener ? 0 : undefined"
+                @click="onRowClick(row, rowIndex, $event)"
+                @keydown="onRowKeydown(row, rowIndex, $event)"
+              >
                 <TableCell v-if="expandable" class="w-10 px-2">
                   <button
                     type="button"
@@ -576,7 +635,7 @@ function toggleExpand(row: Record<string, unknown>, rowIndex: number): void {
                         ? resolvedLabels.collapseRow
                         : resolvedLabels.expandRow
                     "
-                    @click="toggleExpand(row, rowIndex)"
+                    @click.stop="toggleExpand(row, rowIndex)"
                   >
                     <ChevronDown
                       v-if="isRowExpanded(row, rowIndex)"

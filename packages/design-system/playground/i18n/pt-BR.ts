@@ -483,7 +483,8 @@ export const ptBR: PlaygroundMessages = {
       'Use o ícone de filtro ao lado de cada cabeçalho para filtros de texto, intervalo de datas ou enum.',
       'No modo API, os filtros de coluna exigem Aplicar antes de recarregar os dados.',
       'Ative expandable para abrir uma tabela aninhada estática por vez (eager ou lazy).',
-      'Redimensione o drawer ou use o preview mobile: Email só no desktop; no mobile aparece a coluna compacta de Email (visibility).',
+      'Só no mobile (< lg ou Preview mobile): toque na linha para expandir (com expandable) ou emitir @row-click (ex.: abrir um Dialog) sem expandable. No desktop só o chevron expande.',
+      'Use o botão Preview mobile no topo do drawer (ou redimensione abaixo de lg): Email só no desktop; no mobile aparece a coluna compacta de Email (visibility). A busca fica 100% no mobile e 50% da tabela no desktop.',
     ],
     sortLabel: 'Ordenação:',
     filtersLabel: 'Filtros:',
@@ -492,6 +493,9 @@ export const ptBR: PlaygroundMessages = {
     projectCol: 'Projeto',
     roleCol: 'Função',
     noProjects: 'Sem projetos',
+    rowClickDialogTitle: 'Usuário selecionado',
+    rowClickDialogBody: 'Aberto a partir de @row-click no mobile (viewport abaixo de lg).',
+    rowClickDialogClose: 'Fechar',
     controls: {
       features: 'recursos',
       pageSizeOptions: 'page-size-options',
@@ -499,6 +503,7 @@ export const ptBR: PlaygroundMessages = {
       emptyTitlePlaceholder: 'Padrão dos labels…',
       emptyDescriptionPlaceholder: 'Padrão dos labels…',
       expandMode: 'expand-mode',
+      rowClickDemo: '@row-click → Dialog (mobile)',
     },
     columns: {
       name: 'Nome',
@@ -564,7 +569,7 @@ export const ptBR: PlaygroundMessages = {
       Breadcrumbs: 'Mostra ao usuário sua localização na hierarquia do site.',
       Pagination: 'Divide o conteúdo em páginas e permite navegar entre elas.',
       DataTable:
-        'Tabela completa com multi-sort (Ctrl+clique), filtros por coluna, paginação, visibilidade responsiva de colunas e dados client-side ou server-side.',
+        'Tabela completa com multi-sort (Ctrl+clique), filtros por coluna, paginação, visibilidade responsiva, toque na linha no mobile (expand ou @row-click) e dados client-side ou server-side.',
       Layout: 'Shell de aplicação com header, menu, conteúdo e footer retráteis.',
       'Layout Primitives': 'Container, Stack e Grid para estrutura e espaçamento.',
       Modal: 'Apresenta conteúdo em overlay que exige interação. Largura de small até full.',
@@ -612,6 +617,8 @@ export const ptBR: PlaygroundMessages = {
     dataTableBodyFilter: "filter: 'text' | 'date' | 'enum'",
     dataTableBodySortStack: 'v-model:sort-stack',
     dataTableBodyColumnFilters: 'v-model:column-filters',
+    dataTableBodyRowClick:
+      'No mobile (< lg), tocar a linha expande com expandable, ou emite @row-click sem expandable (abrir Dialog, navegar, etc.). No desktop o expand é só pelo chevron.',
     exportedTitle: 'Componentes exportados',
     groupCategories: {
       Actions: 'Ações',

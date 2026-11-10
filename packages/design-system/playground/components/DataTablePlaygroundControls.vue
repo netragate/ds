@@ -16,6 +16,7 @@ defineProps<{
   forceEmpty: boolean
   expandable: boolean
   expandMode: 'eager' | 'lazy'
+  rowClickDemo: boolean
   searchPlaceholder: string
   emptyTitle: string
   emptyDescription: string
@@ -36,6 +37,7 @@ defineEmits<{
   'update:forceEmpty': [value: boolean]
   'update:expandable': [value: boolean]
   'update:expandMode': [value: 'eager' | 'lazy']
+  'update:rowClickDemo': [value: boolean]
   'update:searchPlaceholder': [value: string]
   'update:emptyTitle': [value: string]
   'update:emptyDescription': [value: string]
@@ -110,6 +112,14 @@ function optionStyle(active: boolean) {
         <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
           <Switch :model-value="expandable" size="sm" @update:model-value="$emit('update:expandable', $event)" />
           {{ propTemplateBinding('expandable') }}
+        </label>
+        <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs text-[#4D6A87]">
+          <Switch
+            :model-value="rowClickDemo"
+            size="sm"
+            @update:model-value="$emit('update:rowClickDemo', $event)"
+          />
+          {{ t('dataTable.controls.rowClickDemo') }}
         </label>
       </div>
     </div>

@@ -395,6 +395,54 @@ async function onExpand({ key, row }: { key: string; row: Record<string, unknown
 
 Pattern A (mini-table in a cell) still works via `#cell-{key}` with a nested `Table :nested="true"`.
 
+### Mobile row tap (`row-click`)
+
+On viewports below `lg` (same cutoff as column `visibility` / `AppLayout`, max-width 1023px), or when `forceMobile` is true, tapping a data row is interactive:
+
+- **With `expandable`:** the tap only toggles the expand panel (same as the chevron). Desktop still expands only via the chevron.
+- **Without `expandable`:** the table emits `row-click` with `{ key, row, index }` so the app can open a modal, navigate, etc. The design system does not open UI for you.
+
+On desktop (`lg` and up), cell taps do **not** expand or emit `row-click`. Buttons, links, inputs, and `[data-prevent-row-click]` inside a cell never trigger the row action.
+
+```vue
+<script setup lang="ts">
+import { DataTable, Dialog, Button } from '@netragate/design-system'
+import type { DataTableRowClickPayload } from '@netragate/design-system'
+import { ref } from 'vue'
+
+const dialogOpen = ref(false)
+const selected = ref<DataTableRowClickPayload | null>(null)
+
+function onRowClick(payload: DataTableRowClickPayload) {
+  // Fires only on mobile when expandable is false
+  selected.value = payload
+  dialogOpen.value = true
+}
+</script>
+
+<template>
+  <DataTable
+    :columns="columns"
+    :rows="rows"
+    :row-key="'id'"
+    :expandable="false"
+    @row-click="onRowClick"
+  />
+
+  <Dialog v-model:open="dialogOpen">
+    <template #title>Row {{ selected?.key }}</template>
+    <p class="text-sm text-muted-foreground">
+      {{ selected?.row.name }}
+    </p>
+    <template #footer>
+      <Button variant="primary" @click="dialogOpen = false">Close</Button>
+    </template>
+  </Dialog>
+</template>
+```
+
+The global search field is `w-full` on mobile and half the table width (`lg:w-1/2`) on desktop.
+
 ## Toasts
 
 Mount `ToastHost` once in the root layout and trigger toasts via the composable:
@@ -708,6 +756,7 @@ import type {
   DataTableExpandMode,
   DataTableExpandPayload,
   DataTableRequestParams,
+  DataTableRowClickPayload,
   DataTableSortEntry,
   ModalWidth,
   SelectOption,

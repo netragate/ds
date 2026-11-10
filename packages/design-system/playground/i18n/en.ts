@@ -483,7 +483,8 @@ export const en: PlaygroundMessages = {
       'Use the filter icon beside each header for text, date range, or enum filters.',
       'In API mode, column filters require Apply before reloading data.',
       'Enable expandable to open one nested static table at a time (eager or lazy).',
-      'Resize the drawer or use mobile preview: Email is desktop-only; a compact Email column shows on mobile (visibility).',
+      'Mobile only (< lg or Mobile preview): tap a row to expand when expandable is on, or emit @row-click (e.g. open a Dialog) when expandable is off. Desktop uses the chevron only.',
+      'Use the Mobile preview button at the top of the drawer (or resize below lg): Email is desktop-only; a compact Email column shows on mobile (visibility). Search is full width on mobile and half the table on desktop.',
     ],
     sortLabel: 'Sort:',
     filtersLabel: 'Filters:',
@@ -492,6 +493,9 @@ export const en: PlaygroundMessages = {
     projectCol: 'Project',
     roleCol: 'Role',
     noProjects: 'No projects',
+    rowClickDialogTitle: 'Selected user',
+    rowClickDialogBody: 'Opened from @row-click on mobile (viewport below lg).',
+    rowClickDialogClose: 'Close',
     controls: {
       features: 'features',
       pageSizeOptions: 'page-size-options',
@@ -499,6 +503,7 @@ export const en: PlaygroundMessages = {
       emptyTitlePlaceholder: 'Default from labels…',
       emptyDescriptionPlaceholder: 'Default from labels…',
       expandMode: 'expand-mode',
+      rowClickDemo: '@row-click → Dialog (mobile)',
     },
     columns: {
       name: 'Name',
@@ -564,7 +569,7 @@ export const en: PlaygroundMessages = {
       Breadcrumbs: 'Shows the user their location within the site hierarchy.',
       Pagination: 'Divides content into pages and lets users navigate between them.',
       DataTable:
-        'Full datatable with Ctrl+click multi-sort, column filter popovers, pagination, responsive column visibility, and client or server-side data.',
+        'Full datatable with Ctrl+click multi-sort, column filter popovers, pagination, responsive column visibility, mobile row tap (expand or @row-click), and client or server-side data.',
       Layout: 'Application shell with collapsible header, menu, content, and footer regions.',
       'Layout Primitives': 'Container, Stack, and Grid for page structure and spacing.',
       Modal: 'Presents content in an overlay requiring interaction. Width from small to full viewport.',
@@ -612,6 +617,8 @@ export const en: PlaygroundMessages = {
     dataTableBodyFilter: "filter: 'text' | 'date' | 'enum'",
     dataTableBodySortStack: 'v-model:sort-stack',
     dataTableBodyColumnFilters: 'v-model:column-filters',
+    dataTableBodyRowClick:
+      'On mobile (< lg), tapping a row expands when expandable is on, or emits @row-click when expandable is off (open a Dialog, navigate, etc.). Desktop expand uses the chevron only.',
     exportedTitle: 'Exported components',
     groupCategories: {
       Actions: 'Actions',

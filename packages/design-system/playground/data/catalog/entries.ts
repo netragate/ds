@@ -683,9 +683,10 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
       p('columnFilterApply', 'boolean | null', 'null (follows serverSide)', 'Require Apply before column filters trigger requests'),
       p('striped', 'boolean', 'true', 'Striped table rows'),
       p('resizable', 'boolean', 'true', 'Drag the header edge to resize columns; truncated cells show a tooltip'),
-      p('expandable', 'boolean', 'false', 'Show expand column and support #expanded-row (accordion)'),
+      p('expandable', 'boolean', 'false', 'Show expand column and support #expanded-row (accordion); on mobile, tapping the row also toggles expand'),
       p('expandMode', "'eager' | 'lazy'", 'eager', 'Eager shows slot immediately; lazy emits expand and uses expandLoading'),
       p('expandLoading', 'boolean', 'false', 'Panel-local loading spinner for lazy expand (not whole-table loading)'),
+      p('forceMobile', 'boolean', 'false', 'Force mobile column visibility and row tap behavior regardless of viewport width'),
       p('emptyTitle', 'string', 'No results', 'Empty state title'),
       p('emptyDescription', 'string', 'Try adjusting your search or filters.', 'Empty state description'),
       p('labels', 'DataTableLabels', undefined, 'Localized label overrides'),
@@ -710,6 +711,11 @@ export const componentCatalogEntries: Record<string, ComponentCatalogEntry> = {
     events: [
       e('request', 'DataTableRequestParams', 'Emitted in server-side mode when data should be refetched'),
       e('expand', 'DataTableExpandPayload', 'Emitted when a row is opened (use with expandMode lazy)'),
+      e(
+        'row-click',
+        'DataTableRowClickPayload',
+        'Mobile only (< lg): emitted when a row is tapped and expandable is false — use to open a modal, navigate, etc.',
+      ),
     ],
   },
 

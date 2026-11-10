@@ -410,7 +410,7 @@ export interface PlaygroundMessages {
     openPlayground: string
     modeClient: string
     modeApi: string
-    hints: [string, string, string, string, string]
+    hints: string[]
     sortLabel: string
     filtersLabel: string
     activeFilters: string
@@ -418,6 +418,9 @@ export interface PlaygroundMessages {
     projectCol: string
     roleCol: string
     noProjects: string
+    rowClickDialogTitle: string
+    rowClickDialogBody: string
+    rowClickDialogClose: string
     controls: {
       features: string
       pageSizeOptions: string
@@ -425,6 +428,7 @@ export interface PlaygroundMessages {
       emptyTitlePlaceholder: string
       emptyDescriptionPlaceholder: string
       expandMode: string
+      rowClickDemo: string
     }
     columns: UserTableColumnMessages
     labels: {
@@ -494,6 +498,7 @@ export interface PlaygroundMessages {
     dataTableBodyFilter: string
     dataTableBodySortStack: string
     dataTableBodyColumnFilters: string
+    dataTableBodyRowClick: string
     exportedTitle: string
     groupCategories: Record<string, string>
   }

@@ -10,6 +10,7 @@ import {
 } from '../data/mockUsers'
 import { useDataTableLabels, useStatusLabel, useUserTableColumns } from '../composables/useUserTableColumns'
 import { usePlaygroundLocale } from '../composables/usePlaygroundLocale'
+import { usePlaygroundMobilePreview } from '../composables/usePlaygroundMobilePreview'
 import { playgroundSnippetAttr, templateBooleanAttr, templateBoundAttr, templateStringAttr } from '../utils/propTemplateName'
 import Badge from '@/components/feedback/Badge.vue'
 import Button from '@/components/button/Button.vue'
@@ -20,14 +21,17 @@ import TableBody from '@/components/data-display/TableBody.vue'
 import TableCell from '@/components/data-display/TableCell.vue'
 import TableHead from '@/components/data-display/TableHead.vue'
 import TableRow from '@/components/data-display/TableRow.vue'
+import Dialog from '@/components/overlay/Dialog.vue'
 import type {
   DataTableColumn,
   DataTableColumnFilters,
   DataTableExpandPayload,
+  DataTableRowClickPayload,
   DataTableSortEntry,
 } from '@/components/data-display/dataTableTypes'
 
 const { locale, t } = usePlaygroundLocale()
+const { isMobilePreview } = usePlaygroundMobilePreview()
 const userTableColumns = useUserTableColumns()
 const dataTableLabels = useDataTableLabels()
 const { formatStatus } = useStatusLabel()
@@ -57,6 +61,9 @@ const expandMode = ref<'eager' | 'lazy'>('eager')
 const expandedKey = ref<string | null>(null)
 const expandLoading = ref(false)
 const lazyProjects = ref<Record<string, UserRow['projects']>>({})
+const rowClickDemo = ref(false)
+const rowClickDialogOpen = ref(false)
+const selectedRowClick = ref<DataTableRowClickPayload | null>(null)
 const pageSizePreset = ref<'default' | 'compact'>('default')
 const columnFilterApplyMode = ref<'auto' | 'apply' | 'instant'>('auto')
 const searchPlaceholder = ref('')
@@ -138,6 +145,21 @@ watch(expandable, (enabled) => {
   if (!enabled) {
     expandedKey.value = null
     expandLoading.value = false
+  } else {
+    rowClickDemo.value = false
+    rowClickDialogOpen.value = false
+    selectedRowClick.value = null
+  }
+})
+
+watch(rowClickDemo, (enabled) => {
+  if (enabled) {
+    expandable.value = false
+    expandedKey.value = null
+    expandLoading.value = false
+  } else {
+    rowClickDialogOpen.value = false
+    selectedRowClick.value = null
   }
 })
 
@@ -177,6 +199,12 @@ function projectsForRow(row: Record<string, unknown>): { name: string; role: str
     return (lazyProjects.value[key] ?? []) as { name: string; role: string }[]
   }
   return ((row.projects as { name: string; role: string }[] | undefined) ?? [])
+}
+
+function onRowClick(payload: DataTableRowClickPayload): void {
+  if (!rowClickDemo.value) return
+  selectedRowClick.value = payload
+  rowClickDialogOpen.value = true
 }
 
 function columnSnippet(key: string, label: string, extras: string[]): string {
@@ -235,6 +263,9 @@ const code = computed(() => {
       props.push('  :expand-loading="expandLoading"')
       props.push('  @expand="onExpand"')
     }
+  } else if (rowClickDemo.value) {
+    props.push(`  ${templateBooleanAttr('expandable', false)}`)
+    props.push('  @row-click="onRowClick"')
   }
   if (mode.value === 'api') {
     props.push(
@@ -280,6 +311,15 @@ const code = computed(() => {
     lines.push('  </template>')
   }
   lines.push('</DataTable>')
+
+  if (rowClickDemo.value) {
+    lines.push('')
+    lines.push('function onRowClick({ key, row, index }: DataTableRowClickPayload) {')
+    lines.push('  // Mobile only (< lg). Open Dialog, Drawer, route, etc.')
+    lines.push('  selectedRow = row')
+    lines.push('  dialogOpen = true')
+    lines.push('}')
+  }
 
   return lines.join('\n')
 })
@@ -346,6 +386,7 @@ const code = computed(() => {
         :expandable="expandable"
         :expand-mode="expandMode"
         :expand-loading="expandLoading"
+        :force-mobile="isMobilePreview"
         :page-size-options="pageSizeOptions"
         row-key="id"
         :search-placeholder="resolvedSearchPlaceholder"
@@ -355,6 +396,7 @@ const code = computed(() => {
         :locale="locale"
         @request="loadTable"
         @expand="onExpand"
+        @row-click="onRowClick"
       >
         <template v-if="showToolbar" #toolbar>
           <Badge variant="primary" :value="tableRows.length" />
@@ -408,12 +450,28 @@ const code = computed(() => {
         v-model:force-empty="forceEmpty"
         v-model:expandable="expandable"
         v-model:expand-mode="expandMode"
+        v-model:row-click-demo="rowClickDemo"
         v-model:page-size-preset="pageSizePreset"
         v-model:column-filter-apply-mode="columnFilterApplyMode"
         v-model:search-placeholder="searchPlaceholder"
         v-model:empty-title="emptyTitle"
         v-model:empty-description="emptyDescription"
       />
+
+      <Dialog v-model:open="rowClickDialogOpen">
+        <template #title>{{ t('dataTable.rowClickDialogTitle') }}</template>
+        <template #description>{{ t('dataTable.rowClickDialogBody') }}</template>
+        <p v-if="selectedRowClick" class="text-sm text-foreground">
+          {{ (selectedRowClick.row as UserRow).name }}
+          ·
+          {{ (selectedRowClick.row as UserRow).email }}
+        </p>
+        <template #footer>
+          <Button variant="primary" @click="rowClickDialogOpen = false">
+            {{ t('dataTable.rowClickDialogClose') }}
+          </Button>
+        </template>
+      </Dialog>
     </div>
     <UsageBlock :code="code" />
   </div>
